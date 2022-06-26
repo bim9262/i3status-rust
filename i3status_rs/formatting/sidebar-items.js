@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["config",""],["formatter",""],["prefix",""],["template",""],["unit",""],["value",""]],"struct":[["Format",""],["Handles",""],["RunningFormat",""]],"type":[["Values",""]]});
+initSidebarItems({"mod":[["config",""],["formatter",""],["prefix",""],["scheduling",""],["template",""],["unit",""],["value",""]],"struct":[["Format",""],["FormatInner",""],["Metadata",""],["Rendered",""]],"type":[["Values",""]]});
