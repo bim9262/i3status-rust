@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Device",""]]});
+initSidebarItems({"struct":[["Device",""],["PropertyMap",""]]});
