@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Device",""],["PropertyMap",""]]});
+initSidebarItems({"macro":[["debug",""]],"struct":[["ApcConnection",""],["Device",""],["PropertyMap",""]]});
