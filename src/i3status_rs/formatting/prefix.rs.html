@@ -113,6 +113,14 @@
 <span id="108">108</span>
 <span id="109">109</span>
 <span id="110">110</span>
+<span id="111">111</span>
+<span id="112">112</span>
+<span id="113">113</span>
+<span id="114">114</span>
+<span id="115">115</span>
+<span id="116">116</span>
+<span id="117">117</span>
+<span id="118">118</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::fmt</span>;
 <span class="kw">use</span> <span class="ident">std::ops::AddAssign</span>;
 <span class="kw">use</span> <span class="ident">std::str::FromStr</span>;
@@ -171,6 +179,14 @@
         <span class="ident">value</span> <span class="op">/</span> <span class="number">1_000f64</span>.<span class="ident">powi</span>(<span class="self">self</span> <span class="kw">as</span> <span class="ident">i32</span>)
     }
 
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">eng</span>(<span class="ident">number</span>: <span class="ident">f64</span>) -&gt; <span class="self">Self</span> {
+        <span class="kw">if</span> <span class="ident">number</span> <span class="op">==</span> <span class="number">0.0</span> {
+            <span class="ident"><span class="self">Self</span>::One</span>
+        } <span class="kw">else</span> {
+            <span class="ident"><span class="self">Self</span>::from_exp_level</span>(<span class="ident">number</span>.<span class="ident">abs</span>().<span class="ident">log10</span>().<span class="ident">div_euclid</span>(<span class="number">3.</span>) <span class="kw">as</span> <span class="ident">i32</span>)
+        }
+    }
+
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_exp_level</span>(<span class="ident">exp_level</span>: <span class="ident">i32</span>) -&gt; <span class="self">Self</span> {
         <span class="kw">match</span> <span class="ident">exp_level</span> {
             <span class="ident">i32::MIN</span>..<span class="op">=</span><span class="op">-</span><span class="number">3</span> =&gt; <span class="ident">Prefix::Nano</span>,
@@ -224,5 +240,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="i3status_rs" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0 (fe5b13d68 2022-05-18)" ></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="i3status_rs" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.62.0 (a8314ef7d 2022-06-27)" ></div>
 </body></html>

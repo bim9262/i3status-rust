@@ -358,6 +358,9 @@
 <span id="353">353</span>
 <span id="354">354</span>
 <span id="355">355</span>
+<span id="356">356</span>
+<span id="357">357</span>
+<span id="358">358</span>
 </pre><pre class="rust"><code><span class="doccomment">//! The collection of blocks</span>
 
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">prelude</span>;
@@ -675,6 +678,8 @@
     <span class="kw">pub</span> <span class="ident">icons_format</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>)]</span>
     <span class="kw">pub</span> <span class="ident">theme_overrides</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>)]</span>
+    <span class="kw">pub</span> <span class="ident">icons_overrides</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span> <span class="op">=</span> <span class="string">&quot;CommonConfig::default_error_interval&quot;</span>)]</span>
     <span class="kw">pub</span> <span class="ident">error_interval</span>: <span class="ident">u64</span>,
@@ -695,8 +700,9 @@
             <span class="string">&quot;block&quot;</span>,
             <span class="string">&quot;click&quot;</span>,
             <span class="string">&quot;signal&quot;</span>,
-            <span class="string">&quot;theme_overrides&quot;</span>,
             <span class="string">&quot;icons_format&quot;</span>,
+            <span class="string">&quot;theme_overrides&quot;</span>,
+            <span class="string">&quot;icons_overrides&quot;</span>,
             <span class="string">&quot;error_interval&quot;</span>,
             <span class="string">&quot;error_format&quot;</span>,
             <span class="string">&quot;if_command&quot;</span>,
@@ -714,5 +720,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="i3status_rs" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0 (fe5b13d68 2022-05-18)" ></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="i3status_rs" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.62.0 (a8314ef7d 2022-06-27)" ></div>
 </body></html>
