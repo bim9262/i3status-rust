@@ -1,9 +1,10 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/blocks/weather.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>weather.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
-    <noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../i3status_rs/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/blocks/weather.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>weather.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../i3status_rs/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
         </a><h2 class="location"></h2>
     </nav>
     <nav class="sidebar"><a class="sidebar-logo" href="../../../i3status_rs/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../i3status_rs/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="22" height="22" alt="Pick another theme!" src="../../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../i3status_rs/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
+                                <a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div>
+                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -349,16 +350,29 @@
 <span id="344">344</span>
 <span id="345">345</span>
 <span id="346">346</span>
+<span id="347">347</span>
+<span id="348">348</span>
+<span id="349">349</span>
+<span id="350">350</span>
+<span id="351">351</span>
+<span id="352">352</span>
+<span id="353">353</span>
+<span id="354">354</span>
+<span id="355">355</span>
+<span id="356">356</span>
+<span id="357">357</span>
+<span id="358">358</span>
+<span id="359">359</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Current weather</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! This block displays local weather and temperature information. In order to use this block, you</span>
-<span class="doccomment">//! will need access to a supported weather API service. At the time of writing, OpenWeatherMap is</span>
-<span class="doccomment">//! the only supported service.</span>
+<span class="doccomment">//! will need access to a supported weather API service. At the time of writing, OpenWeatherMap and</span>
+<span class="doccomment">//! met.no are supported.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! Configuring this block requires configuring a weather service, which may require API keys and</span>
 <span class="doccomment">//! other parameters.</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! If using the `autolocate` feature, set the block update interval such that you do not exceed ipapi.co&#39;s free daily limit of 1000 hits.</span>
+<span class="doccomment">//! If using the `autolocate` feature, set the autolocate update interval such that you do not exceed ipapi.co&#39;s free daily limit of 1000 hits. Or use `autolocate_interval = &quot;once&quot;` to only run on initialization.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! # Configuration</span>
 <span class="doccomment">//!</span>
@@ -368,6 +382,7 @@
 <span class="doccomment">//! `format` | A string to customise the output of this block. See below for available placeholders. Text may need to be escaped, refer to [Escaping Text](#escaping-text). | `&quot;$weather $temp&quot;`</span>
 <span class="doccomment">//! `interval` | Update interval, in seconds. | `600`</span>
 <span class="doccomment">//! `autolocate` | Gets your location using the ipapi.co IP location service (no API key required). If the API call fails then the block will fallback to `city_id` or `place`. | `false`</span>
+<span class="doccomment">//! `autolocate_interval` | Update interval for `autolocate` in seconds or &quot;once&quot; | `interval`</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! # OpenWeatherMap Options</span>
 <span class="doccomment">//!</span>
@@ -379,15 +394,26 @@
 <span class="doccomment">//! `api_key` | Your OpenWeatherMap API key. | Yes | None</span>
 <span class="doccomment">//! `city_id` | OpenWeatherMap&#39;s ID for the city. | Yes* | None</span>
 <span class="doccomment">//! `place` | OpenWeatherMap &#39;By city name&#39; search query. See [here](https://openweathermap.org/current) | Yes* | None</span>
-<span class="doccomment">//! `coordinates` | GPS latitude longitude coordinates as a tuple, example: `[&quot;39.236229089090216&quot;,&quot;9.331730718685696&quot;]`</span>
-<span class="doccomment">//! `units` | Either `metric` or `imperial`. | Yes | `metric`</span>
-<span class="doccomment">//! `lang` | Language code. See [here](https://openweathermap.org/current#multi). Currently only affects `weather_verbose` key. | No | `en`</span>
+<span class="doccomment">//! `coordinates` | GPS latitude longitude coordinates as a tuple, example: `[&quot;39.2362&quot;,&quot;9.3317&quot;]` | Yes* | None</span>
+<span class="doccomment">//! `units` | Either `&quot;metric&quot;` or `&quot;imperial&quot;`. | No | `&quot;metric&quot;`</span>
+<span class="doccomment">//! `lang` | Language code. See [here](https://openweathermap.org/current#multi). Currently only affects `weather_verbose` key. | No | `&quot;en&quot;`</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! One of `city_id`, `place` or `coordinates` is required. If more than one are supplied, `city_id` takes precedence over `place` which takes place over `coordinates`.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! The options `api_key`, `city_id`, `place` can be omitted from configuration,</span>
 <span class="doccomment">//! in which case they must be provided in the environment variables</span>
 <span class="doccomment">//! `OPENWEATHERMAP_API_KEY`, `OPENWEATHERMAP_CITY_ID`, `OPENWEATHERMAP_PLACE`.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! # met.no Options</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Key | Values | Required | Default</span>
+<span class="doccomment">//! ----|--------|----------|--------</span>
+<span class="doccomment">//! `name` | `metno`. | Yes | None</span>
+<span class="doccomment">//! `coordinates` | GPS latitude longitude coordinates as a tuple, example: `[&quot;39.2362&quot;,&quot;9.3317&quot;]` | Required if `autolocate = false` | None</span>
+<span class="doccomment">//! `lang` | Language code: `en`, `nn` or `nb` | No | `en`</span>
+<span class="doccomment">//! `altitude` | Meters above sea level of the ground | No | Approximated by server</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Met.no does not support location name.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! # Available Format Keys</span>
 <span class="doccomment">//!</span>
@@ -411,7 +437,11 @@
 <span class="doccomment">//! [[block]]</span>
 <span class="doccomment">//! block = &quot;weather&quot;</span>
 <span class="doccomment">//! format = &quot;$weather ($location) $temp, $wind m/s $direction&quot;</span>
-<span class="doccomment">//! service = { name = &quot;openweathermap&quot;, api_key = &quot;XXX&quot;, city_id = &quot;5398563&quot;, units = &quot;metric&quot; }</span>
+<span class="doccomment">//! [block.service]</span>
+<span class="doccomment">//! name = &quot;openweathermap&quot;</span>
+<span class="doccomment">//! api_key = &quot;XXX&quot;</span>
+<span class="doccomment">//! city_id = &quot;5398563&quot;</span>
+<span class="doccomment">//! units = &quot;metric&quot;</span>
 <span class="doccomment">//! ```</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! # Used Icons</span>
@@ -423,16 +453,17 @@
 <span class="doccomment">//! - `weather_snow` (when weather is reported as &quot;Snow&quot;)</span>
 <span class="doccomment">//! - `weather_default` (in all other cases)</span>
 
+<span class="kw">use</span> <span class="ident">std::fmt</span>;
+<span class="kw">use</span> <span class="ident">std::sync::Arc</span>;
+
 <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::prelude</span>::<span class="kw-2">*</span>;
+
+<span class="kw">mod</span> <span class="ident">met_no</span>;
+<span class="kw">mod</span> <span class="ident">open_weather_map</span>;
 
 <span class="kw">const</span> <span class="ident">IP_API_URL</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;https://ipapi.co/json&quot;</span>;
 
-<span class="kw">const</span> <span class="ident">OPEN_WEATHER_MAP_URL</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;https://api.openweathermap.org/data/2.5/weather&quot;</span>;
-<span class="kw">const</span> <span class="ident">OPEN_WEATHER_MAP_API_KEY_ENV</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;OPENWEATHERMAP_API_KEY&quot;</span>;
-<span class="kw">const</span> <span class="ident">OPEN_WEATHER_MAP_CITY_ID_ENV</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;OPENWEATHERMAP_CITY_ID&quot;</span>;
-<span class="kw">const</span> <span class="ident">OPEN_WEATHER_MAP_PLACE_ENV</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="string">&quot;OPENWEATHERMAP_PLACE&quot;</span>;
-
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Deserialize</span>, <span class="ident">Debug</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Deserialize</span>)]</span>
 <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">deny_unknown_fields</span>)]</span>
 <span class="kw">struct</span> <span class="ident">WeatherConfig</span> {
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span> <span class="op">=</span> <span class="string">&quot;default_interval&quot;</span>)]</span>
@@ -442,42 +473,74 @@
     <span class="ident">service</span>: <span class="ident">WeatherService</span>,
     <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>)]</span>
     <span class="ident">autolocate</span>: <span class="ident">bool</span>,
+    <span class="ident">autolocate_interval</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Seconds</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">fn</span> <span class="ident">default_interval</span>() -&gt; <span class="ident">Seconds</span> {
     <span class="ident">Seconds::new</span>(<span class="number">600</span>)
 }
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Deserialize</span>, <span class="ident">Debug</span>)]</span>
-<span class="attribute">#[<span class="ident">serde</span>(<span class="ident">tag</span> <span class="op">=</span> <span class="string">&quot;name&quot;</span>, <span class="ident">rename_all</span> <span class="op">=</span> <span class="string">&quot;lowercase&quot;</span>)]</span>
-<span class="kw">enum</span> <span class="ident">WeatherService</span> {
-    <span class="ident">OpenWeatherMap</span> {
-        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span> <span class="op">=</span> <span class="string">&quot;WeatherService::getenv_openweathermap_api_key&quot;</span>)]</span>
-        <span class="ident">api_key</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span> <span class="op">=</span> <span class="string">&quot;WeatherService::getenv_openweathermap_city_id&quot;</span>)]</span>
-        <span class="ident">city_id</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span> <span class="op">=</span> <span class="string">&quot;WeatherService::getenv_openweathermap_place&quot;</span>)]</span>
-        <span class="ident">place</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
-        <span class="ident">coordinates</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="ident">String</span>, <span class="ident">String</span>)<span class="op">&gt;</span>,
-        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>)]</span>
-        <span class="ident">units</span>: <span class="ident">UnitSystem</span>,
-        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span> <span class="op">=</span> <span class="string">&quot;WeatherService::default_lang&quot;</span>)]</span>
-        <span class="ident">lang</span>: <span class="ident">String</span>,
-    },
+<span class="attribute">#[<span class="ident">async_trait</span>]</span>
+<span class="kw">trait</span> <span class="ident">WeatherProvider</span> {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get_weather</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">autolocated_location</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Coordinates</span><span class="op">&gt;</span>)
+        -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">WeatherResult</span><span class="op">&gt;</span>;
 }
 
-<span class="kw">impl</span> <span class="ident">WeatherService</span> {
-    <span class="kw">fn</span> <span class="ident">getenv_openweathermap_api_key</span>() -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
-        <span class="ident">std::env::var</span>(<span class="ident">OPEN_WEATHER_MAP_API_KEY_ENV</span>).<span class="ident">ok</span>()
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Deserialize</span>)]</span>
+<span class="attribute">#[<span class="ident">serde</span>(<span class="ident">tag</span> <span class="op">=</span> <span class="string">&quot;name&quot;</span>, <span class="ident">rename_all</span> <span class="op">=</span> <span class="string">&quot;lowercase&quot;</span>)]</span>
+<span class="kw">enum</span> <span class="ident">WeatherService</span> {
+    <span class="ident">OpenWeatherMap</span>(<span class="ident">open_weather_map::Config</span>),
+    <span class="ident">MetNo</span>(<span class="ident">met_no::Config</span>),
+}
+
+<span class="kw">enum</span> <span class="ident">WeatherIcon</span> {
+    <span class="ident">Sun</span>,
+    <span class="ident">Rain</span>,
+    <span class="ident">Clouds</span>,
+    <span class="ident">Thunder</span>,
+    <span class="ident">Snow</span>,
+    <span class="ident">Default</span>,
+}
+
+<span class="kw">impl</span> <span class="ident">WeatherIcon</span> {
+    <span class="kw">fn</span> <span class="ident">to_icon_str</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">str</span> {
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident"><span class="self">Self</span>::Sun</span> =&gt; <span class="string">&quot;weather_sun&quot;</span>,
+            <span class="ident"><span class="self">Self</span>::Rain</span> =&gt; <span class="string">&quot;weather_rain&quot;</span>,
+            <span class="ident"><span class="self">Self</span>::Clouds</span> =&gt; <span class="string">&quot;weather_clouds&quot;</span>,
+            <span class="ident"><span class="self">Self</span>::Thunder</span> =&gt; <span class="string">&quot;weather_thunder&quot;</span>,
+            <span class="ident"><span class="self">Self</span>::Snow</span> =&gt; <span class="string">&quot;weather_snow&quot;</span>,
+            <span class="ident"><span class="self">Self</span>::Default</span> =&gt; <span class="string">&quot;weather_default&quot;</span>,
+        }
     }
-    <span class="kw">fn</span> <span class="ident">getenv_openweathermap_city_id</span>() -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
-        <span class="ident">std::env::var</span>(<span class="ident">OPEN_WEATHER_MAP_CITY_ID_ENV</span>).<span class="ident">ok</span>()
-    }
-    <span class="kw">fn</span> <span class="ident">getenv_openweathermap_place</span>() -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
-        <span class="ident">std::env::var</span>(<span class="ident">OPEN_WEATHER_MAP_PLACE_ENV</span>).<span class="ident">ok</span>()
-    }
-    <span class="kw">fn</span> <span class="ident">default_lang</span>() -&gt; <span class="ident">String</span> {
-        <span class="string">&quot;en&quot;</span>.<span class="ident">into</span>()
+}
+
+<span class="kw">struct</span> <span class="ident">WeatherResult</span> {
+    <span class="ident">location</span>: <span class="ident">String</span>,
+    <span class="ident">temp</span>: <span class="ident">f64</span>,
+    <span class="ident">apparent</span>: <span class="ident">f64</span>,
+    <span class="ident">humidity</span>: <span class="ident">f64</span>,
+    <span class="ident">weather</span>: <span class="ident">String</span>,
+    <span class="ident">weather_verbose</span>: <span class="ident">String</span>,
+    <span class="ident">wind</span>: <span class="ident">f64</span>,
+    <span class="ident">wind_kmh</span>: <span class="ident">f64</span>,
+    <span class="ident">wind_direction</span>: <span class="ident">String</span>,
+    <span class="ident">icon</span>: <span class="ident">WeatherIcon</span>,
+}
+
+<span class="kw">impl</span> <span class="ident">WeatherResult</span> {
+    <span class="kw">fn</span> <span class="ident">into_values</span>(<span class="self">self</span>) -&gt; <span class="ident">Values</span> {
+        <span class="macro">map!</span> {
+            <span class="string">&quot;location&quot;</span> =&gt; <span class="ident">Value::text</span>(<span class="self">self</span>.<span class="ident">location</span>),
+            <span class="string">&quot;temp&quot;</span> =&gt; <span class="ident">Value::degrees</span>(<span class="self">self</span>.<span class="ident">temp</span>),
+            <span class="string">&quot;apparent&quot;</span> =&gt; <span class="ident">Value::degrees</span>(<span class="self">self</span>.<span class="ident">apparent</span>),
+            <span class="string">&quot;humidity&quot;</span> =&gt; <span class="ident">Value::percents</span>(<span class="self">self</span>.<span class="ident">humidity</span>),
+            <span class="string">&quot;weather&quot;</span> =&gt; <span class="ident">Value::text</span>(<span class="self">self</span>.<span class="ident">weather</span>),
+            <span class="string">&quot;weather_verbose&quot;</span> =&gt; <span class="ident">Value::text</span>(<span class="self">self</span>.<span class="ident">weather_verbose</span>),
+            <span class="string">&quot;wind&quot;</span> =&gt; <span class="ident">Value::number</span>(<span class="self">self</span>.<span class="ident">wind</span>),
+            <span class="string">&quot;wind_kmh&quot;</span> =&gt; <span class="ident">Value::number</span>(<span class="self">self</span>.<span class="ident">wind_kmh</span>),
+            <span class="string">&quot;direction&quot;</span> =&gt; <span class="ident">Value::text</span>(<span class="self">self</span>.<span class="ident">wind_direction</span>),
+        }
     }
 }
 
@@ -487,139 +550,92 @@
         .<span class="ident">new_widget</span>()
         .<span class="ident">with_format</span>(<span class="ident">config</span>.<span class="ident">format</span>.<span class="ident">with_default</span>(<span class="string">&quot;$weather $temp&quot;</span>)<span class="question-mark">?</span>);
 
-    <span class="kw">loop</span> {
-        <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">api</span>
-            .<span class="ident">recoverable</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">config</span>.<span class="ident">service</span>.<span class="ident">get</span>(<span class="ident">config</span>.<span class="ident">autolocate</span>))
-            .<span class="kw">await</span><span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">provider</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">WeatherProvider</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">config</span>.<span class="ident">service</span> {
+        <span class="ident">WeatherService::MetNo</span>(<span class="ident">config</span>) =&gt; <span class="ident">Box::new</span>(<span class="ident">met_no::Service::new</span>(<span class="kw-2">&amp;mut</span> <span class="ident">api</span>, <span class="ident">config</span>).<span class="kw">await</span><span class="question-mark">?</span>),
+        <span class="ident">WeatherService::OpenWeatherMap</span>(<span class="ident">config</span>) =&gt; <span class="ident">Box::new</span>(<span class="ident">open_weather_map::Service::new</span>(<span class="ident">config</span>)),
+    };
 
-        <span class="kw">let</span> <span class="ident">apparent_temp</span> <span class="op">=</span> <span class="ident">australian_apparent_temp</span>(
-            <span class="ident">data</span>.<span class="ident">main</span>.<span class="ident">temp</span>,
-            <span class="ident">data</span>.<span class="ident">main</span>.<span class="ident">humidity</span>,
-            <span class="ident">data</span>.<span class="ident">wind</span>.<span class="ident">speed</span>,
-            <span class="ident">config</span>.<span class="ident">service</span>.<span class="ident">units</span>(),
-        );
+    <span class="kw">if</span> <span class="ident">config</span>.<span class="ident">autolocate</span> {
+        <span class="comment">// The default behavior is to mirror `interval`</span>
+        <span class="kw">let</span> <span class="ident">autolocate_interval</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">config</span>.<span class="ident">autolocate_interval</span> {
+            <span class="prelude-val">Some</span>(<span class="ident">s</span>) =&gt; <span class="ident">s</span>,
+            <span class="prelude-val">None</span> =&gt; <span class="ident">config</span>.<span class="ident">interval</span>,
+        };
 
-        <span class="kw">let</span> <span class="ident">kmh_wind_speed</span> <span class="op">=</span> <span class="ident">data</span>.<span class="ident">wind</span>.<span class="ident">speed</span>
-            <span class="op">*</span> <span class="number">3.6</span>
-            <span class="op">*</span> <span class="kw">match</span> <span class="ident">config</span>.<span class="ident">service</span>.<span class="ident">units</span>() {
-                <span class="ident">UnitSystem::Metric</span> =&gt; <span class="number">1.0</span>,
-                <span class="ident">UnitSystem::Imperial</span> =&gt; <span class="number">0.447</span>,
-            };
+        <span class="kw">if</span> <span class="ident">autolocate_interval</span> <span class="op">==</span> <span class="ident">config</span>.<span class="ident">interval</span> {
+            <span class="comment">// In the case where `autolocate_interval` matches `interval` merge both actions.</span>
+            <span class="kw">loop</span> {
+                <span class="kw">let</span> <span class="ident">location</span> <span class="op">=</span> <span class="ident">api</span>.<span class="ident">recoverable</span>(<span class="ident">find_ip_location</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">api</span>
+                    .<span class="ident">recoverable</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">provider</span>.<span class="ident">get_weather</span>(<span class="prelude-val">Some</span>(<span class="ident">location</span>)))
+                    .<span class="kw">await</span><span class="question-mark">?</span>;
+                <span class="ident">widget</span>.<span class="ident">set_icon</span>(<span class="ident">data</span>.<span class="ident">icon</span>.<span class="ident">to_icon_str</span>())<span class="question-mark">?</span>;
+                <span class="ident">widget</span>.<span class="ident">set_values</span>(<span class="ident">data</span>.<span class="ident">into_values</span>());
+                <span class="ident">api</span>.<span class="ident">set_widget</span>(<span class="kw-2">&amp;</span><span class="ident">widget</span>).<span class="kw">await</span><span class="question-mark">?</span>;
 
-        <span class="ident">widget</span>.<span class="ident">set_values</span>(<span class="macro">map!</span> {
-            <span class="string">&quot;location&quot;</span> =&gt; <span class="ident">Value::text</span>(<span class="ident">data</span>.<span class="ident">name</span>),
-            <span class="string">&quot;temp&quot;</span> =&gt; <span class="ident">Value::degrees</span>(<span class="ident">data</span>.<span class="ident">main</span>.<span class="ident">temp</span>),
-            <span class="string">&quot;apparent&quot;</span> =&gt; <span class="ident">Value::degrees</span>(<span class="ident">apparent_temp</span>),
-            <span class="string">&quot;humidity&quot;</span> =&gt; <span class="ident">Value::percents</span>(<span class="ident">data</span>.<span class="ident">main</span>.<span class="ident">humidity</span>),
-            <span class="string">&quot;weather&quot;</span> =&gt; <span class="ident">Value::text</span>(<span class="ident">data</span>.<span class="ident">weather</span>[<span class="number">0</span>].<span class="ident">main</span>.<span class="ident">clone</span>()),
-            <span class="string">&quot;weather_verbose&quot;</span> =&gt; <span class="ident">Value::text</span>(<span class="ident">data</span>.<span class="ident">weather</span>[<span class="number">0</span>].<span class="ident">description</span>.<span class="ident">clone</span>()),
-            <span class="string">&quot;wind&quot;</span> =&gt; <span class="ident">Value::number</span>(<span class="ident">data</span>.<span class="ident">wind</span>.<span class="ident">speed</span>),
-            <span class="string">&quot;wind_kmh&quot;</span> =&gt; <span class="ident">Value::number</span>(<span class="ident">kmh_wind_speed</span>),
-            <span class="string">&quot;direction&quot;</span> =&gt; <span class="ident">Value::text</span>(<span class="ident">convert_wind_direction</span>(<span class="ident">data</span>.<span class="ident">wind</span>.<span class="ident">deg</span>).<span class="ident">into</span>()),
-        });
-
-        <span class="comment">// These map to the &#39;Main&#39; entries here: https://openweathermap.org/weather-conditions</span>
-        <span class="comment">// TODO: Drizzle, Mist, Fog, Haze, Smoke, etc?</span>
-        <span class="comment">// TODO: Read description as well to give more details? font awesome has different rain level icons</span>
-        <span class="ident">widget</span>.<span class="ident">set_icon</span>(<span class="kw">match</span> <span class="ident">data</span>.<span class="ident">weather</span>[<span class="number">0</span>].<span class="ident">main</span>.<span class="ident">as_str</span>() {
-            <span class="string">&quot;Clear&quot;</span> =&gt; <span class="string">&quot;weather_sun&quot;</span>,
-            <span class="string">&quot;Rain&quot;</span> <span class="op">|</span> <span class="string">&quot;Drizzle&quot;</span> =&gt; <span class="string">&quot;weather_rain&quot;</span>,
-            <span class="string">&quot;Clouds&quot;</span> <span class="op">|</span> <span class="string">&quot;Fog&quot;</span> <span class="op">|</span> <span class="string">&quot;Mist&quot;</span> =&gt; <span class="string">&quot;weather_clouds&quot;</span>,
-            <span class="string">&quot;Thunderstorm&quot;</span> =&gt; <span class="string">&quot;weather_thunder&quot;</span>,
-            <span class="string">&quot;Snow&quot;</span> =&gt; <span class="string">&quot;weather_snow&quot;</span>,
-            <span class="kw">_</span> =&gt; <span class="string">&quot;weather_default&quot;</span>,
-        })<span class="question-mark">?</span>;
-
-        <span class="ident">api</span>.<span class="ident">set_widget</span>(<span class="kw-2">&amp;</span><span class="ident">widget</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-
-        <span class="macro">select!</span> {
-            <span class="kw">_</span> <span class="op">=</span> <span class="ident">sleep</span>(<span class="ident">config</span>.<span class="ident">interval</span>.<span class="number">0</span>) =&gt; (),
-            <span class="kw">_</span> <span class="op">=</span> <span class="ident">api</span>.<span class="ident">wait_for_update_request</span>() =&gt; (),
-        }
-    }
-}
-
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Deserialize</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">struct</span> <span class="ident">ApiResponse</span> {
-    <span class="ident">weather</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">ApiWeather</span><span class="op">&gt;</span>,
-    <span class="ident">main</span>: <span class="ident">ApiMain</span>,
-    <span class="ident">wind</span>: <span class="ident">ApiWind</span>,
-    <span class="ident">name</span>: <span class="ident">String</span>,
-}
-
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Deserialize</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">struct</span> <span class="ident">ApiWind</span> {
-    <span class="ident">speed</span>: <span class="ident">f64</span>,
-    <span class="ident">deg</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">f64</span><span class="op">&gt;</span>,
-}
-
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Deserialize</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">struct</span> <span class="ident">ApiMain</span> {
-    <span class="ident">temp</span>: <span class="ident">f64</span>,
-    <span class="ident">humidity</span>: <span class="ident">f64</span>,
-}
-
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Deserialize</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">struct</span> <span class="ident">ApiWeather</span> {
-    <span class="ident">main</span>: <span class="ident">String</span>,
-    <span class="ident">description</span>: <span class="ident">String</span>,
-}
-
-<span class="kw">impl</span> <span class="ident">WeatherService</span> {
-    <span class="kw">fn</span> <span class="ident">units</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">UnitSystem</span> {
-        <span class="kw">let</span> <span class="ident"><span class="self">Self</span>::OpenWeatherMap</span> { <span class="ident">units</span>, .. } <span class="op">=</span> <span class="self">self</span>;
-        <span class="kw-2">*</span><span class="ident">units</span>
-    }
-
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">autolocate</span>: <span class="ident">bool</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ApiResponse</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident"><span class="self">Self</span>::OpenWeatherMap</span> {
-            <span class="ident">api_key</span>,
-            <span class="ident">city_id</span>,
-            <span class="ident">place</span>,
-            <span class="ident">coordinates</span>,
-            <span class="ident">units</span>,
-            <span class="ident">lang</span>,
-        } <span class="op">=</span> <span class="self">self</span>;
-
-        <span class="kw">let</span> <span class="ident">api_key</span> <span class="op">=</span> <span class="ident">api_key</span>.<span class="ident">as_ref</span>().<span class="ident">or_error</span>(<span class="op">|</span><span class="op">|</span> {
-            <span class="macro">format!</span>(
-                <span class="string">&quot;missing key &#39;service.api_key&#39; and environment variable {OPEN_WEATHER_MAP_API_KEY_ENV}&quot;</span>,
-            )
-        })<span class="question-mark">?</span>;
-
-        <span class="kw">let</span> <span class="ident">city</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">autolocate</span> {
-            <span class="ident">find_ip_location</span>().<span class="kw">await</span>.<span class="ident">unwrap_or</span>(<span class="prelude-val">None</span>)
+                <span class="macro">select!</span> {
+                    <span class="kw">_</span> <span class="op">=</span> <span class="ident">sleep</span>(<span class="ident">config</span>.<span class="ident">interval</span>.<span class="number">0</span>) =&gt; (),
+                    <span class="kw">_</span> <span class="op">=</span> <span class="ident">api</span>.<span class="ident">wait_for_update_request</span>() =&gt; (),
+                }
+            }
         } <span class="kw">else</span> {
-            <span class="prelude-val">None</span>
-        };
+            <span class="comment">// Two timers, one to rerender the block and the other to update the location.</span>
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">interval</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">interval</span>.<span class="ident">timer</span>();
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">autolocate_interval</span> <span class="op">=</span> <span class="ident">autolocate_interval</span>.<span class="ident">timer</span>();
 
-        <span class="kw">let</span> <span class="ident">location_query</span> <span class="op">=</span> {
-            <span class="ident">city</span>.<span class="ident">map</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;q={x}&quot;</span>))
-                .<span class="ident">or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">city_id</span>.<span class="ident">as_ref</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;id={x}&quot;</span>)))
-                .<span class="ident">or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">place</span>.<span class="ident">as_ref</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;q={x}&quot;</span>)))
-                .<span class="ident">or_else</span>(<span class="op">|</span><span class="op">|</span> {
-                    <span class="ident">coordinates</span>
-                        .<span class="ident">as_ref</span>()
-                        .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">lat</span>, <span class="ident">lon</span>)<span class="op">|</span> <span class="macro">format!</span>(<span class="string">&quot;lat={lat}&amp;lon={lon}&quot;</span>))
-                })
-                .<span class="ident">error</span>(<span class="string">&quot;no localization was provided&quot;</span>)<span class="question-mark">?</span>
-        };
+            <span class="comment">// Initial pass</span>
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">location</span> <span class="op">=</span> <span class="ident">api</span>.<span class="ident">recoverable</span>(<span class="ident">find_ip_location</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">api</span>
+                .<span class="ident">recoverable</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">provider</span>.<span class="ident">get_weather</span>(<span class="prelude-val">Some</span>(<span class="ident">location</span>)))
+                .<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="ident">widget</span>.<span class="ident">set_icon</span>(<span class="ident">data</span>.<span class="ident">icon</span>.<span class="ident">to_icon_str</span>())<span class="question-mark">?</span>;
+            <span class="ident">widget</span>.<span class="ident">set_values</span>(<span class="ident">data</span>.<span class="ident">into_values</span>());
+            <span class="ident">api</span>.<span class="ident">set_widget</span>(<span class="kw-2">&amp;</span><span class="ident">widget</span>).<span class="kw">await</span><span class="question-mark">?</span>;
 
-        <span class="comment">// Refer to https://openweathermap.org/current</span>
-        <span class="kw">let</span> <span class="ident">url</span> <span class="op">=</span> <span class="macro">format!</span>(
-            <span class="string">&quot;{OPEN_WEATHER_MAP_URL}?{location_query}&amp;appid={api_key}&amp;units={units}&amp;lang={lang}&quot;</span>,
-            <span class="ident">units</span> <span class="op">=</span> <span class="kw">match</span> <span class="kw-2">*</span><span class="ident">units</span> {
-                <span class="ident">UnitSystem::Metric</span> =&gt; <span class="string">&quot;metric&quot;</span>,
-                <span class="ident">UnitSystem::Imperial</span> =&gt; <span class="string">&quot;imperial&quot;</span>,
-            },
-        );
+            <span class="kw">loop</span> {
+                <span class="macro">select!</span> {
+                    <span class="ident">biased</span>; <span class="comment">// if both timers `tick()` autolocate should run first</span>
+                    <span class="kw">_</span> <span class="op">=</span> <span class="ident">autolocate_interval</span>.<span class="ident">tick</span>() =&gt; {
+                        <span class="ident">location</span> <span class="op">=</span> <span class="ident">api</span>.<span class="ident">recoverable</span>(<span class="ident">find_ip_location</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+                    }
+                    <span class="kw">_</span> <span class="op">=</span> <span class="ident">interval</span>.<span class="ident">tick</span>() =&gt; {
+                        <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">api</span>
+                            .<span class="ident">recoverable</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">provider</span>.<span class="ident">get_weather</span>(<span class="prelude-val">Some</span>(<span class="ident">location</span>)))
+                            .<span class="kw">await</span><span class="question-mark">?</span>;
+                        <span class="ident">widget</span>.<span class="ident">set_icon</span>(<span class="ident">data</span>.<span class="ident">icon</span>.<span class="ident">to_icon_str</span>())<span class="question-mark">?</span>;
+                        <span class="ident">widget</span>.<span class="ident">set_values</span>(<span class="ident">data</span>.<span class="ident">into_values</span>());
+                        <span class="ident">api</span>.<span class="ident">set_widget</span>(<span class="kw-2">&amp;</span><span class="ident">widget</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+                    },
+                    <span class="comment">// On update request autolocate and update the block.</span>
+                    <span class="kw">_</span> <span class="op">=</span> <span class="ident">api</span>.<span class="ident">wait_for_update_request</span>() =&gt; {
+                        <span class="ident">location</span> <span class="op">=</span> <span class="ident">api</span>.<span class="ident">recoverable</span>(<span class="ident">find_ip_location</span>).<span class="kw">await</span><span class="question-mark">?</span>;
 
-        <span class="ident">reqwest::get</span>(<span class="ident">url</span>)
-            .<span class="kw">await</span>
-            .<span class="ident">error</span>(<span class="string">&quot;Failed during request for current location&quot;</span>)<span class="question-mark">?</span>
-            .<span class="ident">json</span>()
-            .<span class="kw">await</span>
-            .<span class="ident">error</span>(<span class="string">&quot;Failed while parsing location API result&quot;</span>)
+                        <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">api</span>
+                            .<span class="ident">recoverable</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">provider</span>.<span class="ident">get_weather</span>(<span class="prelude-val">Some</span>(<span class="ident">location</span>)))
+                            .<span class="kw">await</span><span class="question-mark">?</span>;
+                        <span class="ident">widget</span>.<span class="ident">set_icon</span>(<span class="ident">data</span>.<span class="ident">icon</span>.<span class="ident">to_icon_str</span>())<span class="question-mark">?</span>;
+                        <span class="ident">widget</span>.<span class="ident">set_values</span>(<span class="ident">data</span>.<span class="ident">into_values</span>());
+                        <span class="ident">api</span>.<span class="ident">set_widget</span>(<span class="kw-2">&amp;</span><span class="ident">widget</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+
+                        <span class="comment">// both intervals should be reset after a manual sync</span>
+                        <span class="ident">autolocate_interval</span>.<span class="ident">reset</span>();
+                        <span class="ident">interval</span>.<span class="ident">reset</span>();
+                    },
+                }
+            }
+        }
+    } <span class="kw">else</span> {
+        <span class="kw">loop</span> {
+            <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">api</span>.<span class="ident">recoverable</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">provider</span>.<span class="ident">get_weather</span>(<span class="prelude-val">None</span>)).<span class="kw">await</span><span class="question-mark">?</span>;
+            <span class="ident">widget</span>.<span class="ident">set_icon</span>(<span class="ident">data</span>.<span class="ident">icon</span>.<span class="ident">to_icon_str</span>())<span class="question-mark">?</span>;
+            <span class="ident">widget</span>.<span class="ident">set_values</span>(<span class="ident">data</span>.<span class="ident">into_values</span>());
+            <span class="ident">api</span>.<span class="ident">set_widget</span>(<span class="kw-2">&amp;</span><span class="ident">widget</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+
+            <span class="macro">select!</span> {
+                <span class="kw">_</span> <span class="op">=</span> <span class="ident">sleep</span>(<span class="ident">config</span>.<span class="ident">interval</span>.<span class="number">0</span>) =&gt; (),
+                <span class="kw">_</span> <span class="op">=</span> <span class="ident">api</span>.<span class="ident">wait_for_update_request</span>() =&gt; ()
+            }
+        }
     }
 }
 
@@ -631,51 +647,55 @@
     <span class="ident">Imperial</span>,
 }
 
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Deserialize</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>)]</span>
+<span class="kw">struct</span> <span class="ident">Coordinates</span> {
+    <span class="ident">latitude</span>: <span class="ident">f64</span>,
+    <span class="ident">longitude</span>: <span class="ident">f64</span>,
+}
+
 <span class="comment">// TODO: might be good to allow for different geolocation services to be used, similar to how we have `service` for the weather API</span>
-<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">find_ip_location</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">find_ip_location</span>() -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Coordinates</span><span class="op">&gt;</span> {
     <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Deserialize</span>)]</span>
     <span class="kw">struct</span> <span class="ident">ApiResponse</span> {
-        <span class="ident">city</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">flatten</span>)]</span>
+        <span class="ident">location</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Coordinates</span><span class="op">&gt;</span>,
+        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>)]</span>
+        <span class="ident">error</span>: <span class="ident">bool</span>,
+        <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">default</span>)]</span>
+        <span class="ident">reason</span>: <span class="ident">ApiError</span>,
     }
-    <span class="ident">REQWEST_CLIENT</span>
+
+    <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Deserialize</span>, <span class="ident">Default</span>, <span class="ident">Debug</span>)]</span>
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">transparent</span>)]</span>
+    <span class="kw">struct</span> <span class="ident">ApiError</span>(<span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>);
+
+    <span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">ApiError</span> {
+        <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">fmt::Result</span> {
+            <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_deref</span>().<span class="ident">unwrap_or</span>(<span class="string">&quot;Unknown Error&quot;</span>))
+        }
+    }
+    <span class="kw">impl</span> <span class="ident">StdError</span> <span class="kw">for</span> <span class="ident">ApiError</span> {}
+
+    <span class="kw">let</span> <span class="ident">response</span>: <span class="ident">ApiResponse</span> <span class="op">=</span> <span class="ident">REQWEST_CLIENT</span>
         .<span class="ident">get</span>(<span class="ident">IP_API_URL</span>)
         .<span class="ident">send</span>()
         .<span class="kw">await</span>
         .<span class="ident">error</span>(<span class="string">&quot;Failed during request for current location&quot;</span>)<span class="question-mark">?</span>
-        .<span class="ident">json</span>::<span class="op">&lt;</span><span class="ident">ApiResponse</span><span class="op">&gt;</span>()
+        .<span class="ident">json</span>()
         .<span class="kw">await</span>
-        .<span class="ident">error</span>(<span class="string">&quot;Failed while parsing location API result&quot;</span>)
-        .<span class="ident">map</span>(<span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="ident">x</span>.<span class="ident">city</span>)
-}
+        .<span class="ident">error</span>(<span class="string">&quot;Failed while parsing location API result&quot;</span>)<span class="question-mark">?</span>;
 
-<span class="comment">// Compute the Australian Apparent Temperature (AT),</span>
-<span class="comment">// using the metric formula found on Wikipedia.</span>
-<span class="comment">// If using imperial units, we must first convert to metric.</span>
-<span class="kw">fn</span> <span class="ident">australian_apparent_temp</span>(
-    <span class="ident">raw_temp</span>: <span class="ident">f64</span>,
-    <span class="ident">raw_humidity</span>: <span class="ident">f64</span>,
-    <span class="ident">raw_wind_speed</span>: <span class="ident">f64</span>,
-    <span class="ident">units</span>: <span class="ident">UnitSystem</span>,
-) -&gt; <span class="ident">f64</span> {
-    <span class="kw">let</span> <span class="ident">temp_celsius</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">units</span> {
-        <span class="ident">UnitSystem::Metric</span> =&gt; <span class="ident">raw_temp</span>,
-        <span class="ident">UnitSystem::Imperial</span> =&gt; (<span class="ident">raw_temp</span> <span class="op">-</span> <span class="number">32.0</span>) <span class="op">*</span> <span class="number">0.556</span>,
-    };
-
-    <span class="kw">let</span> <span class="ident">exponent</span> <span class="op">=</span> <span class="number">17.27</span> <span class="op">*</span> <span class="ident">temp_celsius</span> <span class="op">/</span> (<span class="number">237.7</span> <span class="op">+</span> <span class="ident">temp_celsius</span>);
-    <span class="kw">let</span> <span class="ident">water_vapor_pressure</span> <span class="op">=</span> <span class="ident">raw_humidity</span> <span class="op">*</span> <span class="number">0.06105</span> <span class="op">*</span> <span class="ident">exponent</span>.<span class="ident">exp</span>();
-
-    <span class="kw">let</span> <span class="ident">metric_wind_speed</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">units</span> {
-        <span class="ident">UnitSystem::Metric</span> =&gt; <span class="ident">raw_wind_speed</span>,
-        <span class="ident">UnitSystem::Imperial</span> =&gt; <span class="ident">raw_wind_speed</span> <span class="op">*</span> <span class="number">0.447</span>,
-    };
-
-    <span class="kw">let</span> <span class="ident">metric_apparent_temp</span> <span class="op">=</span>
-        <span class="ident">temp_celsius</span> <span class="op">+</span> <span class="number">0.33</span> <span class="op">*</span> <span class="ident">water_vapor_pressure</span> <span class="op">-</span> <span class="number">0.7</span> <span class="op">*</span> <span class="ident">metric_wind_speed</span> <span class="op">-</span> <span class="number">4.0</span>;
-
-    <span class="kw">match</span> <span class="ident">units</span> {
-        <span class="ident">UnitSystem::Metric</span> =&gt; <span class="ident">metric_apparent_temp</span>,
-        <span class="ident">UnitSystem::Imperial</span> =&gt; <span class="number">1.8</span> <span class="op">*</span> <span class="ident">metric_apparent_temp</span> <span class="op">+</span> <span class="number">32.</span>,
+    <span class="kw">if</span> <span class="ident">response</span>.<span class="ident">error</span> {
+        <span class="prelude-val">Err</span>(<span class="ident">Error</span> {
+            <span class="ident">kind</span>: <span class="ident">ErrorKind::Other</span>,
+            <span class="ident">message</span>: <span class="prelude-val">Some</span>(<span class="string">&quot;ipapi.co error&quot;</span>.<span class="ident">into</span>()),
+            <span class="ident">cause</span>: <span class="prelude-val">Some</span>(<span class="ident">Arc::new</span>(<span class="ident">response</span>.<span class="ident">reason</span>)),
+            <span class="ident">block</span>: <span class="prelude-val">None</span>,
+        })
+    } <span class="kw">else</span> {
+        <span class="ident">response</span>
+            .<span class="ident">location</span>
+            .<span class="ident">error</span>(<span class="string">&quot;Failed while parsing location API result&quot;</span>)
     }
 }
 
@@ -695,6 +715,13 @@
         <span class="prelude-val">None</span> =&gt; <span class="string">&quot;-&quot;</span>,
     }
 }
+
+<span class="doccomment">/// Compute the Australian Apparent Temperature from metric units</span>
+<span class="kw">fn</span> <span class="ident">australian_apparent_temp</span>(<span class="ident">temp</span>: <span class="ident">f64</span>, <span class="ident">humidity</span>: <span class="ident">f64</span>, <span class="ident">wind_speed</span>: <span class="ident">f64</span>) -&gt; <span class="ident">f64</span> {
+    <span class="kw">let</span> <span class="ident">exponent</span> <span class="op">=</span> <span class="number">17.27</span> <span class="op">*</span> <span class="ident">temp</span> <span class="op">/</span> (<span class="number">237.7</span> <span class="op">+</span> <span class="ident">temp</span>);
+    <span class="kw">let</span> <span class="ident">water_vapor_pressure</span> <span class="op">=</span> <span class="ident">humidity</span> <span class="op">*</span> <span class="number">0.06105</span> <span class="op">*</span> <span class="ident">exponent</span>.<span class="ident">exp</span>();
+    <span class="ident">temp</span> <span class="op">+</span> <span class="number">0.33</span> <span class="op">*</span> <span class="ident">water_vapor_pressure</span> <span class="op">-</span> <span class="number">0.7</span> <span class="op">*</span> <span class="ident">wind_speed</span> <span class="op">-</span> <span class="number">4.0</span>
+}
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="i3status_rs" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.62.1 (e092d0b6b 2022-07-16)" ></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="i3status_rs" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
 </body></html>

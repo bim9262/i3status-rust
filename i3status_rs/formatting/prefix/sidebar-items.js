@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["Prefix","SI prefix"]]});
+window.SIDEBAR_ITEMS = {"constant":[["MUL",""]],"enum":[["Prefix","SI prefix"]]};
