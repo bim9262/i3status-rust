@@ -1,10 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/formatting.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>formatting.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../i3status_rs/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
-        </a><h2 class="location"></h2>
-    </nav>
-    <nav class="sidebar"><a class="sidebar-logo" href="../../i3status_rs/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../i3status_rs/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
-                                <a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div>
-                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/formatting.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>formatting.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../i3status_rs/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../i3status_rs/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../i3status_rs/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -155,6 +149,26 @@
 <span id="149">149</span>
 <span id="150">150</span>
 <span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
+<span id="154">154</span>
+<span id="155">155</span>
+<span id="156">156</span>
+<span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
+<span id="160">160</span>
+<span id="161">161</span>
+<span id="162">162</span>
+<span id="163">163</span>
+<span id="164">164</span>
+<span id="165">165</span>
+<span id="166">166</span>
+<span id="167">167</span>
+<span id="168">168</span>
+<span id="169">169</span>
+<span id="170">170</span>
+<span id="171">171</span>
 </pre><pre class="rust"><code><span class="doccomment">//! # Formatting system</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! Many blocks have a `format` configuration option, which allows to heavily customize the block&#39;s</span>
@@ -162,6 +176,10 @@
 <span class="doccomment">//! displayed according to `format`. `format`&#39;s value is just a text with embeded variables.</span>
 <span class="doccomment">//! Simialrly to PHP and shell, variable name must start with a `$`:</span>
 <span class="doccomment">//! `this is a variable: -&gt; $var &lt;-`.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Also, format strings can embed icons. For example, `^icon_ping` in `&quot; ^icon_ping $ping &quot;` gets</span>
+<span class="doccomment">//! substituted with a &quot;ping&quot; icon from your icon set. For a complete list of icons, see</span>
+<span class="doccomment">//! [this](https://github.com/greshake/i3status-rust/blob/master/doc/themes.md#available-icon-overrides).</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! # Types</span>
 <span class="doccomment">//!</span>
@@ -242,8 +260,8 @@
 <span class="kw">use</span> <span class="ident">std::collections::HashMap</span>;
 <span class="kw">use</span> <span class="ident">std::sync::Arc</span>;
 
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::config::SharedConfig</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::errors</span>::<span class="kw-2">*</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::widget::State</span>;
 <span class="kw">use</span> <span class="ident">template::FormatTemplate</span>;
 <span class="kw">use</span> <span class="ident">value::Value</span>;
 
@@ -254,28 +272,32 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">FormatInner</span> {
     <span class="ident">full</span>: <span class="ident">FormatTemplate</span>,
-    <span class="ident">short</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">FormatTemplate</span><span class="op">&gt;</span>,
+    <span class="ident">short</span>: <span class="ident">FormatTemplate</span>,
     <span class="ident">intervals</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">FormatInner</span> {
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">contains_key</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">full</span>.<span class="ident">contains_key</span>(<span class="ident">key</span>) <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">short</span>.<span class="ident">as_ref</span>().<span class="ident">map_or</span>(<span class="bool-val">false</span>, <span class="op">|</span><span class="ident">x</span><span class="op">|</span> <span class="ident">x</span>.<span class="ident">contains_key</span>(<span class="ident">key</span>))
+        <span class="self">self</span>.<span class="ident">full</span>.<span class="ident">contains_key</span>(<span class="ident">key</span>) <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">short</span>.<span class="ident">contains_key</span>(<span class="ident">key</span>)
     }
 
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">intervals</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">intervals</span>.<span class="ident">clone</span>()
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">render</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">vars</span>: <span class="kw-2">&amp;</span><span class="ident">Values</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Fragment</span><span class="op">&gt;</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Fragment</span><span class="op">&gt;</span>)<span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">full</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">full</span>.<span class="ident">render</span>(<span class="ident">vars</span>).<span class="ident">error</span>(<span class="string">&quot;Failed to render full text&quot;</span>)<span class="question-mark">?</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">render</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">values</span>: <span class="kw-2">&amp;</span><span class="ident">Values</span>,
+        <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">SharedConfig</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Fragment</span><span class="op">&gt;</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Fragment</span><span class="op">&gt;</span>)<span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">full</span> <span class="op">=</span> <span class="self">self</span>
+            .<span class="ident">full</span>
+            .<span class="ident">render</span>(<span class="ident">values</span>, <span class="ident">config</span>)
+            .<span class="ident">error</span>(<span class="string">&quot;Failed to render full text&quot;</span>)<span class="question-mark">?</span>;
         <span class="kw">let</span> <span class="ident">short</span> <span class="op">=</span> <span class="self">self</span>
             .<span class="ident">short</span>
-            .<span class="ident">as_ref</span>()
-            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">s</span><span class="op">|</span> <span class="ident">s</span>.<span class="ident">render</span>(<span class="ident">vars</span>))
-            .<span class="ident">transpose</span>()
-            .<span class="ident">error</span>(<span class="string">&quot;Failed to render short text&quot;</span>)<span class="question-mark">?</span>
-            .<span class="ident">unwrap_or_default</span>();
+            .<span class="ident">render</span>(<span class="ident">values</span>, <span class="ident">config</span>)
+            .<span class="ident">error</span>(<span class="string">&quot;Failed to render short text&quot;</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>((<span class="ident">full</span>, <span class="ident">short</span>))
     }
 }
@@ -295,10 +317,22 @@
     }
 }
 
+<span class="kw">impl</span> <span class="ident">Fragment</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">formated_text</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">String</span> {
+        <span class="kw">match</span> (<span class="self">self</span>.<span class="ident">metadata</span>.<span class="ident">italic</span>, <span class="self">self</span>.<span class="ident">metadata</span>.<span class="ident">underline</span>) {
+            (<span class="bool-val">true</span>, <span class="bool-val">true</span>) =&gt; <span class="macro">format!</span>(<span class="string">&quot;&lt;i&gt;&lt;u&gt;{}&lt;/u&gt;&lt;/i&gt;&quot;</span>, <span class="self">self</span>.<span class="ident">text</span>),
+            (<span class="bool-val">false</span>, <span class="bool-val">true</span>) =&gt; <span class="macro">format!</span>(<span class="string">&quot;&lt;u&gt;{}&lt;/u&gt;&quot;</span>, <span class="self">self</span>.<span class="ident">text</span>),
+            (<span class="bool-val">true</span>, <span class="bool-val">false</span>) =&gt; <span class="macro">format!</span>(<span class="string">&quot;&lt;i&gt;{}&lt;/i&gt;&quot;</span>, <span class="self">self</span>.<span class="ident">text</span>),
+            (<span class="bool-val">false</span>, <span class="bool-val">false</span>) =&gt; <span class="self">self</span>.<span class="ident">text</span>.<span class="ident">clone</span>(),
+        }
+    }
+}
+
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Default</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Metadata</span> {
     <span class="kw">pub</span> <span class="ident">instance</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
-    <span class="kw">pub</span> <span class="ident">state</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">State</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">underline</span>: <span class="ident">bool</span>,
+    <span class="kw">pub</span> <span class="ident">italic</span>: <span class="ident">bool</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">Metadata</span> {
@@ -307,5 +341,4 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="i3status_rs" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
-</body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="i3status_rs" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0 (a55dd71d5 2022-09-19)" ></div></body></html>
