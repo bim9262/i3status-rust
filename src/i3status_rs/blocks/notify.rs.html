@@ -191,13 +191,6 @@
 <span id="191">191</span>
 <span id="192">192</span>
 <span id="193">193</span>
-<span id="194">194</span>
-<span id="195">195</span>
-<span id="196">196</span>
-<span id="197">197</span>
-<span id="198">198</span>
-<span id="199">199</span>
-<span id="200">200</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Display and toggle the state of notifications daemon
 //!
 //! Right now only `dunst` is supported.
@@ -256,8 +249,8 @@
     <span class="kw">let </span>config = NotifyConfig::deserialize(config).config_error()<span class="question-mark">?</span>;
     <span class="kw">let </span><span class="kw-2">mut </span>widget = Widget::new().with_format(config.format.with_default(<span class="string">&quot; $icon &quot;</span>)<span class="question-mark">?</span>);
 
-    <span class="kw">let </span><span class="kw-2">mut </span>driver: Box&lt;<span class="kw">dyn </span>Driver + Send + Sync&gt; = <span class="kw">match </span>config.driver {
-        DriverType::Dunst =&gt; Box::new(MakoDriver::new().<span class="kw">await</span><span class="question-mark">?</span>),
+    <span class="kw">let </span><span class="kw-2">mut </span>driver: Box&lt;<span class="kw">dyn </span>Driver&gt; = <span class="kw">match </span>config.driver {
+        DriverType::Dunst =&gt; Box::new(DunstDriver::new().<span class="kw">await</span><span class="question-mark">?</span>),
         DriverType::SwayNC =&gt; Box::new(SwayNCDriver::new().<span class="kw">await</span><span class="question-mark">?</span>),
     };
 
@@ -295,12 +288,12 @@
     <span class="kw">async fn </span>wait_for_change(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt;;
 }
 
-<span class="kw">struct </span>MakoDriver {
+<span class="kw">struct </span>DunstDriver {
     proxy: DunstDbusProxy&lt;<span class="lifetime">&#39;static</span>&gt;,
     changes: PropertyStream&lt;<span class="lifetime">&#39;static</span>, bool&gt;,
 }
 
-<span class="kw">impl </span>MakoDriver {
+<span class="kw">impl </span>DunstDriver {
     <span class="kw">async fn </span>new() -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
         <span class="kw">let </span>dbus_conn = new_dbus_connection().<span class="kw">await</span><span class="question-mark">?</span>;
         <span class="kw">let </span>proxy = DunstDbusProxy::new(<span class="kw-2">&amp;</span>dbus_conn)
@@ -314,7 +307,7 @@
 }
 
 <span class="attribute">#[async_trait]
-</span><span class="kw">impl </span>Driver <span class="kw">for </span>MakoDriver {
+</span><span class="kw">impl </span>Driver <span class="kw">for </span>DunstDriver {
     <span class="kw">async fn </span>is_paused(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;bool&gt; {
         <span class="self">self</span>.proxy.paused().<span class="kw">await</span>.error(<span class="string">&quot;Failed to get &#39;paused&#39;&quot;</span>)
     }
@@ -345,22 +338,20 @@
 }
 <span class="kw">struct </span>SwayNCDriver {
     proxy: SwayNCDbusProxy&lt;<span class="lifetime">&#39;static</span>&gt;,
-    changes: OnDndToggleStream&lt;<span class="lifetime">&#39;static</span>&gt;,
+    changes: SubscribeStream&lt;<span class="lifetime">&#39;static</span>&gt;,
 }
 
 <span class="kw">impl </span>SwayNCDriver {
     <span class="kw">async fn </span>new() -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
         <span class="kw">let </span>dbus_conn = new_dbus_connection().<span class="kw">await</span><span class="question-mark">?</span>;
-        <span class="kw">let </span>proxy = SwayNCDbusProxy::builder(<span class="kw-2">&amp;</span>dbus_conn)
-            .cache_properties(zbus::CacheProperties::No)
-            .build()
+        <span class="kw">let </span>proxy = SwayNCDbusProxy::new(<span class="kw-2">&amp;</span>dbus_conn)
             .<span class="kw">await
             </span>.error(<span class="string">&quot;Failed to create SwayNCDbusProxy&quot;</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="self">Self </span>{
             changes: proxy
-                .receive_on_dnd_toggle()
+                .receive_subscribe()
                 .<span class="kw">await
-                </span>.error(<span class="string">&quot;Failed to subscribe to OnDndToggle&quot;</span>)<span class="question-mark">?</span>,
+                </span>.error(<span class="string">&quot;Failed to create SubscribeStream&quot;</span>)<span class="question-mark">?</span>,
             proxy,
         })
     }
@@ -369,14 +360,11 @@
 <span class="attribute">#[async_trait]
 </span><span class="kw">impl </span>Driver <span class="kw">for </span>SwayNCDriver {
     <span class="kw">async fn </span>is_paused(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;bool&gt; {
-        <span class="self">self</span>.proxy.dnd().<span class="kw">await</span>.error(<span class="string">&quot;Failed to get &#39;Dnd&#39;&quot;</span>)
+        <span class="self">self</span>.proxy.get_dnd().<span class="kw">await</span>.error(<span class="string">&quot;Failed to &#39;GetDnd&#39;&quot;</span>)
     }
 
     <span class="kw">async fn </span>set_paused(<span class="kw-2">&amp;</span><span class="self">self</span>, paused: bool) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
-        <span class="self">self</span>.proxy
-            .set_dnd(paused)
-            .<span class="kw">await
-            </span>.error(<span class="string">&quot;Failed to set &#39;Dnd&#39;&quot;</span>)
+        <span class="self">self</span>.proxy.set_dnd(paused).<span class="kw">await</span>.error(<span class="string">&quot;Failed to &#39;SetDnd&#39;&quot;</span>)
     }
 
     <span class="kw">async fn </span>wait_for_change(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
@@ -386,17 +374,15 @@
 }
 
 <span class="attribute">#[dbus_proxy(
-    interface = <span class="string">&quot;org.freedesktop.Notifications&quot;</span>,
+    interface = <span class="string">&quot;org.erikreider.swaync.cc&quot;</span>,
     default_service = <span class="string">&quot;org.freedesktop.Notifications&quot;</span>,
-    default_path = <span class="string">&quot;/org/freedesktop/Notifications&quot;
+    default_path = <span class="string">&quot;/org/erikreider/swaync/cc&quot;
 </span>)]
 </span><span class="kw">trait </span>SwayNCDbus {
-    <span class="attribute">#[dbus_proxy(property, name = <span class="string">&quot;Dnd&quot;</span>)]
-    </span><span class="kw">fn </span>dnd(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; zbus::Result&lt;bool&gt;;
-    <span class="attribute">#[dbus_proxy(property, name = <span class="string">&quot;Dnd&quot;</span>)]
-    </span><span class="kw">fn </span>set_dnd(<span class="kw-2">&amp;</span><span class="self">self</span>, value: bool) -&gt; zbus::Result&lt;()&gt;;
-    <span class="attribute">#[dbus_proxy(signal, name = <span class="string">&quot;OnDndToggle&quot;</span>)]
-    </span><span class="kw">fn </span>on_dnd_toggle(<span class="kw-2">&amp;</span><span class="self">self</span>, valut: bool) -&gt; zbus::Result&lt;()&gt;;
+    <span class="kw">fn </span>get_dnd(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; zbus::Result&lt;bool&gt;;
+    <span class="kw">fn </span>set_dnd(<span class="kw-2">&amp;</span><span class="self">self</span>, value: bool) -&gt; zbus::Result&lt;()&gt;;
+    <span class="attribute">#[dbus_proxy(signal)]
+    </span><span class="kw">fn </span>subscribe(<span class="kw-2">&amp;</span><span class="self">self</span>, value: bool) -&gt; zbus::Result&lt;()&gt;;
 }
 </code></pre></div>
 </section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="i3status_rs" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>
