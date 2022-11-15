@@ -193,6 +193,11 @@
 <span id="193">193</span>
 <span id="194">194</span>
 <span id="195">195</span>
+<span id="196">196</span>
+<span id="197">197</span>
+<span id="198">198</span>
+<span id="199">199</span>
+<span id="200">200</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Display and toggle the state of notifications daemon
 //!
 //! Right now only `dunst` is supported.
@@ -340,7 +345,7 @@
 }
 <span class="kw">struct </span>SwayNCDriver {
     proxy: SwayNCDbusProxy&lt;<span class="lifetime">&#39;static</span>&gt;,
-    changes: PropertyStream&lt;<span class="lifetime">&#39;static</span>, bool&gt;,
+    changes: OnDndToggleStream&lt;<span class="lifetime">&#39;static</span>&gt;,
 }
 
 <span class="kw">impl </span>SwayNCDriver {
@@ -352,7 +357,10 @@
             .<span class="kw">await
             </span>.error(<span class="string">&quot;Failed to create SwayNCDbusProxy&quot;</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="self">Self </span>{
-            changes: proxy.receive_dnd_changed().<span class="kw">await</span>,
+            changes: proxy
+                .receive_on_dnd_toggle()
+                .<span class="kw">await
+                </span>.error(<span class="string">&quot;Failed to subscribe to OnDndToggle&quot;</span>)<span class="question-mark">?</span>,
             proxy,
         })
     }
@@ -387,6 +395,8 @@
     </span><span class="kw">fn </span>dnd(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; zbus::Result&lt;bool&gt;;
     <span class="attribute">#[dbus_proxy(property, name = <span class="string">&quot;Dnd&quot;</span>)]
     </span><span class="kw">fn </span>set_dnd(<span class="kw-2">&amp;</span><span class="self">self</span>, value: bool) -&gt; zbus::Result&lt;()&gt;;
+    <span class="attribute">#[dbus_proxy(signal, name = <span class="string">&quot;OnDndToggle&quot;</span>)]
+    </span><span class="kw">fn </span>on_dnd_toggle(<span class="kw-2">&amp;</span><span class="self">self</span>, valut: bool) -&gt; zbus::Result&lt;()&gt;;
 }
 </code></pre></div>
 </section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="i3status_rs" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>
