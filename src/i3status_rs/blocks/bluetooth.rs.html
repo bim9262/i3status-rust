@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/blocks/bluetooth.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>bluetooth.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../i3status_rs/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../../i3status_rs/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../i3status_rs/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/blocks/bluetooth.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>bluetooth.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../../normalize.css"><link rel="stylesheet" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../../ayu.css" disabled><link rel="stylesheet" href="../../../dark.css" disabled><link rel="stylesheet" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../main.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../../i3status_rs/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -366,6 +366,12 @@
 <span id="366">366</span>
 <span id="367">367</span>
 <span id="368">368</span>
+<span id="369">369</span>
+<span id="370">370</span>
+<span id="371">371</span>
+<span id="372">372</span>
+<span id="373">373</span>
+<span id="374">374</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Monitor Bluetooth device
 //!
 //! This block displays the connectivity of a given Bluetooth device and the battery level if this
@@ -391,6 +397,10 @@
 //! `name`       | Device&#39;s name                                                         | Text   | -
 //! `percentage` | Device&#39;s battery level (may be absent if the device is not supported) | Number | %
 //! `available`  | Present if the device is available                                    | Flag   | -
+//!
+//! Action   | Default button
+//! ---------|---------------
+//! `toggle` | Right
 //!
 //! # Examples
 //!
@@ -428,6 +438,9 @@
 }
 
 <span class="kw">pub async fn </span>run(config: Config, <span class="kw-2">mut </span>api: CommonApi) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    api.set_default_actions(<span class="kw-2">&amp;</span>[(MouseButton::Right, <span class="prelude-val">None</span>, <span class="string">&quot;toggle&quot;</span>)])
+        .<span class="kw">await</span><span class="question-mark">?</span>;
+
     <span class="kw">let </span>format = config.format.with_default(<span class="string">&quot; $icon $name{ $percentage|} &quot;</span>)<span class="question-mark">?</span>;
     <span class="kw">let </span>disconnected_format = config
         .disconnected_format
@@ -479,8 +492,8 @@
                     res<span class="question-mark">?</span>;
                     <span class="kw">break</span>;
                 },
-                event = api.event() =&gt; <span class="kw">if let </span>Click(click) = event {
-                    <span class="kw">if </span>click.button == MouseButton::Right {
+                event = api.event() =&gt; <span class="kw">match </span>event {
+                    Action(a) <span class="kw">if </span>a == <span class="string">&quot;toggle&quot; </span>=&gt; {
                         <span class="kw">if let </span><span class="prelude-val">Some</span>(dev) = <span class="kw-2">&amp;</span>monitor.device {
                             <span class="kw">if let </span><span class="prelude-val">Ok</span>(connected) = dev.connected().<span class="kw">await </span>{
                                 <span class="kw">if </span>connected {
@@ -491,6 +504,7 @@
                             }
                         }
                     }
+                    <span class="kw">_ </span>=&gt; (),
                 }
             }
         }
@@ -598,14 +612,20 @@
         mac: <span class="kw-2">&amp;</span>str,
         adapter_mac: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt;,
     ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>&gt;&gt; {
+        <span class="kw">let </span><span class="prelude-val">Ok</span>(devices) = manager_proxy
+            .get_managed_objects()
+            .<span class="kw">await
+        else </span>{
+            <span class="macro">debug!</span>(<span class="string">&quot;could not get the list of managed objects&quot;</span>);
+            <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>);
+        };
+
+        <span class="macro">debug!</span>(<span class="string">&quot;all managed devices: {:?}&quot;</span>, devices);
+
         <span class="kw">let </span>root_object: String = <span class="kw">match </span>adapter_mac {
             <span class="prelude-val">Some</span>(adapter_mac) =&gt; {
-                <span class="kw">let </span>adapters = manager_proxy
-                    .get_managed_objects()
-                    .<span class="kw">await
-                    </span>.error(<span class="string">&quot;Failed to get a list of adapters&quot;</span>)<span class="question-mark">?</span>;
                 <span class="kw">let </span><span class="kw-2">mut </span>adapter_path = <span class="prelude-val">None</span>;
-                <span class="kw">for </span>(path, interfaces) <span class="kw">in </span>adapters {
+                <span class="kw">for </span>(path, interfaces) <span class="kw">in </span><span class="kw-2">&amp;</span>devices {
                     <span class="kw">let </span>adapter_interface = <span class="kw">match </span>interfaces.get(<span class="string">&quot;org.bluez.Adapter1&quot;</span>) {
                         <span class="prelude-val">Some</span>(i) =&gt; i,
                         <span class="prelude-val">None </span>=&gt; <span class="kw">continue</span>, <span class="comment">// Not an adapter
@@ -628,14 +648,6 @@
         };
 
         <span class="macro">debug!</span>(<span class="string">&quot;root object: {:?}&quot;</span>, root_object);
-
-        <span class="comment">// Iterate over all devices
-        </span><span class="kw">let </span>devices = manager_proxy
-            .get_managed_objects()
-            .<span class="kw">await
-            </span>.error(<span class="string">&quot;Failed to get the list of devices&quot;</span>)<span class="question-mark">?</span>;
-
-        <span class="macro">debug!</span>(<span class="string">&quot;all managed devices: {:?}&quot;</span>, devices);
 
         <span class="kw">for </span>(path, interfaces) <span class="kw">in </span>devices {
             <span class="kw">if </span>!path.starts_with(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;{root_object}/&quot;</span>)) {
@@ -735,4 +747,4 @@
     </span><span class="kw">fn </span>percentage(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; zbus::Result&lt;u8&gt;;
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="i3status_rs" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="i3status_rs" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0 (69f9c33d7 2022-12-12)" ></div></body></html>
