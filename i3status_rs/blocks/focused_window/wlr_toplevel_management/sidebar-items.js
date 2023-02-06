@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":[["toplevel_cb",""],["toplevel_manager_cb",""]],"struct":[["State",""],["Toplevel",""],["WlrToplevelManagement",""]]};
