@@ -1,6 +1,6 @@
 //! The current song title and artist
 //!
-//! Also provides buttons for play/pause, previous and next.
+//! Also provides :) buttons for play/pause, previous and next.
 //!
 //! Supports all music players that implement the [MediaPlayer2 Interface]. This includes:
 //!
