@@ -26,14 +26,14 @@ repos:
   - repo: https://github.com/streetsidesoftware/cspell-cli
     rev: v6.2.0
     hooks:
-      - id: cspell
+    - id: cspell
   # typos is corrections based
   # Corrections: Known misspellings that map to their corresponding dictionary word
   - repo: https://github.com/crate-ci/typos
     rev: v1.13.12
     hooks:
-      - id: typos
-        args: [] # this prevents typos from being autocorrected (so you have a chance to review them)
+    - id: typos
+      args: [] # this prevents typos from being autocorrected (so you have a chance to review them)
   - repo: https://github.com/doublify/pre-commit-rust
     rev: v1.0
     hooks:
