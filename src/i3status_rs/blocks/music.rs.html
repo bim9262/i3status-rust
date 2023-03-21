@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/blocks/music.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>music.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-1f7d512b176f0f72.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-124a1ca42af929b6.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-6827029ac823cab7.css" id="mainThemeStyle"><link rel="stylesheet" id="themeStyle" href="../../../static.files/light-ebce58d0a40c3431.css"><link rel="stylesheet" disabled href="../../../static.files/dark-f23faae4a2daf9a6.css"><link rel="stylesheet" disabled href="../../../static.files/ayu-8af5e100b21cd173.css"><script id="default-settings" ></script><script src="../../../static.files/storage-d43fa987303ecbbb.js"></script><script defer src="../../../static.files/source-script-5cf2e01a42cc9858.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../static.files/main-c55e1eb52e1886b4.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../../i3status_rs/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-5ec35bf9ca753509.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/blocks/music.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>music.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-1f7d512b176f0f72.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-124a1ca42af929b6.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-93196c7a1c3542a8.css" id="mainThemeStyle"><link rel="stylesheet" id="themeStyle" href="../../../static.files/light-4743e13df3dfe8c4.css"><link rel="stylesheet" disabled href="../../../static.files/dark-0e1b889528bd466b.css"><link rel="stylesheet" disabled href="../../../static.files/ayu-65289d5d067c7c66.css"><script id="default-settings" ></script><script src="../../../static.files/storage-d43fa987303ecbbb.js"></script><script defer src="../../../static.files/source-script-ea63cb6500f71309.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../static.files/main-3367e395607fafc1.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../i3status_rs/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-5ec35bf9ca753509.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -633,6 +633,14 @@
 <a href="#633" id="633">633</a>
 <a href="#634" id="634">634</a>
 <a href="#635" id="635">635</a>
+<a href="#636" id="636">636</a>
+<a href="#637" id="637">637</a>
+<a href="#638" id="638">638</a>
+<a href="#639" id="639">639</a>
+<a href="#640" id="640">640</a>
+<a href="#641" id="641">641</a>
+<a href="#642" id="642">642</a>
+<a href="#643" id="643">643</a>
 </pre><pre class="rust"><code><span class="doccomment">//! The current song title and artist
 //!
 //! Also provides buttons for play/pause, previous and next.
@@ -675,8 +683,8 @@
 //! `play`        | Play/Pause button | Clickable icon
 //! `next`        | Next button | Clickable icon
 //! `prev`        | Previous button | Clickable icon
-//! `volume_icon` | Icon based on volume              | Icon
-//! `volume`      | Current volume. Missing if muted. | Number
+//! `volume_icon` | Icon based on volume. Missing if unsupported.    | Icon
+//! `volume`      | Current volume. Missing if muted or unsupported. | Number
 //!
 //! Action          | Default button
 //! ----------------|------------------
@@ -719,7 +727,7 @@
 //! interface_name_exclude = [&quot;.*kdeconnect.*&quot;, &quot;mpd&quot;]
 //! ```
 //!
-//! Click anywhere to paly/pause:
+//! Click anywhere to play/pause:
 //!
 //! ```toml
 //! [[block]]
@@ -762,7 +770,6 @@
 
 </span><span class="kw">use </span><span class="kw">super</span>::prelude::<span class="kw-2">*</span>;
 <span class="kw">use </span>regex::Regex;
-<span class="kw">use </span>tokio::try_join;
 <span class="kw">use </span>zbus::fdo::{DBusProxy, NameOwnerChanged, PropertiesChanged};
 <span class="kw">use </span>zbus::names::{OwnedBusName, OwnedUniqueName};
 <span class="kw">use </span>zbus::{MatchRule, MessageStream};
@@ -829,7 +836,7 @@
         <span class="string">&quot;prev&quot; </span>=&gt; new_btn(<span class="string">&quot;music_prev&quot;</span>, PREV_BTN, <span class="kw-2">&amp;mut </span>api)<span class="question-mark">?</span>,
     };
 
-    <span class="kw">let </span>prefered_players = <span class="kw">match </span>config.player {
+    <span class="kw">let </span>preferred_players = <span class="kw">match </span>config.player {
         PlayerName::Single(name) =&gt; <span class="macro">vec!</span>[name],
         PlayerName::Multiple(names) =&gt; names,
     };
@@ -840,19 +847,19 @@
         .collect::&lt;<span class="prelude-ty">Result</span>&lt;Vec&lt;<span class="kw">_</span>&gt;, <span class="kw">_</span>&gt;&gt;()
         .error(<span class="string">&quot;Invalid regex&quot;</span>)<span class="question-mark">?</span>;
 
-    <span class="kw">let </span>playerctrld_proxy = zbus_playerctld::PlayerctldProxy::new(<span class="kw-2">&amp;</span>dbus_conn)
+    <span class="kw">let </span>playerctld_proxy = zbus_playerctld::PlayerctldProxy::new(<span class="kw-2">&amp;</span>dbus_conn)
         .<span class="kw">await
         </span>.error(<span class="string">&quot;Failed to create PlayerctldProxy&quot;</span>)<span class="question-mark">?</span>;
 
-    <span class="kw">let </span><span class="kw-2">mut </span>players = get_players(<span class="kw-2">&amp;</span>dbus_conn, <span class="kw-2">&amp;</span>prefered_players, <span class="kw-2">&amp;</span>exclude_regex).<span class="kw">await</span><span class="question-mark">?</span>;
+    <span class="kw">let </span><span class="kw-2">mut </span>players = get_players(<span class="kw-2">&amp;</span>dbus_conn, <span class="kw-2">&amp;</span>preferred_players, <span class="kw-2">&amp;</span>exclude_regex).<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="kw">let </span><span class="kw-2">mut </span>cur_player = <span class="prelude-val">None</span>;
-    <span class="kw">if let </span><span class="prelude-val">Ok</span>(playerctrld_players) = playerctrld_proxy.player_names().<span class="kw">await </span>{
+    <span class="kw">if let </span><span class="prelude-val">Ok</span>(playerctld_players) = playerctld_proxy.player_names().<span class="kw">await </span>{
         <span class="comment">// If we can get the list of players from playerctld then we should
         // take the first matching player (this is the most recently active player)
-        </span><span class="kw">for </span>playerctrld_player <span class="kw">in </span>playerctrld_players {
+        </span><span class="kw">for </span>playerctld_player <span class="kw">in </span>playerctld_players {
             <span class="kw">if let </span><span class="prelude-val">Some</span>(pos) = players
                 .iter()
-                .position(|p| p.bus_name.as_str() == playerctrld_player)
+                .position(|p| p.bus_name.as_str() == playerctld_player)
             {
                 cur_player = <span class="prelude-val">Some</span>(pos);
                 <span class="kw">break</span>;
@@ -898,7 +905,7 @@
     .<span class="kw">await
     </span>.error(<span class="string">&quot;Failed to add match rule&quot;</span>)<span class="question-mark">?</span>;
 
-    <span class="kw">let </span><span class="kw-2">mut </span>active_player_change_end_stream = playerctrld_proxy
+    <span class="kw">let </span><span class="kw-2">mut </span>active_player_change_end_stream = playerctld_proxy
         .receive_active_player_change_end()
         .<span class="kw">await
         </span>.error(<span class="string">&quot;Failed to create ActivePlayerChangeEndStream&quot;</span>)<span class="question-mark">?</span>;
@@ -958,11 +965,13 @@
                     }
                     <span class="kw">_ </span>=&gt; (),
                 }
-                values.insert(
-                    <span class="string">&quot;volume_icon&quot;</span>.into(),
-                    Value::icon(api.get_icon_in_progression(<span class="string">&quot;volume&quot;</span>, player.volume)<span class="question-mark">?</span>),
-                );
-                values.insert(<span class="string">&quot;volume&quot;</span>.into(), Value::percents(player.volume * <span class="number">100.0</span>));
+                <span class="kw">if let </span><span class="prelude-val">Some</span>(volume) = player.volume {
+                    values.insert(
+                        <span class="string">&quot;volume_icon&quot;</span>.into(),
+                        Value::icon(api.get_icon_in_progression(<span class="string">&quot;volume&quot;</span>, volume)<span class="question-mark">?</span>),
+                    );
+                    values.insert(<span class="string">&quot;volume&quot;</span>.into(), Value::percents(volume * <span class="number">100.0</span>));
+                }
                 widget.set_values(values);
                 widget.state = state;
                 api.set_widget(<span class="kw-2">&amp;</span>widget).<span class="kw">await</span><span class="question-mark">?</span>;
@@ -993,7 +1002,7 @@
                                 zbus_mpris::PlayerMetadata::try_from(metadata.to_owned()).unwrap();
                         }
                         <span class="kw">if let </span><span class="prelude-val">Some</span>(volume) = props.get(<span class="string">&quot;Volume&quot;</span>) {
-                            player.volume = <span class="kw-2">*</span>volume.downcast_ref().unwrap();
+                            player.volume = <span class="prelude-val">Some</span>(<span class="kw-2">*</span>volume.downcast_ref().unwrap());
                         }
                         <span class="kw">if </span>player.status == <span class="prelude-val">Some</span>(PlaybackStatus::Playing)
                         &amp;&amp; (
@@ -1011,7 +1020,7 @@
                     <span class="kw">let </span>msg = NameOwnerChanged::from_message(msg).unwrap();
                     <span class="kw">let </span>args = msg.args().unwrap();
                     <span class="kw">match </span>(args.old_owner.as_ref(), args.new_owner.as_ref()) {
-                        (<span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(new)) =&gt; <span class="kw">if </span>player_matches(args.name.as_str(), <span class="kw-2">&amp;</span>prefered_players, <span class="kw-2">&amp;</span>exclude_regex) {
+                        (<span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(new)) =&gt; <span class="kw">if </span>player_matches(args.name.as_str(), <span class="kw-2">&amp;</span>preferred_players, <span class="kw-2">&amp;</span>exclude_regex) {
                             <span class="kw">match </span>Player::new(<span class="kw-2">&amp;</span>dbus_conn, args.name.to_owned().into(), new.to_owned().into()).<span class="kw">await </span>{
                                 <span class="prelude-val">Ok</span>(player) =&gt; players.push(player),
                                 <span class="prelude-val">Err</span>(e) =&gt; {
@@ -1045,7 +1054,7 @@
                     <span class="kw">else</span>{
                         <span class="comment">// We must have shifted to a player we wanted to skip (on the interface_name_exclude list).
                         // Let&#39;s shift again
-                        </span><span class="kw">if let </span><span class="prelude-val">Err</span>(e) = playerctrld_proxy.shift().<span class="kw">await</span>{
+                        </span><span class="kw">if let </span><span class="prelude-val">Err</span>(e) = playerctld_proxy.shift().<span class="kw">await</span>{
                             <span class="macro">debug!</span>(<span class="string">&quot;{e}&quot;</span>);
                         }
                     }
@@ -1068,7 +1077,7 @@
                                 }
                                 <span class="string">&quot;next_player&quot; </span>=&gt; {
                                     cur_player = <span class="prelude-val">Some</span>((i + <span class="number">1</span>) % players.len());
-                                    <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = playerctrld_proxy.shift().<span class="kw">await</span>{
+                                    <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = playerctld_proxy.shift().<span class="kw">await</span>{
                                         <span class="macro">debug!</span>(<span class="string">&quot;{e}&quot;</span>);
                                     }
                                     <span class="kw">break</span>;
@@ -1097,7 +1106,7 @@
 
 <span class="kw">async fn </span>get_players(
     dbus_conn: <span class="kw-2">&amp;</span>zbus::Connection,
-    prefered_players: <span class="kw-2">&amp;</span>[String],
+    preferred_players: <span class="kw-2">&amp;</span>[String],
     exclude_regex: <span class="kw-2">&amp;</span>[Regex],
 ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;Player&gt;&gt; {
     <span class="kw">let </span>proxy = DBusProxy::new(dbus_conn)
@@ -1109,7 +1118,7 @@
         </span>.error(<span class="string">&quot;failed to list dbus names&quot;</span>)<span class="question-mark">?</span>;
     <span class="kw">let </span><span class="kw-2">mut </span>players = Vec::new();
     <span class="kw">for </span>name <span class="kw">in </span>names {
-        <span class="kw">if </span>player_matches(name.as_str(), prefered_players, exclude_regex) {
+        <span class="kw">if </span>player_matches(name.as_str(), preferred_players, exclude_regex) {
             <span class="kw">let </span>owner = proxy.get_name_owner(name.as_ref()).<span class="kw">await</span>.unwrap();
             <span class="kw">match </span>Player::new(dbus_conn, name, owner).<span class="kw">await </span>{
                 <span class="prelude-val">Ok</span>(player) =&gt; players.push(player),
@@ -1129,7 +1138,7 @@
     bus_name: OwnedBusName,
     player_proxy: zbus_mpris::PlayerProxy&lt;<span class="lifetime">&#39;static</span>&gt;,
     metadata: zbus_mpris::PlayerMetadata,
-    volume: f64,
+    volume: <span class="prelude-ty">Option</span>&lt;f64&gt;,
 }
 
 <span class="kw">impl </span>Player {
@@ -1144,9 +1153,12 @@
             </span>.build()
             .<span class="kw">await
             </span>.error(<span class="string">&quot;failed to open player proxy&quot;</span>)<span class="question-mark">?</span>;
+
         <span class="kw">let </span>(metadata, status, volume) =
-            <span class="macro">try_join!</span>(proxy.metadata(), proxy.playback_status(), proxy.volume())
-                .error(<span class="string">&quot;failed to obtain player information&quot;</span>)<span class="question-mark">?</span>;
+            <span class="macro">tokio::join!</span>(proxy.metadata(), proxy.playback_status(), proxy.volume());
+
+        <span class="kw">let </span>metadata = metadata.error(<span class="string">&quot;failed to obtain player metadata&quot;</span>)<span class="question-mark">?</span>;
+        <span class="kw">let </span>status = status.error(<span class="string">&quot;failed to obtain player status&quot;</span>)<span class="question-mark">?</span>;
 
         <span class="prelude-val">Ok</span>(<span class="self">Self </span>{
             status: PlaybackStatus::from_str(<span class="kw-2">&amp;</span>status),
@@ -1154,7 +1166,7 @@
             bus_name,
             player_proxy: proxy,
             metadata,
-            volume,
+            volume: volume.ok(),
         })
     }
 
@@ -1186,10 +1198,13 @@
     }
 
     <span class="kw">async fn </span>set_volume(<span class="kw-2">&amp;</span><span class="self">self</span>, step_size: f64) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
-        <span class="self">self</span>.player_proxy
-            .set_volume(<span class="self">self</span>.volume + step_size)
-            .<span class="kw">await
-            </span>.error(<span class="string">&quot;set_volume() failed&quot;</span>)
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(volume) = <span class="self">self</span>.volume {
+            <span class="self">self</span>.player_proxy
+                .set_volume(volume + step_size)
+                .<span class="kw">await
+                </span>.error(<span class="string">&quot;set_volume() failed&quot;</span>)<span class="question-mark">?</span>;
+        }
+        <span class="prelude-val">Ok</span>(())
     }
 }
 
@@ -1218,14 +1233,15 @@
         .then(|| <span class="kw-2">&amp;</span>full_name[NAME_PREFIX.len()..])
 }
 
-<span class="kw">fn </span>player_matches(full_name: <span class="kw-2">&amp;</span>str, prefered_players: <span class="kw-2">&amp;</span>[String], exclude_regex: <span class="kw-2">&amp;</span>[Regex]) -&gt; bool {
+<span class="kw">fn </span>player_matches(full_name: <span class="kw-2">&amp;</span>str, preferred_players: <span class="kw-2">&amp;</span>[String], exclude_regex: <span class="kw-2">&amp;</span>[Regex]) -&gt; bool {
     <span class="kw">let </span>name = <span class="kw">match </span>extract_player_name(full_name) {
         <span class="prelude-val">Some</span>(name) =&gt; name,
         <span class="prelude-val">None </span>=&gt; <span class="kw">return </span><span class="bool-val">false</span>,
     };
 
     exclude_regex.iter().all(|r| !r.is_match(name))
-        &amp;&amp; (prefered_players.is_empty() || prefered_players.iter().any(|p| name.starts_with(<span class="kw-2">&amp;**</span>p)))
+        &amp;&amp; (preferred_players.is_empty()
+            || preferred_players.iter().any(|p| name.starts_with(<span class="kw-2">&amp;**</span>p)))
 }
 
 <span class="attr">#[cfg(test)]
@@ -1269,4 +1285,4 @@
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="i3status_rs" data-themes="" data-resource-suffix="" data-rustdoc-version="1.67.1 (d5a82bbd2 2023-02-07)" data-search-js="search-444266647c4dba98.js" data-settings-js="settings-bebeae96e00e4617.js" data-settings-css="settings-af96d9e2fc13e081.css" ></div></body></html>
+</section></main><div id="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="i3status_rs" data-themes="" data-resource-suffix="" data-rustdoc-version="1.68.0 (2c8cc3432 2023-03-06)" data-search-js="search-98d53477a794af0b.js" data-settings-js="settings-c3c521c753752a1a.js" data-settings-css="settings-08ddfdda51b8ee2e.css" ></div></body></html>

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/blocks/memory.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>memory.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-1f7d512b176f0f72.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-124a1ca42af929b6.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-6827029ac823cab7.css" id="mainThemeStyle"><link rel="stylesheet" id="themeStyle" href="../../../static.files/light-ebce58d0a40c3431.css"><link rel="stylesheet" disabled href="../../../static.files/dark-f23faae4a2daf9a6.css"><link rel="stylesheet" disabled href="../../../static.files/ayu-8af5e100b21cd173.css"><script id="default-settings" ></script><script src="../../../static.files/storage-d43fa987303ecbbb.js"></script><script defer src="../../../static.files/source-script-5cf2e01a42cc9858.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../static.files/main-c55e1eb52e1886b4.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../../i3status_rs/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-5ec35bf9ca753509.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/blocks/memory.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>memory.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-1f7d512b176f0f72.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-124a1ca42af929b6.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-93196c7a1c3542a8.css" id="mainThemeStyle"><link rel="stylesheet" id="themeStyle" href="../../../static.files/light-4743e13df3dfe8c4.css"><link rel="stylesheet" disabled href="../../../static.files/dark-0e1b889528bd466b.css"><link rel="stylesheet" disabled href="../../../static.files/ayu-65289d5d067c7c66.css"><script id="default-settings" ></script><script src="../../../static.files/storage-d43fa987303ecbbb.js"></script><script defer src="../../../static.files/source-script-ea63cb6500f71309.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../static.files/main-3367e395607fafc1.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../i3status_rs/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-5ec35bf9ca753509.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -286,6 +286,17 @@
 <a href="#286" id="286">286</a>
 <a href="#287" id="287">287</a>
 <a href="#288" id="288">288</a>
+<a href="#289" id="289">289</a>
+<a href="#290" id="290">290</a>
+<a href="#291" id="291">291</a>
+<a href="#292" id="292">292</a>
+<a href="#293" id="293">293</a>
+<a href="#294" id="294">294</a>
+<a href="#295" id="295">295</a>
+<a href="#296" id="296">296</a>
+<a href="#297" id="297">297</a>
+<a href="#298" id="298">298</a>
+<a href="#299" id="299">299</a>
 </pre><pre class="rust"><code><span class="doccomment">//! Memory and swap usage
 //!
 //! # Configuration
@@ -404,15 +415,20 @@
         } <span class="kw">as </span>f64
             * <span class="number">1024.</span>;
 
+        <span class="comment">// While zfs_arc_cache can be considered &quot;available&quot; memory,
+        // it can only free a maximum of (zfs_arc_cache - zfs_arc_min) amount.
+        // see https://github.com/htop-dev/htop/pull/1003
+        </span><span class="kw">let </span>zfs_shrinkable_size = mem_state
+            .zfs_arc_cache
+            .saturating_sub(mem_state.zfs_arc_min) <span class="kw">as </span>f64;
+        <span class="kw">let </span>mem_avail = mem_avail + zfs_shrinkable_size;
+
         <span class="kw">let </span>pagecache = mem_state.pagecache <span class="kw">as </span>f64 * <span class="number">1024.</span>;
         <span class="kw">let </span>reclaimable = mem_state.s_reclaimable <span class="kw">as </span>f64 * <span class="number">1024.</span>;
         <span class="kw">let </span>shmem = mem_state.shmem <span class="kw">as </span>f64 * <span class="number">1024.</span>;
 
-        <span class="comment">// TODO: see https://github.com/htop-dev/htop/pull/1003
-        </span><span class="kw">let </span>zfs_arc_cache = mem_state.zfs_arc_cache <span class="kw">as </span>f64;
-
         <span class="comment">// See https://lore.kernel.org/lkml/1455827801-13082-1-git-send-email-hannes@cmpxchg.org/
-        </span><span class="kw">let </span>cached = pagecache + reclaimable - shmem + zfs_arc_cache;
+        </span><span class="kw">let </span>cached = pagecache + reclaimable - shmem + zfs_shrinkable_size;
 
         <span class="kw">let </span>buffers = mem_state.buffers <span class="kw">as </span>f64 * <span class="number">1024.</span>;
 
@@ -425,7 +441,7 @@
         };
 
         <span class="comment">// account for ZFS ARC cache
-        </span><span class="kw">let </span>mem_used = mem_used - zfs_arc_cache;
+        </span><span class="kw">let </span>mem_used = mem_used - zfs_shrinkable_size;
 
         <span class="kw">let </span>swap_total = mem_state.swap_total <span class="kw">as </span>f64 * <span class="number">1024.</span>;
         <span class="kw">let </span>swap_free = mem_state.swap_free <span class="kw">as </span>f64 * <span class="number">1024.</span>;
@@ -510,6 +526,7 @@
     swap_free: u64,
     swap_cached: u64,
     zfs_arc_cache: u64,
+    zfs_arc_min: u64,
 }
 
 <span class="kw">impl </span>Memstate {
@@ -562,17 +579,22 @@
             line.clear();
         }
 
-        <span class="comment">// Read ZFS arc cache size to add to total cache size
+        <span class="comment">// For ZFS
         </span><span class="kw">if let </span><span class="prelude-val">Ok</span>(arcstats) = read_file(<span class="string">&quot;/proc/spl/kstat/zfs/arcstats&quot;</span>).<span class="kw">await </span>{
             <span class="kw">let </span>size_re = <span class="macro">regex!</span>(<span class="string">r&quot;size\s+\d+\s+(\d+)&quot;</span>);
             <span class="kw">let </span>size = <span class="kw-2">&amp;</span>size_re
                 .captures(<span class="kw-2">&amp;</span>arcstats)
                 .error(<span class="string">&quot;failed to find zfs_arc_cache size&quot;</span>)<span class="question-mark">?</span>[<span class="number">1</span>];
             mem_state.zfs_arc_cache = size.parse().error(<span class="string">&quot;failed to parse zfs_arc_cache size&quot;</span>)<span class="question-mark">?</span>;
+            <span class="kw">let </span>c_min_re = <span class="macro">regex!</span>(<span class="string">r&quot;c_min\s+\d+\s+(\d+)&quot;</span>);
+            <span class="kw">let </span>c_min = <span class="kw-2">&amp;</span>c_min_re
+                .captures(<span class="kw-2">&amp;</span>arcstats)
+                .error(<span class="string">&quot;failed to find zfs_arc_min size&quot;</span>)<span class="question-mark">?</span>[<span class="number">1</span>];
+            mem_state.zfs_arc_min = c_min.parse().error(<span class="string">&quot;failed to parse zfs_arc_min size&quot;</span>)<span class="question-mark">?</span>;
         }
 
         <span class="prelude-val">Ok</span>(mem_state)
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="i3status_rs" data-themes="" data-resource-suffix="" data-rustdoc-version="1.67.1 (d5a82bbd2 2023-02-07)" data-search-js="search-444266647c4dba98.js" data-settings-js="settings-bebeae96e00e4617.js" data-settings-css="settings-af96d9e2fc13e081.css" ></div></body></html>
+</section></main><div id="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="i3status_rs" data-themes="" data-resource-suffix="" data-rustdoc-version="1.68.0 (2c8cc3432 2023-03-06)" data-search-js="search-98d53477a794af0b.js" data-settings-js="settings-c3c521c753752a1a.js" data-settings-css="settings-08ddfdda51b8ee2e.css" ></div></body></html>

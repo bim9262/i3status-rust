@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/blocks/bluetooth.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>bluetooth.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-1f7d512b176f0f72.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-124a1ca42af929b6.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-6827029ac823cab7.css" id="mainThemeStyle"><link rel="stylesheet" id="themeStyle" href="../../../static.files/light-ebce58d0a40c3431.css"><link rel="stylesheet" disabled href="../../../static.files/dark-f23faae4a2daf9a6.css"><link rel="stylesheet" disabled href="../../../static.files/ayu-8af5e100b21cd173.css"><script id="default-settings" ></script><script src="../../../static.files/storage-d43fa987303ecbbb.js"></script><script defer src="../../../static.files/source-script-5cf2e01a42cc9858.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../static.files/main-c55e1eb52e1886b4.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../../i3status_rs/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-5ec35bf9ca753509.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/blocks/bluetooth.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>bluetooth.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-1f7d512b176f0f72.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-124a1ca42af929b6.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-93196c7a1c3542a8.css" id="mainThemeStyle"><link rel="stylesheet" id="themeStyle" href="../../../static.files/light-4743e13df3dfe8c4.css"><link rel="stylesheet" disabled href="../../../static.files/dark-0e1b889528bd466b.css"><link rel="stylesheet" disabled href="../../../static.files/ayu-65289d5d067c7c66.css"><script id="default-settings" ></script><script src="../../../static.files/storage-d43fa987303ecbbb.js"></script><script defer src="../../../static.files/source-script-ea63cb6500f71309.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../static.files/main-3367e395607fafc1.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../i3status_rs/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-5ec35bf9ca753509.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -397,6 +397,49 @@
 <a href="#397" id="397">397</a>
 <a href="#398" id="398">398</a>
 <a href="#399" id="399">399</a>
+<a href="#400" id="400">400</a>
+<a href="#401" id="401">401</a>
+<a href="#402" id="402">402</a>
+<a href="#403" id="403">403</a>
+<a href="#404" id="404">404</a>
+<a href="#405" id="405">405</a>
+<a href="#406" id="406">406</a>
+<a href="#407" id="407">407</a>
+<a href="#408" id="408">408</a>
+<a href="#409" id="409">409</a>
+<a href="#410" id="410">410</a>
+<a href="#411" id="411">411</a>
+<a href="#412" id="412">412</a>
+<a href="#413" id="413">413</a>
+<a href="#414" id="414">414</a>
+<a href="#415" id="415">415</a>
+<a href="#416" id="416">416</a>
+<a href="#417" id="417">417</a>
+<a href="#418" id="418">418</a>
+<a href="#419" id="419">419</a>
+<a href="#420" id="420">420</a>
+<a href="#421" id="421">421</a>
+<a href="#422" id="422">422</a>
+<a href="#423" id="423">423</a>
+<a href="#424" id="424">424</a>
+<a href="#425" id="425">425</a>
+<a href="#426" id="426">426</a>
+<a href="#427" id="427">427</a>
+<a href="#428" id="428">428</a>
+<a href="#429" id="429">429</a>
+<a href="#430" id="430">430</a>
+<a href="#431" id="431">431</a>
+<a href="#432" id="432">432</a>
+<a href="#433" id="433">433</a>
+<a href="#434" id="434">434</a>
+<a href="#435" id="435">435</a>
+<a href="#436" id="436">436</a>
+<a href="#437" id="437">437</a>
+<a href="#438" id="438">438</a>
+<a href="#439" id="439">439</a>
+<a href="#440" id="440">440</a>
+<a href="#441" id="441">441</a>
+<a href="#442" id="442">442</a>
 </pre><pre class="rust"><code><span class="doccomment">//! Monitor Bluetooth device
 //!
 //! This block displays the connectivity of a given Bluetooth device and the battery level if this
@@ -407,6 +450,10 @@
 //!
 //! Right-clicking the block will attempt to connect (or disconnect) the device.
 //!
+//! Note: battery level information is not reported for some devices. [Enabling experimental
+//! features of `bluez`](https://wiki.archlinux.org/title/bluetooth#Enabling_experimental_features)
+//! may fix it.
+//!
 //! # Configuration
 //!
 //! Key | Values | Default
@@ -415,13 +462,15 @@
 //! `adapter_mac` | MAC Address of the Bluetooth adapter (in case your device was connected to multiple currently available adapters) | `None`
 //! `format` | A string to customise the output of this block. See below for available placeholders. | &lt;code&gt;&quot; $icon $name{ $percentage&amp;vert;} &quot;&lt;/code&gt;
 //! `disconnected_format` | A string to customise the output of this block. See below for available placeholders. | &lt;code&gt;&quot; $icon{ $name&amp;vert;} &quot;&lt;/code&gt;
+//! `battery_state` | A mapping from battery percentage to block&#39;s [state](State) (color). See example below. | 0..15 -&gt; critical, 16..30 -&gt; warning, 31..60 -&gt; info, 61..100 -&gt; good
 //!
-//! Placeholder  | Value                                                                 | Type   | Unit
-//! -------------|-----------------------------------------------------------------------|--------|------
-//! `icon`       | Icon based on what type of device is connected                        | Icon   | -
-//! `name`       | Device&#39;s name                                                         | Text   | -
-//! `percentage` | Device&#39;s battery level (may be absent if the device is not supported) | Number | %
-//! `available`  | Present if the device is available                                    | Flag   | -
+//! Placeholder    | Value                                                                 | Type   | Unit
+//! ---------------|-----------------------------------------------------------------------|--------|------
+//! `icon`         | Icon based on what type of device is connected                        | Icon   | -
+//! `name`         | Device&#39;s name                                                         | Text   | -
+//! `percentage`   | Device&#39;s battery level (may be absent if the device is not supported) | Number | %
+//! `battery_icon` | Battery icon (may be absent if the device is not supported)           | Icon   | -
+//! `available`    | Present if the device is available                                    | Flag   | -
 //!
 //! Action   | Default button
 //! ---------|---------------
@@ -437,6 +486,10 @@
 //! mac = &quot;00:18:09:92:1B:BA&quot;
 //! disconnected_format = &quot;&quot;
 //! format = &quot; $icon &quot;
+//! [block.battery_state]
+//! &quot;0..20&quot; = &quot;critical&quot;
+//! &quot;21..70&quot; = &quot;warning&quot;
+//! &quot;71..100&quot; = &quot;good&quot;
 //! ```
 //!
 //! # Icons Used
@@ -446,8 +499,10 @@
 //! - `mouse` for bluetooth devices identifying as &quot;input-mouse&quot;
 //! - `bluetooth` for all other devices
 
-</span><span class="kw">use </span><span class="kw">super</span>::prelude::<span class="kw-2">*</span>;
-<span class="kw">use </span>zbus::fdo::{DBusProxy, ObjectManagerProxy, PropertiesProxy};
+</span><span class="kw">use </span>zbus::fdo::{DBusProxy, ObjectManagerProxy, PropertiesProxy};
+
+<span class="kw">use </span><span class="kw">super</span>::prelude::<span class="kw-2">*</span>;
+<span class="kw">use </span><span class="kw">crate</span>::wrappers::RangeMap;
 
 <span class="macro">make_log_macro!</span>(debug, <span class="string">&quot;bluetooth&quot;</span>);
 
@@ -460,6 +515,8 @@
     </span>format: FormatConfig,
     <span class="attr">#[serde(default)]
     </span>disconnected_format: FormatConfig,
+    <span class="attr">#[serde(default)]
+    </span>battery_state: <span class="prelude-ty">Option</span>&lt;RangeMap&lt;u8, State&gt;&gt;,
 }
 
 <span class="kw">pub async fn </span>run(config: Config, <span class="kw-2">mut </span>api: CommonApi) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
@@ -474,29 +531,43 @@
 
     <span class="kw">let </span><span class="kw-2">mut </span>monitor = DeviceMonitor::new(config.mac, config.adapter_mac).<span class="kw">await</span><span class="question-mark">?</span>;
 
+    <span class="kw">let </span>battery_states = config.battery_state.unwrap_or_else(|| {
+        <span class="macro">vec!</span>[
+            (<span class="number">0</span>..=<span class="number">15</span>, State::Critical),
+            (<span class="number">16</span>..=<span class="number">30</span>, State::Warning),
+            (<span class="number">31</span>..=<span class="number">60</span>, State::Info),
+            (<span class="number">61</span>..=<span class="number">100</span>, State::Good),
+        ]
+        .into()
+    });
+
     <span class="kw">loop </span>{
         <span class="kw">match </span>monitor.get_device_info().<span class="kw">await </span>{
             <span class="comment">// Available
             </span><span class="prelude-val">Some</span>(device) =&gt; {
-                <span class="kw">let </span><span class="kw-2">mut </span>values = <span class="macro">map! </span>{
+                <span class="macro">debug!</span>(<span class="string">&quot;Device available, info: {device:?}&quot;</span>);
+
+                <span class="kw">let </span>values = <span class="macro">map! </span>{
                     <span class="string">&quot;icon&quot; </span>=&gt; Value::icon(api.get_icon(device.icon)<span class="question-mark">?</span>),
                     <span class="string">&quot;name&quot; </span>=&gt; Value::text(device.name),
-                    <span class="string">&quot;available&quot; </span>=&gt; Value::flag()
+                    <span class="string">&quot;available&quot; </span>=&gt; Value::flag(),
+                    [<span class="kw">if let </span><span class="prelude-val">Some</span>(p) = device.battery_percentage] <span class="string">&quot;percentage&quot; </span>=&gt; Value::percents(p),
+                    [<span class="kw">if let </span><span class="prelude-val">Some</span>(p) = device.battery_percentage]
+                        <span class="string">&quot;battery_icon&quot; </span>=&gt; Value::icon(api.get_icon_in_progression(<span class="string">&quot;bat&quot;</span>, p <span class="kw">as </span>f64 / <span class="number">100.0</span>)<span class="question-mark">?</span>),
                 };
-                <span class="kw">if let </span><span class="prelude-val">Some</span>(p) = device.battery_percentage {
-                    values.insert(<span class="string">&quot;percentage&quot;</span>.into(), Value::percents(p));
-                }
+
                 <span class="kw">if </span>device.connected {
-                    <span class="macro">debug!</span>(<span class="string">&quot;Showing device as connected&quot;</span>);
-                    widget.state = State::Good;
                     widget.set_format(format.clone());
+                    widget.state = battery_states
+                        .get(<span class="kw-2">&amp;</span>device.battery_percentage.unwrap_or(<span class="number">100</span>))
+                        .copied()
+                        .unwrap_or(State::Good);
                 } <span class="kw">else </span>{
-                    <span class="macro">debug!</span>(<span class="string">&quot;Showing device as disconnected&quot;</span>);
                     widget.set_format(disconnected_format.clone());
                     widget.state = State::Idle;
                 }
-                widget.set_values(values);
 
+                widget.set_values(values);
                 api.set_widget(<span class="kw-2">&amp;</span>widget).<span class="kw">await</span><span class="question-mark">?</span>;
             }
             <span class="comment">// Unavailable
@@ -548,7 +619,8 @@
     battery: Battery1Proxy&lt;<span class="lifetime">&#39;static</span>&gt;,
 }
 
-<span class="kw">struct </span>DeviceInfo {
+<span class="attr">#[derive(Debug)]
+</span><span class="kw">struct </span>DeviceInfo {
     connected: bool,
     icon: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str,
     name: String,
@@ -607,6 +679,12 @@
                     .<span class="kw">await
                     </span>.error(<span class="string">&quot;Failed to receive updates&quot;</span>)<span class="question-mark">?</span>;
 
+                <span class="kw">let </span><span class="kw-2">mut </span>interface_added = <span class="self">self
+                    </span>.manager_proxy
+                    .receive_interfaces_added()
+                    .<span class="kw">await
+                    </span>.error(<span class="string">&quot;Failed to monitor interfaces&quot;</span>)<span class="question-mark">?</span>;
+
                 <span class="kw">let </span><span class="kw-2">mut </span>interface_removed = <span class="self">self
                     </span>.manager_proxy
                     .receive_interfaces_removed()
@@ -629,6 +707,13 @@
                             }).<span class="kw">await</span>;
                             <span class="macro">debug!</span>(<span class="string">&quot;Got update for device&quot;</span>);
                             <span class="kw">return </span><span class="prelude-val">Ok</span>(());
+                        }
+                        <span class="prelude-val">Some</span>(event) = interface_added.next() =&gt; {
+                            <span class="kw">let </span>args = event.args().error(<span class="string">&quot;Failed to get the args&quot;</span>)<span class="question-mark">?</span>;
+                            <span class="kw">if </span>args.object_path() == device.device.path() {
+                                <span class="macro">debug!</span>(<span class="string">&quot;Interfaces added: {:?}&quot;</span>, args.interfaces_and_properties().keys());
+                                <span class="kw">return </span><span class="prelude-val">Ok</span>(());
+                            }
                         }
                         <span class="prelude-val">Some</span>(event) = interface_removed.next() =&gt; {
                             <span class="kw">let </span>args = event.args().error(<span class="string">&quot;Failed to get the args&quot;</span>)<span class="question-mark">?</span>;
@@ -763,6 +848,7 @@
                     .<span class="kw">await
                     </span>.error(<span class="string">&quot;Failed to create Device1Proxy&quot;</span>)<span class="question-mark">?</span>,
                 battery: Battery1Proxy::builder(manager_proxy.connection())
+                    .cache_properties(zbus::CacheProperties::No)
                     .path(path)
                     .unwrap()
                     .build()
@@ -797,4 +883,4 @@
     </span><span class="kw">fn </span>percentage(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; zbus::Result&lt;u8&gt;;
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="i3status_rs" data-themes="" data-resource-suffix="" data-rustdoc-version="1.67.1 (d5a82bbd2 2023-02-07)" data-search-js="search-444266647c4dba98.js" data-settings-js="settings-bebeae96e00e4617.js" data-settings-css="settings-af96d9e2fc13e081.css" ></div></body></html>
+</section></main><div id="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="i3status_rs" data-themes="" data-resource-suffix="" data-rustdoc-version="1.68.0 (2c8cc3432 2023-03-06)" data-search-js="search-98d53477a794af0b.js" data-settings-js="settings-c3c521c753752a1a.js" data-settings-css="settings-08ddfdda51b8ee2e.css" ></div></body></html>

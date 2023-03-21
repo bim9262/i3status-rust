@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/netlink.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>netlink.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-1f7d512b176f0f72.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-124a1ca42af929b6.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-6827029ac823cab7.css" id="mainThemeStyle"><link rel="stylesheet" id="themeStyle" href="../../static.files/light-ebce58d0a40c3431.css"><link rel="stylesheet" disabled href="../../static.files/dark-f23faae4a2daf9a6.css"><link rel="stylesheet" disabled href="../../static.files/ayu-8af5e100b21cd173.css"><script id="default-settings" ></script><script src="../../static.files/storage-d43fa987303ecbbb.js"></script><script defer src="../../static.files/source-script-5cf2e01a42cc9858.js"></script><script defer src="../../source-files.js"></script><script defer src="../../static.files/main-c55e1eb52e1886b4.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../i3status_rs/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-5ec35bf9ca753509.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/netlink.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>netlink.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-1f7d512b176f0f72.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-124a1ca42af929b6.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-93196c7a1c3542a8.css" id="mainThemeStyle"><link rel="stylesheet" id="themeStyle" href="../../static.files/light-4743e13df3dfe8c4.css"><link rel="stylesheet" disabled href="../../static.files/dark-0e1b889528bd466b.css"><link rel="stylesheet" disabled href="../../static.files/ayu-65289d5d067c7c66.css"><script id="default-settings" ></script><script src="../../static.files/storage-d43fa987303ecbbb.js"></script><script defer src="../../static.files/source-script-ea63cb6500f71309.js"></script><script defer src="../../source-files.js"></script><script defer src="../../static.files/main-3367e395607fafc1.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../i3status_rs/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-5ec35bf9ca753509.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -412,6 +412,37 @@
 <a href="#412" id="412">412</a>
 <a href="#413" id="413">413</a>
 <a href="#414" id="414">414</a>
+<a href="#415" id="415">415</a>
+<a href="#416" id="416">416</a>
+<a href="#417" id="417">417</a>
+<a href="#418" id="418">418</a>
+<a href="#419" id="419">419</a>
+<a href="#420" id="420">420</a>
+<a href="#421" id="421">421</a>
+<a href="#422" id="422">422</a>
+<a href="#423" id="423">423</a>
+<a href="#424" id="424">424</a>
+<a href="#425" id="425">425</a>
+<a href="#426" id="426">426</a>
+<a href="#427" id="427">427</a>
+<a href="#428" id="428">428</a>
+<a href="#429" id="429">429</a>
+<a href="#430" id="430">430</a>
+<a href="#431" id="431">431</a>
+<a href="#432" id="432">432</a>
+<a href="#433" id="433">433</a>
+<a href="#434" id="434">434</a>
+<a href="#435" id="435">435</a>
+<a href="#436" id="436">436</a>
+<a href="#437" id="437">437</a>
+<a href="#438" id="438">438</a>
+<a href="#439" id="439">439</a>
+<a href="#440" id="440">440</a>
+<a href="#441" id="441">441</a>
+<a href="#442" id="442">442</a>
+<a href="#443" id="443">443</a>
+<a href="#444" id="444">444</a>
+<a href="#445" id="445">445</a>
 </pre><pre class="rust"><code><span class="kw">use </span>neli::attr::Attribute;
 <span class="kw">use </span>neli::consts::{nl::<span class="kw-2">*</span>, rtnl::<span class="kw-2">*</span>, socket::<span class="kw-2">*</span>};
 <span class="kw">use </span>neli::nl::{NlPayload, Nlmsghdr};
@@ -482,25 +513,25 @@
         )
         .error(<span class="string">&quot;Socket error&quot;</span>)<span class="question-mark">?</span>;
 
-        <span class="kw">let </span>ifaces = get_interfaces(<span class="kw-2">&amp;mut </span>sock)
+        <span class="kw">let </span><span class="kw-2">mut </span>ifaces = get_interfaces(<span class="kw-2">&amp;mut </span>sock, iface_re)
             .<span class="kw">await
             </span>.map_err(BoxErrorWrapper)
             .error(<span class="string">&quot;Failed to fetch interfaces&quot;</span>)<span class="question-mark">?</span>;
 
-        <span class="kw">let </span>iface = <span class="kw">match </span>iface_re {
-            <span class="prelude-val">Some</span>(re) =&gt; ifaces.into_iter().find(|i| re.is_match(<span class="kw-2">&amp;</span>i.name)),
-            <span class="prelude-val">None </span>=&gt; {
-                <span class="kw">let </span>default_iface = get_default_interface(<span class="kw-2">&amp;mut </span>sock)
-                    .<span class="kw">await
-                    </span>.map_err(BoxErrorWrapper)
-                    .error(<span class="string">&quot;Failed to get default interface&quot;</span>)<span class="question-mark">?</span>;
-                ifaces.into_iter().find(|i| i.index == default_iface)
-            }
-        };
+        <span class="kw">let </span>default_iface = get_default_interface(<span class="kw-2">&amp;mut </span>sock)
+            .<span class="kw">await
+            </span>.map_err(BoxErrorWrapper)
+            .error(<span class="string">&quot;Failed to get default interface&quot;</span>)<span class="question-mark">?</span>;
 
-        <span class="kw">let </span>iface = <span class="kw">match </span>iface {
-            <span class="prelude-val">Some</span>(iface) =&gt; iface,
-            <span class="prelude-val">None </span>=&gt; <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>),
+        <span class="kw">let </span>iface_position = ifaces
+            .iter()
+            .position(|i| i.index == default_iface)
+            .unwrap_or(<span class="number">0</span>);
+
+        <span class="kw">let </span>iface = <span class="kw">if </span>iface_position &lt; ifaces.len() {
+            ifaces.swap_remove(iface_position)
+        } <span class="kw">else </span>{
+            <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>);
         };
 
         <span class="kw">let </span>wifi_info = WifiInfo::new(iface.index).<span class="kw">await</span><span class="question-mark">?</span>;
@@ -571,38 +602,70 @@
                 .clamp(<span class="number">0.</span>, <span class="number">100.</span>)
         }
 
-        <span class="kw">let </span><span class="kw-2">mut </span>socket =
-            neli_wifi::AsyncSocket::connect().error(<span class="string">&quot;Failed to open nl80211 socket&quot;</span>)<span class="question-mark">?</span>;
+        <span class="kw">fn </span>ssid_from_bss_info_elements(<span class="kw-2">mut </span>bytes: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="prelude-ty">Option</span>&lt;String&gt; {
+            <span class="kw">while </span>bytes.len() &gt; <span class="number">2 </span>&amp;&amp; bytes[<span class="number">0</span>] != <span class="number">0 </span>{
+                bytes = <span class="kw-2">&amp;</span>bytes[(bytes[<span class="number">1</span>] <span class="kw">as </span>usize + <span class="number">2</span>)..];
+            }
+
+            <span class="kw">if </span>bytes.len() &lt; <span class="number">2 </span>|| bytes.len() &lt; bytes[<span class="number">1</span>] <span class="kw">as </span>usize + <span class="number">2 </span>{
+                <span class="kw">return </span><span class="prelude-val">None</span>;
+            };
+
+            <span class="kw">let </span>ssid_len = bytes[<span class="number">1</span>] <span class="kw">as </span>usize;
+            <span class="kw">let </span>raw_ssid = <span class="kw-2">&amp;</span>bytes[<span class="number">2</span>..][..ssid_len];
+
+            <span class="prelude-val">Some</span>(String::from_utf8_lossy(raw_ssid).into_owned())
+        }
+
+        <span class="comment">// Ignore connection error because `nl80211` might not be enabled on the system.
+        </span><span class="kw">let </span><span class="prelude-val">Ok</span>(<span class="kw-2">mut </span>socket) = neli_wifi::AsyncSocket::connect()
+        <span class="kw">else </span>{ <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>) };
+
         <span class="kw">let </span>interfaces = socket
             .get_interfaces_info()
             .<span class="kw">await
             </span>.error(<span class="string">&quot;Failed to get nl80211 interfaces&quot;</span>)<span class="question-mark">?</span>;
+
         <span class="kw">for </span>interface <span class="kw">in </span>interfaces {
             <span class="kw">if let </span><span class="prelude-val">Some</span>(index) = interface.index {
                 <span class="kw">if </span>index != if_index {
                     <span class="kw">continue</span>;
                 }
-                <span class="kw">if let </span><span class="prelude-val">Ok</span>(ap) = socket.get_station_info(index).<span class="kw">await </span>{
-                    <span class="kw">let </span>raw_signal = <span class="kw">match </span>ap.signal {
-                        <span class="prelude-val">Some</span>(signal) =&gt; <span class="prelude-val">Some</span>(signal),
-                        <span class="prelude-val">None </span>=&gt; socket
-                            .get_bss_info(index)
-                            .<span class="kw">await
-                            </span>.ok()
-                            .and_then(|bss| bss.signal)
-                            .map(|s| (s / <span class="number">100</span>) <span class="kw">as </span>i8),
-                    };
-                    <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="self">Self </span>{
-                        ssid: interface
-                            .ssid
-                            .map(String::from_utf8)
-                            .transpose()
-                            .error(<span class="string">&quot;SSID is not valid UTF8&quot;</span>)<span class="question-mark">?</span>, <span class="comment">// ssid: Some(String::from_utf8(ssid).error(&quot;SSID is not valid UTF8&quot;)?),
-                        </span>frequency: interface.frequency.map(|f| f <span class="kw">as </span>f64 * <span class="number">1e6</span>),
-                        signal: raw_signal.map(|s| signal_percents(s <span class="kw">as </span>f64)),
-                        bitrate: ap.tx_bitrate.map(|b| b <span class="kw">as </span>f64 * <span class="number">1e5</span>), <span class="comment">// 100kbit/s -&gt; bit/s
-                    </span>}));
-                }
+
+                <span class="kw">let </span><span class="prelude-val">Ok</span>(ap) = socket.get_station_info(index).<span class="kw">await
+                else </span>{ <span class="kw">continue </span>};
+
+                <span class="kw">let </span>bss = socket
+                    .get_bss_info(index)
+                    .<span class="kw">await
+                    </span>.unwrap_or_default()
+                    .into_iter()
+                    .find(|bss| bss.status == <span class="prelude-val">Some</span>(<span class="number">1</span>));
+
+                <span class="kw">let </span>raw_signal = <span class="kw">match </span>ap.signal {
+                    <span class="prelude-val">Some</span>(signal) =&gt; <span class="prelude-val">Some</span>(signal),
+                    <span class="prelude-val">None </span>=&gt; bss
+                        .as_ref()
+                        .and_then(|bss| bss.signal)
+                        .map(|s| (s / <span class="number">100</span>) <span class="kw">as </span>i8),
+                };
+
+                <span class="kw">let </span>ssid = interface
+                    .ssid
+                    .as_deref()
+                    .map(|ssid| String::from_utf8_lossy(ssid).into_owned())
+                    .or_else(|| {
+                        bss.as_ref()
+                            .and_then(|bss| bss.information_elements.as_deref())
+                            .and_then(ssid_from_bss_info_elements)
+                    });
+
+                <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="self">Self </span>{
+                    ssid,
+                    frequency: interface.frequency.map(|f| f <span class="kw">as </span>f64 * <span class="number">1e6</span>),
+                    signal: raw_signal.map(|s| signal_percents(s <span class="kw">as </span>f64)),
+                    bitrate: ap.tx_bitrate.map(|b| b <span class="kw">as </span>f64 * <span class="number">1e5</span>), <span class="comment">// 100kbit/s -&gt; bit/s
+                </span>}));
             }
         }
         <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>)
@@ -673,6 +736,7 @@
 
 <span class="kw">async fn </span>get_interfaces(
     sock: <span class="kw-2">&amp;mut </span>NlSocket,
+    filter: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>Regex&gt;,
 ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;Interface&gt;, Box&lt;<span class="kw">dyn </span>StdError + Send + Sync + <span class="lifetime">&#39;static</span>&gt;&gt; {
     sock.send(<span class="kw-2">&amp;</span>Nlmsghdr::new(
         <span class="prelude-val">None</span>,
@@ -705,12 +769,15 @@
                 <span class="kw">_ </span>=&gt; (),
             }
         }
-        interfaces.push(Interface {
-            index: msg.ifi_index,
-            is_up,
-            name: name.unwrap(),
-            stats,
-        });
+        <span class="kw">let </span>name: String = name.unwrap();
+        <span class="kw">if </span>filter.map_or(<span class="bool-val">true</span>, |f| f.is_match(<span class="kw-2">&amp;</span>name)) {
+            interfaces.push(Interface {
+                index: msg.ifi_index,
+                is_up,
+                name,
+                stats,
+            });
+        }
     });
 
     <span class="prelude-val">Ok</span>(interfaces)
@@ -763,11 +830,11 @@
     <span class="prelude-val">Ok</span>(default_index)
 }
 
-<span class="kw">async fn </span>ip_payload(
+<span class="kw">async fn </span>ip_payload&lt;<span class="kw">const </span>BYTES: usize&gt;(
     sock: <span class="kw-2">&amp;mut </span>NlSocket,
     ifa_family: RtAddrFamily,
     ifa_index: i32,
-) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;neli::types::Buffer&gt;, Box&lt;<span class="kw">dyn </span>StdError + Send + Sync + <span class="lifetime">&#39;static</span>&gt;&gt; {
+) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;[u8; BYTES]&gt;, Box&lt;<span class="kw">dyn </span>StdError + Send + Sync + <span class="lifetime">&#39;static</span>&gt;&gt; {
     sock.send(<span class="kw-2">&amp;</span>Nlmsghdr::new(
         <span class="prelude-val">None</span>,
         Rtm::Getaddr,
@@ -788,11 +855,18 @@
     <span class="kw">let </span><span class="kw-2">mut </span>payload = <span class="prelude-val">None</span>;
 
     <span class="macro">recv_until_done!</span>(sock, msg: Ifaddrmsg =&gt; {
-        <span class="kw">if </span>msg.ifa_index != ifa_index {
+        <span class="kw">if </span>msg.ifa_index != ifa_index || payload.is_some() {
             <span class="kw">continue</span>;
         }
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(rtattr) = msg.rtattrs.into_iter().find(|a| a.rta_type == Ifa::Address) {
-            payload = <span class="prelude-val">Some</span>(rtattr.rta_payload);
+
+        <span class="kw">let </span>attr_handle = msg.rtattrs.get_attr_handle();
+
+        <span class="kw">let </span><span class="prelude-val">Some</span>(attr) = attr_handle.get_attribute(Ifa::Local)
+            .or_else(|| attr_handle.get_attribute(Ifa::Address))
+        <span class="kw">else </span>{ <span class="kw">continue </span>};
+
+        <span class="kw">if let </span><span class="prelude-val">Ok</span>(p) = attr.rta_payload.as_ref().try_into() {
+            payload = <span class="prelude-val">Some</span>(p);
         }
     });
 
@@ -800,31 +874,19 @@
 }
 
 <span class="kw">async fn </span>ipv4(sock: <span class="kw-2">&amp;mut </span>NlSocket, ifa_index: i32) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;Ipv4Addr&gt;&gt; {
-    <span class="kw">match </span>ip_payload(sock, RtAddrFamily::Inet, ifa_index)
+    <span class="prelude-val">Ok</span>(ip_payload(sock, RtAddrFamily::Inet, ifa_index)
         .<span class="kw">await
         </span>.map_err(BoxErrorWrapper)
         .error(<span class="string">&quot;Failed to get IP address&quot;</span>)<span class="question-mark">?
-    </span>{
-        <span class="prelude-val">None </span>=&gt; <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>),
-        <span class="prelude-val">Some</span>(payload) =&gt; {
-            <span class="kw">let </span>payload: <span class="kw-2">&amp;</span>[u8; <span class="number">4</span>] = payload.as_ref().try_into().unwrap();
-            <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(Ipv4Addr::from(<span class="kw-2">*</span>payload)))
-        }
-    }
+        </span>.map(Ipv4Addr::from))
 }
 
 <span class="kw">async fn </span>ipv6(sock: <span class="kw-2">&amp;mut </span>NlSocket, ifa_index: i32) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;Ipv6Addr&gt;&gt; {
-    <span class="kw">match </span>ip_payload(sock, RtAddrFamily::Inet6, ifa_index)
+    <span class="prelude-val">Ok</span>(ip_payload(sock, RtAddrFamily::Inet6, ifa_index)
         .<span class="kw">await
         </span>.map_err(BoxErrorWrapper)
         .error(<span class="string">&quot;Failed to get IPv6 address&quot;</span>)<span class="question-mark">?
-    </span>{
-        <span class="prelude-val">None </span>=&gt; <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>),
-        <span class="prelude-val">Some</span>(payload) =&gt; {
-            <span class="kw">let </span>payload: <span class="kw-2">&amp;</span>[u8; <span class="number">16</span>] = payload.as_ref().try_into().unwrap();
-            <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(Ipv6Addr::from(<span class="kw-2">*</span>payload)))
-        }
-    }
+        </span>.map(Ipv6Addr::from))
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="i3status_rs" data-themes="" data-resource-suffix="" data-rustdoc-version="1.67.1 (d5a82bbd2 2023-02-07)" data-search-js="search-444266647c4dba98.js" data-settings-js="settings-bebeae96e00e4617.js" data-settings-css="settings-af96d9e2fc13e081.css" ></div></body></html>
+</section></main><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="i3status_rs" data-themes="" data-resource-suffix="" data-rustdoc-version="1.68.0 (2c8cc3432 2023-03-06)" data-search-js="search-98d53477a794af0b.js" data-settings-js="settings-c3c521c753752a1a.js" data-settings-css="settings-08ddfdda51b8ee2e.css" ></div></body></html>
