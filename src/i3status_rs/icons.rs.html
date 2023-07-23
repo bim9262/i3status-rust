@@ -142,6 +142,20 @@
 <a href="#142" id="142">142</a>
 <a href="#143" id="143">143</a>
 <a href="#144" id="144">144</a>
+<a href="#145" id="145">145</a>
+<a href="#146" id="146">146</a>
+<a href="#147" id="147">147</a>
+<a href="#148" id="148">148</a>
+<a href="#149" id="149">149</a>
+<a href="#150" id="150">150</a>
+<a href="#151" id="151">151</a>
+<a href="#152" id="152">152</a>
+<a href="#153" id="153">153</a>
+<a href="#154" id="154">154</a>
+<a href="#155" id="155">155</a>
+<a href="#156" id="156">156</a>
+<a href="#157" id="157">157</a>
+<a href="#158" id="158">158</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::errors::<span class="kw-2">*</span>;
 <span class="kw">use </span><span class="kw">crate</span>::util;
 <span class="kw">use </span>serde::Deserialize;
@@ -161,6 +175,12 @@
 <span class="kw">impl </span>From&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str&gt; <span class="kw">for </span>Icon {
     <span class="kw">fn </span>from(value: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str) -&gt; <span class="self">Self </span>{
         <span class="self">Self</span>::Single(value.into())
+    }
+}
+
+<span class="kw">impl </span>From&lt;Vec&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str&gt;&gt; <span class="kw">for </span>Icon {
+    <span class="kw">fn </span>from(value: Vec&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str&gt;) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::Progression(value.into_iter().map(|s| s.to_string()).collect())
     }
 }
 
@@ -197,6 +217,14 @@
             <span class="string">&quot;music_play&quot; </span>=&gt; <span class="string">&quot;&gt;&quot;</span>,
             <span class="string">&quot;music_prev&quot; </span>=&gt; <span class="string">&quot;&lt;&quot;</span>,
             <span class="string">&quot;net_bridge&quot; </span>=&gt; <span class="string">&quot;BRIDGE&quot;</span>,
+            <span class="string">&quot;net_cellular&quot; </span>=&gt; <span class="macro">vec!</span>[
+                                <span class="string">&quot;NO SIGNAL&quot;</span>,
+                                <span class="string">&quot;0 BARS&quot;</span>,
+                                <span class="string">&quot;1 BAR&quot;</span>,
+                                <span class="string">&quot;2 BARS&quot;</span>,
+                                <span class="string">&quot;3 BARS&quot;</span>,
+                                <span class="string">&quot;4 BARS&quot;</span>,
+                              ],
             <span class="string">&quot;net_down&quot; </span>=&gt; <span class="string">&quot;DOWN&quot;</span>,
             <span class="string">&quot;net_loopback&quot; </span>=&gt; <span class="string">&quot;LO&quot;</span>,
             <span class="string">&quot;net_modem&quot; </span>=&gt; <span class="string">&quot;MODEM&quot;</span>,
