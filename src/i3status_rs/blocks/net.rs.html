@@ -208,6 +208,9 @@
 <a href="#208" id="208">208</a>
 <a href="#209" id="209">209</a>
 <a href="#210" id="210">210</a>
+<a href="#211" id="211">211</a>
+<a href="#212" id="212">212</a>
+<a href="#213" id="213">213</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Network information
 //!
 //! This block uses `sysfs` and `netlink` and thus does not require any external dependencies.
@@ -217,10 +220,11 @@
 //! Key | Values | Default
 //! ----|--------|--------
 //! `device` | Network interface to monitor (as specified in `/sys/class/net/`). Supports regex. | If not set, device will be automatically selected every `interval`
+//! `interval` | Update interval in seconds | `2`
 //! `format` | A string to customise the output of this block. See below for available placeholders. | `&quot; $icon ^icon_net_down $speed_down.eng(prefix:K) ^icon_net_up $speed_up.eng(prefix:K) &quot;`
 //! `format_alt` | If set, block will switch between `format` and `format_alt` on every click | `None`
-//! `interval` | Update interval in seconds | `2`
-//! `missing_format` | Same as `format` if the interface cannot be connected (or missing). | `&quot; × &quot;`
+//! `inactive_format` | Same as `format` but for when the interface is inactive | `&quot; $icon Down &quot;`
+//! `missing_format` | Same as `format` but for when the device is missing | `&quot; × &quot;`
 //!
 //! Action          | Description                               | Default button
 //! ----------------|-------------------------------------------|---------------
@@ -274,17 +278,19 @@
 <span class="kw">use </span>std::time::Instant;
 
 <span class="attr">#[derive(Deserialize, Debug, SmartDefault)]
-#[serde(default)]
+#[serde(deny_unknown_fields, default)]
 </span><span class="kw">pub struct </span>Config {
-    device: <span class="prelude-ty">Option</span>&lt;String&gt;,
-    format: FormatConfig,
-    format_alt: <span class="prelude-ty">Option</span>&lt;FormatConfig&gt;,
-    missing_format: FormatConfig,
+    <span class="kw">pub </span>device: <span class="prelude-ty">Option</span>&lt;String&gt;,
     <span class="attr">#[default(<span class="number">2</span>.into())]
-    </span>interval: Seconds,
+    </span><span class="kw">pub </span>interval: Seconds,
+    <span class="kw">pub </span>format: FormatConfig,
+    <span class="kw">pub </span>format_alt: <span class="prelude-ty">Option</span>&lt;FormatConfig&gt;,
+    <span class="kw">pub </span>inactive_format: FormatConfig,
+    <span class="kw">pub </span>missing_format: FormatConfig,
 }
 
-<span class="kw">pub async fn </span>run(config: Config, <span class="kw-2">mut </span>api: CommonApi) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+<span class="kw">pub async fn </span>run(config: <span class="kw-2">&amp;</span>Config, api: <span class="kw-2">&amp;</span>CommonApi) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="kw">let </span><span class="kw-2">mut </span>actions = api.get_actions().<span class="kw">await</span><span class="question-mark">?</span>;
     api.set_default_actions(<span class="kw-2">&amp;</span>[(MouseButton::Left, <span class="prelude-val">None</span>, <span class="string">&quot;toggle_format&quot;</span>)])
         .<span class="kw">await</span><span class="question-mark">?</span>;
 
@@ -292,12 +298,12 @@
         <span class="string">&quot; $icon ^icon_net_down $speed_down.eng(prefix:K) ^icon_net_up $speed_up.eng(prefix:K) &quot;</span>,
     )<span class="question-mark">?</span>;
     <span class="kw">let </span>missing_format = config.missing_format.with_default(<span class="string">&quot; × &quot;</span>)<span class="question-mark">?</span>;
-    <span class="kw">let </span><span class="kw-2">mut </span>format_alt = <span class="kw">match </span>config.format_alt {
+    <span class="kw">let </span>inactive_format = config.inactive_format.with_default(<span class="string">&quot; $icon Down &quot;</span>)<span class="question-mark">?</span>;
+    <span class="kw">let </span><span class="kw-2">mut </span>format_alt = <span class="kw">match </span><span class="kw-2">&amp;</span>config.format_alt {
         <span class="prelude-val">Some</span>(f) =&gt; <span class="prelude-val">Some</span>(f.with_default(<span class="string">&quot;&quot;</span>)<span class="question-mark">?</span>),
         <span class="prelude-val">None </span>=&gt; <span class="prelude-val">None</span>,
     };
 
-    <span class="kw">let </span><span class="kw-2">mut </span>widget = Widget::new().with_format(format.clone());
     <span class="kw">let </span><span class="kw-2">mut </span>timer = config.interval.timer();
 
     <span class="kw">let </span>device_re = config
@@ -316,17 +322,17 @@
     <span class="kw">loop </span>{
         <span class="kw">match </span>NetDevice::new(device_re.as_ref()).<span class="kw">await</span><span class="question-mark">? </span>{
             <span class="prelude-val">None </span>=&gt; {
-                widget.set_format(missing_format.clone());
-                widget.set_values(default());
-                api.set_widget(<span class="kw-2">&amp;</span>widget).<span class="kw">await</span><span class="question-mark">?</span>;
-            }
-            <span class="prelude-val">Some</span>(device) <span class="kw">if </span>!device.is_up() =&gt; {
-                widget.set_format(missing_format.clone());
-                widget.set_values(default());
-                api.set_widget(<span class="kw-2">&amp;</span>widget).<span class="kw">await</span><span class="question-mark">?</span>;
+                api.set_widget(Widget::new().with_format(missing_format.clone()))
+                    .<span class="kw">await</span><span class="question-mark">?</span>;
             }
             <span class="prelude-val">Some</span>(device) =&gt; {
-                widget.set_format(format.clone());
+                <span class="kw">let </span><span class="kw-2">mut </span>widget = Widget::new();
+
+                <span class="kw">if </span>device.is_up() {
+                    widget.set_format(format.clone());
+                } <span class="kw">else </span>{
+                    widget.set_format(inactive_format.clone());
+                }
 
                 <span class="kw">let </span><span class="kw-2">mut </span>speed_down: f64 = <span class="number">0.0</span>;
                 <span class="kw">let </span><span class="kw-2">mut </span>speed_up: f64 = <span class="number">0.0</span>;
@@ -371,16 +377,16 @@
                     <span class="string">&quot;device&quot; </span>=&gt; Value::text(device.iface.name),
                 });
 
-                api.set_widget(<span class="kw-2">&amp;</span>widget).<span class="kw">await</span><span class="question-mark">?</span>;
+                api.set_widget(widget).<span class="kw">await</span><span class="question-mark">?</span>;
             }
         }
 
         <span class="kw">loop </span>{
             <span class="macro">select! </span>{
                 <span class="kw">_ </span>= timer.tick() =&gt; <span class="kw">break</span>,
-                event = api.event() =&gt; <span class="kw">match </span>event {
-                    UpdateRequest =&gt; <span class="kw">break</span>,
-                    Action(a) <span class="kw">if </span>a == <span class="string">&quot;toggle_format&quot; </span>=&gt; {
+                <span class="kw">_ </span>= api.wait_for_update_request() =&gt; <span class="kw">break</span>,
+                <span class="prelude-val">Some</span>(action) = actions.recv() =&gt; <span class="kw">match </span>action.as_ref() {
+                    <span class="string">&quot;toggle_format&quot; </span>=&gt; {
                         <span class="kw">if let </span><span class="prelude-val">Some</span>(format_alt) = <span class="kw-2">&amp;mut </span>format_alt {
                             std::mem::swap(format_alt, <span class="kw-2">&amp;mut </span>format);
                             <span class="kw">break</span>;

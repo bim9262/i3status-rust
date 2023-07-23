@@ -273,6 +273,24 @@
 <a href="#273" id="273">273</a>
 <a href="#274" id="274">274</a>
 <a href="#275" id="275">275</a>
+<a href="#276" id="276">276</a>
+<a href="#277" id="277">277</a>
+<a href="#278" id="278">278</a>
+<a href="#279" id="279">279</a>
+<a href="#280" id="280">280</a>
+<a href="#281" id="281">281</a>
+<a href="#282" id="282">282</a>
+<a href="#283" id="283">283</a>
+<a href="#284" id="284">284</a>
+<a href="#285" id="285">285</a>
+<a href="#286" id="286">286</a>
+<a href="#287" id="287">287</a>
+<a href="#288" id="288">288</a>
+<a href="#289" id="289">289</a>
+<a href="#290" id="290">290</a>
+<a href="#291" id="291">291</a>
+<a href="#292" id="292">292</a>
+<a href="#293" id="293">293</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Display and toggle the state of notifications daemon
 //!
 //! Left-clicking on this block will enable/disable notifications.
@@ -340,25 +358,26 @@
 <span class="kw">const </span>ICON_OFF: <span class="kw-2">&amp;</span>str = <span class="string">&quot;bell-slash&quot;</span>;
 
 <span class="attr">#[derive(Deserialize, Debug, Default)]
-#[serde(default)]
+#[serde(deny_unknown_fields, default)]
 </span><span class="kw">pub struct </span>Config {
-    driver: DriverType,
-    format: FormatConfig,
+    <span class="kw">pub </span>driver: DriverType,
+    <span class="kw">pub </span>format: FormatConfig,
 }
 
 <span class="attr">#[derive(Deserialize, Debug, SmartDefault)]
 #[serde(rename_all = <span class="string">&quot;lowercase&quot;</span>)]
-</span><span class="kw">enum </span>DriverType {
+</span><span class="kw">pub enum </span>DriverType {
     <span class="attr">#[default]
     </span>Dunst,
     SwayNC,
 }
 
-<span class="kw">pub async fn </span>run(config: Config, <span class="kw-2">mut </span>api: CommonApi) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+<span class="kw">pub async fn </span>run(config: <span class="kw-2">&amp;</span>Config, api: <span class="kw-2">&amp;</span>CommonApi) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="kw">let </span><span class="kw-2">mut </span>actions = api.get_actions().<span class="kw">await</span><span class="question-mark">?</span>;
     api.set_default_actions(<span class="kw-2">&amp;</span>[(MouseButton::Left, <span class="prelude-val">None</span>, <span class="string">&quot;toggle_paused&quot;</span>)])
         .<span class="kw">await</span><span class="question-mark">?</span>;
 
-    <span class="kw">let </span><span class="kw-2">mut </span>widget = Widget::new().with_format(config.format.with_default(<span class="string">&quot; $icon &quot;</span>)<span class="question-mark">?</span>);
+    <span class="kw">let </span>format = config.format.with_default(<span class="string">&quot; $icon &quot;</span>)<span class="question-mark">?</span>;
 
     <span class="kw">let </span><span class="kw-2">mut </span>driver: Box&lt;<span class="kw">dyn </span>Driver&gt; = <span class="kw">match </span>config.driver {
         DriverType::Dunst =&gt; Box::new(DunstDriver::new().<span class="kw">await</span><span class="question-mark">?</span>),
@@ -369,6 +388,7 @@
         <span class="kw">let </span>(is_paused, notification_count) =
             <span class="macro">try_join!</span>(driver.is_paused(), driver.notification_count())<span class="question-mark">?</span>;
 
+        <span class="kw">let </span><span class="kw-2">mut </span>widget = Widget::new().with_format(format.clone());
         widget.set_values(<span class="macro">map!</span>(
             <span class="string">&quot;icon&quot; </span>=&gt; Value::icon(api.get_icon(<span class="kw">if </span>is_paused { ICON_OFF } <span class="kw">else </span>{ ICON_ON })<span class="question-mark">?</span>),
             [<span class="kw">if </span>notification_count != <span class="number">0</span>] <span class="string">&quot;notification_count&quot; </span>=&gt; Value::number(notification_count),
@@ -379,15 +399,15 @@
         } <span class="kw">else </span>{
             State::Info
         };
-        api.set_widget(<span class="kw-2">&amp;</span>widget).<span class="kw">await</span><span class="question-mark">?</span>;
+        api.set_widget(widget).<span class="kw">await</span><span class="question-mark">?</span>;
 
         <span class="macro">select! </span>{
             x = driver.wait_for_change() =&gt; x<span class="question-mark">?</span>,
-            event = api.event() =&gt; <span class="kw">match </span>event {
-                Action(a) <span class="kw">if </span>a == <span class="string">&quot;toggle_paused&quot; </span>=&gt; {
+            <span class="prelude-val">Some</span>(action) = actions.recv() =&gt; <span class="kw">match </span>action.as_ref() {
+                <span class="string">&quot;toggle_paused&quot; </span>=&gt; {
                     driver.set_paused(!is_paused).<span class="kw">await</span><span class="question-mark">?</span>;
                 }
-                Action(a) <span class="kw">if </span>a == <span class="string">&quot;show&quot; </span>=&gt; {
+                <span class="string">&quot;show&quot; </span>=&gt; {
                     driver.notification_show().<span class="kw">await</span><span class="question-mark">?</span>;
                 }
                 <span class="kw">_ </span>=&gt; (),
@@ -484,6 +504,7 @@
 <span class="kw">struct </span>SwayNCDriver {
     proxy: SwayNCDbusProxy&lt;<span class="lifetime">&#39;static</span>&gt;,
     changes: SubscribeStream&lt;<span class="lifetime">&#39;static</span>&gt;,
+    changes_v2: SubscribeV2Stream&lt;<span class="lifetime">&#39;static</span>&gt;,
 }
 
 <span class="kw">impl </span>SwayNCDriver {
@@ -497,6 +518,10 @@
                 .receive_subscribe()
                 .<span class="kw">await
                 </span>.error(<span class="string">&quot;Failed to create SubscribeStream&quot;</span>)<span class="question-mark">?</span>,
+            changes_v2: proxy
+                .receive_subscribe_v2()
+                .<span class="kw">await
+                </span>.error(<span class="string">&quot;Failed to create SubscribeV2Stream&quot;</span>)<span class="question-mark">?</span>,
             proxy,
         })
     }
@@ -530,7 +555,10 @@
     }
 
     <span class="kw">async fn </span>wait_for_change(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
-        <span class="self">self</span>.changes.next().<span class="kw">await</span>;
+        <span class="macro">select! </span>{
+            <span class="kw">_ </span>= <span class="self">self</span>.changes.next() =&gt; (),
+            <span class="kw">_ </span>= <span class="self">self</span>.changes_v2.next() =&gt; (),
+        }
         <span class="prelude-val">Ok</span>(())
     }
 }
@@ -546,6 +574,14 @@
     <span class="kw">fn </span>toggle_visibility(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; zbus::Result&lt;()&gt;;
     <span class="kw">fn </span>notification_count(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; zbus::Result&lt;u32&gt;;
     <span class="attr">#[dbus_proxy(signal)]
-    </span><span class="kw">fn </span>subscribe(<span class="kw-2">&amp;</span><span class="self">self</span>, value: bool) -&gt; zbus::Result&lt;()&gt;;
+    </span><span class="kw">fn </span>subscribe(<span class="kw-2">&amp;</span><span class="self">self</span>, count: u32, dnd: bool, cc_open: bool) -&gt; zbus::Result&lt;()&gt;;
+    <span class="attr">#[dbus_proxy(signal)]
+    </span><span class="kw">fn </span>subscribe_v2(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        count: u32,
+        dnd: bool,
+        cc_open: bool,
+        inhibited: bool,
+    ) -&gt; zbus::Result&lt;()&gt;;
 }
 </code></pre></div></section></main></body></html>

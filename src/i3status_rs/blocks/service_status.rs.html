@@ -219,27 +219,24 @@
 <span class="kw">use </span>zbus::PropertyStream;
 
 <span class="attr">#[derive(Deserialize, Debug, Default)]
-#[serde(default)]
+#[serde(deny_unknown_fields, default)]
 </span><span class="kw">pub struct </span>Config {
-    driver: DriverType,
-    service: String,
-    active_format: FormatConfig,
-    inactive_format: FormatConfig,
-    active_state: <span class="prelude-ty">Option</span>&lt;State&gt;,
-    inactive_state: <span class="prelude-ty">Option</span>&lt;State&gt;,
+    <span class="kw">pub </span>driver: DriverType,
+    <span class="kw">pub </span>service: String,
+    <span class="kw">pub </span>active_format: FormatConfig,
+    <span class="kw">pub </span>inactive_format: FormatConfig,
+    <span class="kw">pub </span>active_state: <span class="prelude-ty">Option</span>&lt;State&gt;,
+    <span class="kw">pub </span>inactive_state: <span class="prelude-ty">Option</span>&lt;State&gt;,
 }
 
 <span class="attr">#[derive(Deserialize, Debug, SmartDefault)]
 #[serde(rename_all = <span class="string">&quot;snake_case&quot;</span>)]
-</span><span class="kw">enum </span>DriverType {
+</span><span class="kw">pub enum </span>DriverType {
     <span class="attr">#[default]
     </span>Systemd,
 }
 
-<span class="kw">pub async fn </span>run(config: Config, <span class="kw-2">mut </span>api: CommonApi) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
-    api.event_receiver.close();
-
-    <span class="kw">let </span><span class="kw-2">mut </span>widget = Widget::new();
+<span class="kw">pub async fn </span>run(config: <span class="kw-2">&amp;</span>Config, api: <span class="kw-2">&amp;</span>CommonApi) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
     <span class="kw">let </span>active_format = config.active_format.with_default(<span class="string">&quot; $service active &quot;</span>)<span class="question-mark">?</span>;
     <span class="kw">let </span>inactive_format = config.inactive_format.with_default(<span class="string">&quot; $service inactive &quot;</span>)<span class="question-mark">?</span>;
 
@@ -253,6 +250,8 @@
     <span class="kw">loop </span>{
         <span class="kw">let </span>service_active_state = driver.is_active().<span class="kw">await</span><span class="question-mark">?</span>;
 
+        <span class="kw">let </span><span class="kw-2">mut </span>widget = Widget::new();
+
         <span class="kw">if </span>service_active_state {
             widget.state = active_state;
             widget.set_format(active_format.clone());
@@ -261,10 +260,11 @@
             widget.set_format(inactive_format.clone());
         };
 
-        widget.set_values(<span class="macro">map!</span>(
+        widget.set_values(<span class="macro">map! </span>{
             <span class="string">&quot;service&quot; </span>=&gt;Value::text(config.service.clone()),
-        ));
-        api.set_widget(<span class="kw-2">&amp;</span>widget).<span class="kw">await</span><span class="question-mark">?</span>;
+        });
+
+        api.set_widget(widget).<span class="kw">await</span><span class="question-mark">?</span>;
 
         driver.wait_for_change().<span class="kw">await</span><span class="question-mark">?</span>;
     }

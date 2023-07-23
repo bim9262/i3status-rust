@@ -455,27 +455,28 @@
 <span class="kw">use </span>futures::future::pending;
 
 <span class="attr">#[derive(Deserialize, Debug, SmartDefault)]
-#[serde(default)]
+#[serde(deny_unknown_fields, default)]
 </span><span class="kw">pub struct </span>Config {
-    format: FormatConfig,
+    <span class="kw">pub </span>format: FormatConfig,
     <span class="comment">// TODO: Document once this option becomes usefull
     </span><span class="attr">#[default(<span class="number">5</span>.into())]
-    </span>interval: Seconds,
+    </span><span class="kw">pub </span>interval: Seconds,
     <span class="attr">#[default(<span class="number">10_000</span>)]
-    </span>max_temp: u16,
+    </span><span class="kw">pub </span>max_temp: u16,
     <span class="attr">#[default(<span class="number">1_000</span>)]
-    </span>min_temp: u16,
+    </span><span class="kw">pub </span>min_temp: u16,
     <span class="comment">// TODO: Remove (this option is undocumented)
     </span><span class="attr">#[default(<span class="number">6_500</span>)]
-    </span>current_temp: u16,
-    hue_shifter: <span class="prelude-ty">Option</span>&lt;HueShifter&gt;,
+    </span><span class="kw">pub </span>current_temp: u16,
+    <span class="kw">pub </span>hue_shifter: <span class="prelude-ty">Option</span>&lt;HueShifter&gt;,
     <span class="attr">#[default(<span class="number">100</span>)]
-    </span>step: u16,
+    </span><span class="kw">pub </span>step: u16,
     <span class="attr">#[default(<span class="number">6_500</span>)]
-    </span>click_temp: u16,
+    </span><span class="kw">pub </span>click_temp: u16,
 }
 
-<span class="kw">pub async fn </span>run(config: Config, <span class="kw-2">mut </span>api: CommonApi) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+<span class="kw">pub async fn </span>run(config: <span class="kw-2">&amp;</span>Config, api: <span class="kw-2">&amp;</span>CommonApi) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="kw">let </span><span class="kw-2">mut </span>actions = api.get_actions().<span class="kw">await</span><span class="question-mark">?</span>;
     api.set_default_actions(<span class="kw-2">&amp;</span>[
         (MouseButton::Left, <span class="prelude-val">None</span>, <span class="string">&quot;set_click_temp&quot;</span>),
         (MouseButton::Right, <span class="prelude-val">None</span>, <span class="string">&quot;reset&quot;</span>),
@@ -484,7 +485,7 @@
     ])
     .<span class="kw">await</span><span class="question-mark">?</span>;
 
-    <span class="kw">let </span><span class="kw-2">mut </span>widget = Widget::new().with_format(config.format.with_default(<span class="string">&quot; $temperature &quot;</span>)<span class="question-mark">?</span>);
+    <span class="kw">let </span>format = config.format.with_default(<span class="string">&quot; $temperature &quot;</span>)<span class="question-mark">?</span>;
 
     <span class="comment">// limit too big steps at 500K to avoid too brutal changes
     </span><span class="kw">let </span>step = config.step.min(<span class="number">500</span>);
@@ -524,51 +525,50 @@
     <span class="kw">let </span><span class="kw-2">mut </span>current_temp = driver.get().<span class="kw">await</span><span class="question-mark">?</span>.unwrap_or(config.current_temp);
 
     <span class="kw">loop </span>{
+        <span class="kw">let </span><span class="kw-2">mut </span>widget = Widget::new().with_format(format.clone());
         widget.set_values(<span class="macro">map!</span>(<span class="string">&quot;temperature&quot; </span>=&gt; Value::number(current_temp)));
-        api.set_widget(<span class="kw-2">&amp;</span>widget).<span class="kw">await</span><span class="question-mark">?</span>;
+        api.set_widget(widget).<span class="kw">await</span><span class="question-mark">?</span>;
 
         <span class="macro">select! </span>{
             update = driver.receive_update() =&gt; {
                 current_temp = update<span class="question-mark">?</span>;
             }
-            event = api.event() =&gt; {
-                <span class="kw">match </span>event {
-                    UpdateRequest =&gt; {
-                        <span class="kw">if let </span><span class="prelude-val">Some</span>(val) = driver.get().<span class="kw">await</span><span class="question-mark">? </span>{
-                            current_temp = val;
-                        }
-                    }
-                    Action(a) <span class="kw">if </span>a == <span class="string">&quot;set_click_temp&quot; </span>=&gt; {
-                        current_temp = config.click_temp;
-                        driver.update(current_temp).<span class="kw">await</span><span class="question-mark">?</span>;
-                    }
-                    Action(a) <span class="kw">if </span>a == <span class="string">&quot;reset&quot; </span>=&gt; {
-                        <span class="kw">if </span>max_temp &gt; <span class="number">6500 </span>{
-                            current_temp = <span class="number">6500</span>;
-                            driver.reset().<span class="kw">await</span><span class="question-mark">?</span>;
-                        } <span class="kw">else </span>{
-                            current_temp = max_temp;
-                            driver.update(current_temp).<span class="kw">await</span><span class="question-mark">?</span>;
-                        }
-                    }
-                    Action(a) <span class="kw">if </span>a == <span class="string">&quot;temperature_up&quot; </span>=&gt; {
-                        current_temp = (current_temp + step).min(max_temp);
-                        driver.update(current_temp).<span class="kw">await</span><span class="question-mark">?</span>;
-                    }
-                    Action(a) <span class="kw">if </span>a == <span class="string">&quot;temperature_down&quot; </span>=&gt; {
-                        current_temp = current_temp.saturating_sub(step).max(min_temp);
-                        driver.update(current_temp).<span class="kw">await</span><span class="question-mark">?</span>;
-                    }
-                    <span class="kw">_ </span>=&gt; (),
+            <span class="kw">_ </span>= api.wait_for_update_request() =&gt; {
+                <span class="kw">if let </span><span class="prelude-val">Some</span>(val) = driver.get().<span class="kw">await</span><span class="question-mark">? </span>{
+                    current_temp = val;
                 }
+            }
+            <span class="prelude-val">Some</span>(action) = actions.recv() =&gt; <span class="kw">match </span>action.as_ref() {
+                <span class="string">&quot;set_click_temp&quot; </span>=&gt; {
+                    current_temp = config.click_temp;
+                    driver.update(current_temp).<span class="kw">await</span><span class="question-mark">?</span>;
+                }
+                <span class="string">&quot;reset&quot; </span>=&gt; {
+                    <span class="kw">if </span>max_temp &gt; <span class="number">6500 </span>{
+                        current_temp = <span class="number">6500</span>;
+                        driver.reset().<span class="kw">await</span><span class="question-mark">?</span>;
+                    } <span class="kw">else </span>{
+                        current_temp = max_temp;
+                        driver.update(current_temp).<span class="kw">await</span><span class="question-mark">?</span>;
+                    }
+                }
+                <span class="string">&quot;temperature_up&quot; </span>=&gt; {
+                    current_temp = (current_temp + step).min(max_temp);
+                    driver.update(current_temp).<span class="kw">await</span><span class="question-mark">?</span>;
+                }
+                <span class="string">&quot;temperature_down&quot; </span>=&gt; {
+                    current_temp = current_temp.saturating_sub(step).max(min_temp);
+                    driver.update(current_temp).<span class="kw">await</span><span class="question-mark">?</span>;
+                }
+                <span class="kw">_ </span>=&gt; (),
             }
         }
     }
 }
 
-<span class="attr">#[derive(Deserialize, Debug, Clone)]
+<span class="attr">#[derive(Deserialize, Debug, Clone, Copy)]
 #[serde(rename_all = <span class="string">&quot;snake_case&quot;</span>)]
-</span><span class="kw">enum </span>HueShifter {
+</span><span class="kw">pub enum </span>HueShifter {
     Redshift,
     Sct,
     Gammastep,

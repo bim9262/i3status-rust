@@ -226,6 +226,11 @@
 <a href="#226" id="226">226</a>
 <a href="#227" id="227">227</a>
 <a href="#228" id="228">228</a>
+<a href="#229" id="229">229</a>
+<a href="#230" id="230">230</a>
+<a href="#231" id="231">231</a>
+<a href="#232" id="232">232</a>
+<a href="#233" id="233">233</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Watson statistics
 //!
 //! [Watson](http://tailordev.github.io/Watson/) is a simple CLI time tracking application. This block will show the name of your current active project, tags and optionally recorded time. Clicking the widget will toggle the `show_time` variable dynamically.
@@ -269,24 +274,25 @@
 <span class="kw">use </span><span class="kw">super</span>::prelude::<span class="kw-2">*</span>;
 
 <span class="attr">#[derive(Deserialize, Debug, SmartDefault)]
-#[serde(default)]
+#[serde(deny_unknown_fields, default)]
 </span><span class="kw">pub struct </span>Config {
-    format: FormatConfig,
-    state_path: <span class="prelude-ty">Option</span>&lt;ShellString&gt;,
+    <span class="kw">pub </span>format: FormatConfig,
+    <span class="kw">pub </span>state_path: <span class="prelude-ty">Option</span>&lt;ShellString&gt;,
     <span class="attr">#[default(<span class="number">60</span>.into())]
-    </span>interval: Seconds,
-    show_time: bool,
+    </span><span class="kw">pub </span>interval: Seconds,
+    <span class="kw">pub </span>show_time: bool,
 }
 
-<span class="kw">pub async fn </span>run(config: Config, <span class="kw-2">mut </span>api: CommonApi) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+<span class="kw">pub async fn </span>run(config: <span class="kw-2">&amp;</span>Config, api: <span class="kw-2">&amp;</span>CommonApi) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="kw">let </span><span class="kw-2">mut </span>actions = api.get_actions().<span class="kw">await</span><span class="question-mark">?</span>;
     api.set_default_actions(<span class="kw-2">&amp;</span>[(MouseButton::Left, <span class="prelude-val">None</span>, <span class="string">&quot;toggle_show_time&quot;</span>)])
         .<span class="kw">await</span><span class="question-mark">?</span>;
 
-    <span class="kw">let </span><span class="kw-2">mut </span>widget = Widget::new().with_format(config.format.with_default(<span class="string">&quot; $text |&quot;</span>)<span class="question-mark">?</span>);
+    <span class="kw">let </span>format = config.format.with_default(<span class="string">&quot; $text |&quot;</span>)<span class="question-mark">?</span>;
 
     <span class="kw">let </span><span class="kw-2">mut </span>show_time = config.show_time;
 
-    <span class="kw">let </span>(state_dir, state_file, state_path) = <span class="kw">match </span>config.state_path {
+    <span class="kw">let </span>(state_dir, state_file, state_path) = <span class="kw">match </span><span class="kw-2">&amp;</span>config.state_path {
         <span class="prelude-val">Some</span>(p) =&gt; {
             <span class="kw">let </span><span class="kw-2">mut </span>p: PathBuf = (<span class="kw-2">*</span>p.expand()<span class="question-mark">?</span>).into();
             <span class="kw">let </span>path = p.clone();
@@ -303,12 +309,13 @@
         }
     };
 
-    <span class="kw">let </span><span class="kw-2">mut </span>notify = Inotify::init().error(<span class="string">&quot;Failed to start inotify&quot;</span>)<span class="question-mark">?</span>;
+    <span class="kw">let </span>notify = Inotify::init().error(<span class="string">&quot;Failed to start inotify&quot;</span>)<span class="question-mark">?</span>;
     notify
-        .add_watch(<span class="kw-2">&amp;</span>state_dir, WatchMask::CREATE | WatchMask::MOVED_TO)
+        .watches()
+        .add(<span class="kw-2">&amp;</span>state_dir, WatchMask::CREATE | WatchMask::MOVED_TO)
         .error(<span class="string">&quot;Failed to watch watson state directory&quot;</span>)<span class="question-mark">?</span>;
     <span class="kw">let </span><span class="kw-2">mut </span>state_updates = notify
-        .event_stream([<span class="number">0</span>; <span class="number">1024</span>])
+        .into_event_stream([<span class="number">0</span>; <span class="number">1024</span>])
         .error(<span class="string">&quot;Failed to create event stream&quot;</span>)<span class="question-mark">?</span>;
 
     <span class="kw">let </span><span class="kw-2">mut </span>timer = config.interval.timer();
@@ -319,6 +326,9 @@
             .<span class="kw">await
             </span>.error(<span class="string">&quot;Failed to read state file&quot;</span>)<span class="question-mark">?</span>;
         <span class="kw">let </span>state = serde_json::from_str(<span class="kw-2">&amp;</span>state).unwrap_or(WatsonState::Idle {});
+
+        <span class="kw">let </span><span class="kw-2">mut </span>widget = Widget::new().with_format(format.clone());
+
         <span class="kw">match </span>state {
             state @ WatsonState::Active { .. } =&gt; {
                 widget.state = State::Good;
@@ -346,20 +356,20 @@
             }
         }
 
-        api.set_widget(<span class="kw-2">&amp;</span>widget).<span class="kw">await</span><span class="question-mark">?</span>;
+        api.set_widget(widget).<span class="kw">await</span><span class="question-mark">?</span>;
 
         <span class="kw">loop </span>{
             <span class="macro">select! </span>{
                 <span class="kw">_ </span>= timer.tick() =&gt; <span class="kw">break</span>,
+                <span class="kw">_ </span>= api.wait_for_update_request() =&gt; <span class="kw">break</span>,
                 <span class="prelude-val">Some</span>(update) = state_updates.next() =&gt; {
                     <span class="kw">let </span>update = update.error(<span class="string">&quot;Bad inotify update&quot;</span>)<span class="question-mark">?</span>;
-                    <span class="kw">if </span>update.name.map(|x| state_file == x).unwrap_or(<span class="bool-val">false</span>) {
+                    <span class="kw">if </span>update.name.is_some_and(|x| state_file == x) {
                         <span class="kw">break</span>;
                     }
                 }
-                event = api.event() =&gt; <span class="kw">match </span>event {
-                    UpdateRequest =&gt; <span class="kw">break</span>,
-                    Action(a) <span class="kw">if </span>a == <span class="string">&quot;toggle_show_time&quot; </span>=&gt; {
+                <span class="prelude-val">Some</span>(action) = actions.recv() =&gt; <span class="kw">match </span>action.as_ref() {
+                    <span class="string">&quot;toggle_show_time&quot; </span>=&gt; {
                         show_time = !show_time;
                         <span class="kw">break</span>;
                     }

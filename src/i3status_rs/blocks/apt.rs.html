@@ -288,21 +288,19 @@
 <span class="kw">use </span><span class="kw">super</span>::prelude::<span class="kw-2">*</span>;
 
 <span class="attr">#[derive(Deserialize, Debug, SmartDefault)]
-#[serde(default)]
+#[serde(deny_unknown_fields, default)]
 </span><span class="kw">pub struct </span>Config {
     <span class="attr">#[default(<span class="number">600</span>.into())]
-    </span>interval: Seconds,
-    format: FormatConfig,
-    format_singular: FormatConfig,
-    format_up_to_date: FormatConfig,
-    warning_updates_regex: <span class="prelude-ty">Option</span>&lt;String&gt;,
-    critical_updates_regex: <span class="prelude-ty">Option</span>&lt;String&gt;,
-    ignore_phased_updates: bool,
+    </span><span class="kw">pub </span>interval: Seconds,
+    <span class="kw">pub </span>format: FormatConfig,
+    <span class="kw">pub </span>format_singular: FormatConfig,
+    <span class="kw">pub </span>format_up_to_date: FormatConfig,
+    <span class="kw">pub </span>warning_updates_regex: <span class="prelude-ty">Option</span>&lt;String&gt;,
+    <span class="kw">pub </span>critical_updates_regex: <span class="prelude-ty">Option</span>&lt;String&gt;,
+    <span class="kw">pub </span>ignore_phased_updates: bool,
 }
 
-<span class="kw">pub async fn </span>run(config: Config, <span class="kw-2">mut </span>api: CommonApi) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
-    <span class="kw">let </span><span class="kw-2">mut </span>widget = Widget::new();
-
+<span class="kw">pub async fn </span>run(config: <span class="kw-2">&amp;</span>Config, api: <span class="kw-2">&amp;</span>CommonApi) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
     <span class="kw">let </span>format = config.format.with_default(<span class="string">&quot; $icon $count.eng(w:1) &quot;</span>)<span class="question-mark">?</span>;
     <span class="kw">let </span>format_singular = config
         .format_singular
@@ -354,6 +352,7 @@
         </span>.error(<span class="string">&quot;Failed to write to config file&quot;</span>)<span class="question-mark">?</span>;
 
     <span class="kw">loop </span>{
+        <span class="kw">let </span><span class="kw-2">mut </span>widget = Widget::new();
         <span class="kw">let </span>updates = get_updates_list(config_file).<span class="kw">await</span><span class="question-mark">?</span>;
         <span class="kw">let </span>count = get_update_count(config_file, config.ignore_phased_updates, <span class="kw-2">&amp;</span>updates).<span class="kw">await</span><span class="question-mark">?</span>;
 
@@ -369,10 +368,10 @@
 
         <span class="kw">let </span>warning = warning_updates_regex
             .as_ref()
-            .map_or(<span class="bool-val">false</span>, |regex| has_matching_update(<span class="kw-2">&amp;</span>updates, regex));
+            .is_some_and(|regex| has_matching_update(<span class="kw-2">&amp;</span>updates, regex));
         <span class="kw">let </span>critical = critical_updates_regex
             .as_ref()
-            .map_or(<span class="bool-val">false</span>, |regex| has_matching_update(<span class="kw-2">&amp;</span>updates, regex));
+            .is_some_and(|regex| has_matching_update(<span class="kw-2">&amp;</span>updates, regex));
         widget.state = <span class="kw">match </span>count {
             <span class="number">0 </span>=&gt; State::Idle,
             <span class="kw">_ </span>=&gt; {
@@ -386,7 +385,7 @@
             }
         };
 
-        api.set_widget(<span class="kw-2">&amp;</span>widget).<span class="kw">await</span><span class="question-mark">?</span>;
+        api.set_widget(widget).<span class="kw">await</span><span class="question-mark">?</span>;
 
         <span class="macro">select! </span>{
             <span class="kw">_ </span>= sleep(config.interval.<span class="number">0</span>) =&gt; (),
@@ -407,6 +406,7 @@
         .<span class="kw">await
         </span>.error(<span class="string">&quot;Failed to run `apt update`&quot;</span>)<span class="question-mark">?</span>;
     <span class="kw">let </span>stdout = Command::new(<span class="string">&quot;apt&quot;</span>)
+        .env(<span class="string">&quot;LANG&quot;</span>, <span class="string">&quot;C&quot;</span>)
         .env(<span class="string">&quot;APT_CONFIG&quot;</span>, config_path)
         .args([<span class="string">&quot;list&quot;</span>, <span class="string">&quot;--upgradable&quot;</span>])
         .output()
@@ -452,7 +452,7 @@
     )
     .error(<span class="string">&quot;Problem capturing apt-cache command output&quot;</span>)<span class="question-mark">?</span>;
 
-    <span class="kw">let </span>phased_regex = <span class="macro">regex!</span>(<span class="string">r#&quot;.*\(phased (\d+)%\).*&quot;#</span>);
+    <span class="kw">let </span>phased_regex = <span class="macro">regex!</span>(<span class="string">r&quot;.*\(phased (\d+)%\).*&quot;</span>);
     <span class="prelude-val">Ok</span>(<span class="kw">match </span>phased_regex.captures(<span class="kw-2">&amp;</span>output) {
         <span class="prelude-val">Some</span>(matches) =&gt; <span class="kw-2">&amp;</span>matches[<span class="number">1</span>] != <span class="string">&quot;100&quot;</span>,
         <span class="prelude-val">None </span>=&gt; <span class="bool-val">false</span>,

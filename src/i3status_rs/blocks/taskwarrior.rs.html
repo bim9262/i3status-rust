@@ -165,6 +165,9 @@
 <a href="#165" id="165">165</a>
 <a href="#166" id="166">166</a>
 <a href="#167" id="167">167</a>
+<a href="#168" id="168">168</a>
+<a href="#169" id="169">169</a>
+<a href="#170" id="170">170</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! The number of tasks from the taskwarrior list
 //!
 //! Clicking the right mouse button on the icon cycles the view of the block through the user&#39;s filters.
@@ -221,16 +224,16 @@
 <span class="kw">use </span>tokio::process::Command;
 
 <span class="attr">#[derive(Deserialize, Debug)]
-#[serde(default)]
+#[serde(deny_unknown_fields, default)]
 </span><span class="kw">pub struct </span>Config {
-    interval: Seconds,
-    warning_threshold: u32,
-    critical_threshold: u32,
-    filters: Vec&lt;Filter&gt;,
-    format: FormatConfig,
-    format_singular: FormatConfig,
-    format_everything_done: FormatConfig,
-    data_location: ShellString,
+    <span class="kw">pub </span>interval: Seconds,
+    <span class="kw">pub </span>warning_threshold: u32,
+    <span class="kw">pub </span>critical_threshold: u32,
+    <span class="kw">pub </span>filters: Vec&lt;Filter&gt;,
+    <span class="kw">pub </span>format: FormatConfig,
+    <span class="kw">pub </span>format_singular: FormatConfig,
+    <span class="kw">pub </span>format_everything_done: FormatConfig,
+    <span class="kw">pub </span>data_location: ShellString,
 }
 
 <span class="kw">impl </span>Default <span class="kw">for </span>Config {
@@ -251,7 +254,8 @@
     }
 }
 
-<span class="kw">pub async fn </span>run(config: Config, <span class="kw-2">mut </span>api: CommonApi) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+<span class="kw">pub async fn </span>run(config: <span class="kw-2">&amp;</span>Config, api: <span class="kw-2">&amp;</span>CommonApi) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="kw">let </span><span class="kw-2">mut </span>actions = api.get_actions().<span class="kw">await</span><span class="question-mark">?</span>;
     api.set_default_actions(<span class="kw-2">&amp;</span>[(MouseButton::Right, <span class="prelude-val">None</span>, <span class="string">&quot;next_filter&quot;</span>)])
         .<span class="kw">await</span><span class="question-mark">?</span>;
 
@@ -263,21 +267,22 @@
         .format_everything_done
         .with_default(<span class="string">&quot; $icon $count.eng(w:1) &quot;</span>)<span class="question-mark">?</span>;
 
-    <span class="kw">let </span><span class="kw-2">mut </span>widget = Widget::new();
-
     <span class="kw">let </span><span class="kw-2">mut </span>filters = config.filters.iter().cycle();
     <span class="kw">let </span><span class="kw-2">mut </span>filter = filters.next().error(<span class="string">&quot;`filters` is empty&quot;</span>)<span class="question-mark">?</span>;
 
-    <span class="kw">let </span><span class="kw-2">mut </span>notify = Inotify::init().error(<span class="string">&quot;Failed to start inotify&quot;</span>)<span class="question-mark">?</span>;
+    <span class="kw">let </span>notify = Inotify::init().error(<span class="string">&quot;Failed to start inotify&quot;</span>)<span class="question-mark">?</span>;
     notify
-        .add_watch(<span class="kw-2">&amp;*</span>config.data_location.expand()<span class="question-mark">?</span>, WatchMask::MODIFY)
+        .watches()
+        .add(<span class="kw-2">&amp;*</span>config.data_location.expand()<span class="question-mark">?</span>, WatchMask::MODIFY)
         .error(<span class="string">&quot;Failed to watch data location&quot;</span>)<span class="question-mark">?</span>;
     <span class="kw">let </span><span class="kw-2">mut </span>updates = notify
-        .event_stream([<span class="number">0</span>; <span class="number">1024</span>])
+        .into_event_stream([<span class="number">0</span>; <span class="number">1024</span>])
         .error(<span class="string">&quot;Failed to create event stream&quot;</span>)<span class="question-mark">?</span>;
 
     <span class="kw">loop </span>{
         <span class="kw">let </span>number_of_tasks = get_number_of_tasks(<span class="kw-2">&amp;</span>filter.filter).<span class="kw">await</span><span class="question-mark">?</span>;
+
+        <span class="kw">let </span><span class="kw-2">mut </span>widget = Widget::new();
 
         widget.set_format(<span class="kw">match </span>number_of_tasks {
             <span class="number">0 </span>=&gt; format_everything_done.clone(),
@@ -297,13 +302,14 @@
             <span class="kw">_ </span>=&gt; State::Idle,
         };
 
-        api.set_widget(<span class="kw-2">&amp;</span>widget).<span class="kw">await</span><span class="question-mark">?</span>;
+        api.set_widget(widget).<span class="kw">await</span><span class="question-mark">?</span>;
 
         <span class="macro">select! </span>{
             <span class="kw">_ </span>= sleep(config.interval.<span class="number">0</span>) =&gt;(),
             <span class="kw">_ </span>= updates.next() =&gt; (),
-            event = api.event() =&gt; <span class="kw">match </span>event {
-                Action(a) <span class="kw">if </span>a == <span class="string">&quot;next_filter&quot; </span>=&gt; {
+            <span class="kw">_ </span>= api.wait_for_update_request() =&gt; (),
+            <span class="prelude-val">Some</span>(action) = actions.recv() =&gt; <span class="kw">match </span>action.as_ref() {
+                <span class="string">&quot;next_filter&quot; </span>=&gt; {
                     filter = filters.next().unwrap();
                 }
                 <span class="kw">_ </span>=&gt; (),
@@ -328,7 +334,7 @@
 
 <span class="attr">#[derive(Deserialize, Debug, Default, Clone)]
 #[serde(deny_unknown_fields)]
-</span><span class="kw">struct </span>Filter {
+</span><span class="kw">pub struct </span>Filter {
     <span class="kw">pub </span>name: String,
     <span class="kw">pub </span>filter: String,
 }

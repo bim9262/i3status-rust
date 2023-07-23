@@ -277,6 +277,19 @@
 <a href="#277" id="277">277</a>
 <a href="#278" id="278">278</a>
 <a href="#279" id="279">279</a>
+<a href="#280" id="280">280</a>
+<a href="#281" id="281">281</a>
+<a href="#282" id="282">282</a>
+<a href="#283" id="283">283</a>
+<a href="#284" id="284">284</a>
+<a href="#285" id="285">285</a>
+<a href="#286" id="286">286</a>
+<a href="#287" id="287">287</a>
+<a href="#288" id="288">288</a>
+<a href="#289" id="289">289</a>
+<a href="#290" id="290">290</a>
+<a href="#291" id="291">291</a>
+<a href="#292" id="292">292</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! The output of a custom shell command
 //!
 //! For further customisation, use the `json` option and have the shell command output valid JSON in the schema below:
@@ -374,34 +387,38 @@
 //! # TODO:
 //! - Use `shellexpand`
 
-</span><span class="kw">use </span><span class="kw">super</span>::prelude::<span class="kw-2">*</span>;
+</span><span class="kw">use </span><span class="kw">crate</span>::formatting::Format;
+
+<span class="kw">use </span><span class="kw">super</span>::prelude::<span class="kw-2">*</span>;
 <span class="kw">use </span>inotify::{Inotify, WatchMask};
 <span class="kw">use </span>std::process::Stdio;
 <span class="kw">use </span>tokio::io::{<span class="self">self</span>, AsyncBufReadExt, BufReader};
 <span class="kw">use </span>tokio::process::Command;
 
 <span class="attr">#[derive(Deserialize, Debug, SmartDefault)]
-#[serde(default)]
+#[serde(deny_unknown_fields, default)]
 </span><span class="kw">pub struct </span>Config {
-    format: FormatConfig,
-    command: <span class="prelude-ty">Option</span>&lt;String&gt;,
-    persistent: bool,
-    cycle: <span class="prelude-ty">Option</span>&lt;Vec&lt;String&gt;&gt;,
+    <span class="kw">pub </span>format: FormatConfig,
+    <span class="kw">pub </span>command: <span class="prelude-ty">Option</span>&lt;String&gt;,
+    <span class="kw">pub </span>persistent: bool,
+    <span class="kw">pub </span>cycle: <span class="prelude-ty">Option</span>&lt;Vec&lt;String&gt;&gt;,
     <span class="attr">#[default(<span class="number">10</span>.into())]
-    </span>interval: Seconds,
-    json: bool,
-    hide_when_empty: bool,
-    shell: <span class="prelude-ty">Option</span>&lt;String&gt;,
-    watch_files: Vec&lt;ShellString&gt;,
+    </span><span class="kw">pub </span>interval: Seconds,
+    <span class="kw">pub </span>json: bool,
+    <span class="kw">pub </span>hide_when_empty: bool,
+    <span class="kw">pub </span>shell: <span class="prelude-ty">Option</span>&lt;String&gt;,
+    <span class="kw">pub </span>watch_files: Vec&lt;ShellString&gt;,
 }
 
 <span class="kw">async fn </span>update_bar(
     stdout: <span class="kw-2">&amp;</span>str,
     hide_when_empty: bool,
     json: bool,
-    api: <span class="kw-2">&amp;mut </span>CommonApi,
-    widget: <span class="kw-2">&amp;mut </span>Widget,
+    api: <span class="kw-2">&amp;</span>CommonApi,
+    format: Format,
 ) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="kw">let </span><span class="kw-2">mut </span>widget = Widget::new().with_format(format);
+
     <span class="kw">let </span>text_empty;
 
     <span class="kw">if </span>json {
@@ -429,14 +446,14 @@
     </span>}
 }
 
-<span class="kw">pub async fn </span>run(config: Config, <span class="kw-2">mut </span>api: CommonApi) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+<span class="kw">pub async fn </span>run(config: <span class="kw-2">&amp;</span>Config, api: <span class="kw-2">&amp;</span>CommonApi) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
     api.set_default_actions(<span class="kw-2">&amp;</span>[(MouseButton::Left, <span class="prelude-val">None</span>, <span class="string">&quot;cycle&quot;</span>)])
         .<span class="kw">await</span><span class="question-mark">?</span>;
 
-    <span class="kw">let </span><span class="kw-2">mut </span>widget = Widget::new().with_format(config.format.with_defaults(
+    <span class="kw">let </span>format = config.format.with_defaults(
         <span class="string">&quot;{ $icon|} $text.pango-str() &quot;</span>,
         <span class="string">&quot;{ $icon|} $short_text.pango-str() |&quot;</span>,
-    )<span class="question-mark">?</span>);
+    )<span class="question-mark">?</span>;
 
     <span class="kw">let </span><span class="kw-2">mut </span>timer = config.interval.timer();
 
@@ -444,27 +461,25 @@
     <span class="kw">let </span><span class="kw-2">mut </span>file_updates: FileStream = <span class="kw">match </span>config.watch_files.as_slice() {
         [] =&gt; Box::pin(futures::stream::pending()),
         files =&gt; {
-            <span class="kw">let </span><span class="kw-2">mut </span>notify = Inotify::init().error(<span class="string">&quot;Failed to start inotify&quot;</span>)<span class="question-mark">?</span>;
+            <span class="kw">let </span>notify = Inotify::init().error(<span class="string">&quot;Failed to start inotify&quot;</span>)<span class="question-mark">?</span>;
+            <span class="kw">let </span><span class="kw-2">mut </span>watches = notify.watches();
             <span class="kw">for </span>file <span class="kw">in </span>files {
                 <span class="kw">let </span>file = file.expand()<span class="question-mark">?</span>;
-                notify
-                    .add_watch(<span class="kw-2">&amp;*</span>file, WatchMask::MODIFY | WatchMask::CLOSE_WRITE)
+                watches
+                    .add(<span class="kw-2">&amp;*</span>file, WatchMask::MODIFY | WatchMask::CLOSE_WRITE)
                     .error(<span class="string">&quot;Failed to add file watch&quot;</span>)<span class="question-mark">?</span>;
             }
             Box::pin(
                 notify
-                    .event_stream([<span class="number">0</span>; <span class="number">1024</span>])
+                    .into_event_stream([<span class="number">0</span>; <span class="number">1024</span>])
                     .error(<span class="string">&quot;Failed to create event stream&quot;</span>)<span class="question-mark">?</span>,
             )
         }
     };
 
-    <span class="comment">// Choose the shell in this priority:
-    // 1) `shell` config option
-    // 2) `SHELL` environment variable
-    // 3) `&quot;sh&quot;`
-    </span><span class="kw">let </span>shell = config
+    <span class="kw">let </span>shell = config
         .shell
+        .clone()
         .or_else(|| std::env::var(<span class="string">&quot;SHELL&quot;</span>).ok())
         .unwrap_or_else(|| <span class="string">&quot;sh&quot;</span>.to_string());
 
@@ -478,6 +493,8 @@
                     .error(<span class="string">&quot;&#39;command&#39; must be specified when &#39;persistent&#39; is set&quot;</span>)<span class="question-mark">?</span>,
             ])
             .stdout(Stdio::piped())
+            .stdin(Stdio::null())
+            .kill_on_drop(<span class="bool-val">true</span>)
             .spawn()
             .error(<span class="string">&quot;failed to run command&quot;</span>)<span class="question-mark">?</span>;
 
@@ -492,18 +509,26 @@
         });
 
         <span class="kw">loop </span>{
-            <span class="macro">select! </span>{
-                line = reader.next_line() =&gt; {
-                    <span class="kw">let </span>line = line.error(<span class="string">&quot;error reading line from child process&quot;</span>)<span class="question-mark">?</span>.error(<span class="string">&quot;child process exited unexpectedly&quot;</span>)<span class="question-mark">?</span>;
-                    update_bar(<span class="kw-2">&amp;</span>line, config.hide_when_empty, config.json, <span class="kw-2">&amp;mut </span>api, <span class="kw-2">&amp;mut </span>widget).<span class="kw">await</span><span class="question-mark">?</span>;
-                }
-                <span class="comment">// events must be polled
-                </span><span class="kw">_ </span>= api.event() =&gt; (),
-            }
+            <span class="kw">let </span>line = reader
+                .next_line()
+                .<span class="kw">await
+                </span>.error(<span class="string">&quot;error reading line from child process&quot;</span>)<span class="question-mark">?
+                </span>.error(<span class="string">&quot;child process exited unexpectedly&quot;</span>)<span class="question-mark">?</span>;
+            update_bar(
+                <span class="kw-2">&amp;</span>line,
+                config.hide_when_empty,
+                config.json,
+                api,
+                format.clone(),
+            )
+            .<span class="kw">await</span><span class="question-mark">?</span>;
         }
     } <span class="kw">else </span>{
+        <span class="kw">let </span><span class="kw-2">mut </span>actions = api.get_actions().<span class="kw">await</span><span class="question-mark">?</span>;
+
         <span class="kw">let </span><span class="kw-2">mut </span>cycle = config
             .cycle
+            .clone()
             .or_else(|| config.command.clone().map(|cmd| <span class="macro">vec!</span>[cmd]))
             .error(<span class="string">&quot;either &#39;command&#39; or &#39;cycle&#39; must be specified&quot;</span>)<span class="question-mark">?
             </span>.into_iter()
@@ -514,6 +539,7 @@
             <span class="comment">// Run command
             </span><span class="kw">let </span>output = Command::new(<span class="kw-2">&amp;</span>shell)
                 .args([<span class="string">&quot;-c&quot;</span>, <span class="kw-2">&amp;</span>cmd])
+                .stdin(Stdio::null())
                 .output()
                 .<span class="kw">await
                 </span>.error(<span class="string">&quot;failed to run command&quot;</span>)<span class="question-mark">?</span>;
@@ -525,8 +551,8 @@
                 stdout,
                 config.hide_when_empty,
                 config.json,
-                <span class="kw-2">&amp;mut </span>api,
-                <span class="kw-2">&amp;mut </span>widget,
+                api,
+                format.clone(),
             )
             .<span class="kw">await</span><span class="question-mark">?</span>;
 
@@ -534,9 +560,9 @@
                 <span class="macro">select! </span>{
                     <span class="kw">_ </span>= timer.tick() =&gt; <span class="kw">break</span>,
                     <span class="kw">_ </span>= file_updates.next() =&gt; <span class="kw">break</span>,
-                    event = api.event() =&gt; <span class="kw">match </span>event {
-                        UpdateRequest =&gt; <span class="kw">break</span>,
-                        Action(a) <span class="kw">if </span>a == <span class="string">&quot;cycle&quot; </span>=&gt; {
+                    <span class="kw">_ </span>= api.wait_for_update_request() =&gt; <span class="kw">break</span>,
+                    <span class="prelude-val">Some</span>(action) = actions.recv() =&gt; <span class="kw">match </span>action.as_ref() {
+                        <span class="string">&quot;cycle&quot; </span>=&gt; {
                             cmd = cycle.next().unwrap();
                             <span class="kw">break</span>;
                         }

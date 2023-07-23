@@ -295,8 +295,6 @@
 <a href="#295" id="295">295</a>
 <a href="#296" id="296">296</a>
 <a href="#297" id="297">297</a>
-<a href="#298" id="298">298</a>
-<a href="#299" id="299">299</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Memory and swap usage
 //!
 //! # Configuration
@@ -363,32 +361,31 @@
 <span class="kw">use </span><span class="kw">crate</span>::util::read_file;
 
 <span class="attr">#[derive(Deserialize, Debug, SmartDefault)]
-#[serde(default)]
+#[serde(deny_unknown_fields, default)]
 </span><span class="kw">pub struct </span>Config {
-    format: FormatConfig,
-    format_alt: <span class="prelude-ty">Option</span>&lt;FormatConfig&gt;,
+    <span class="kw">pub </span>format: FormatConfig,
+    <span class="kw">pub </span>format_alt: <span class="prelude-ty">Option</span>&lt;FormatConfig&gt;,
     <span class="attr">#[default(<span class="number">5</span>.into())]
-    </span>interval: Seconds,
+    </span><span class="kw">pub </span>interval: Seconds,
     <span class="attr">#[default(<span class="number">80.0</span>)]
-    </span>warning_mem: f64,
+    </span><span class="kw">pub </span>warning_mem: f64,
     <span class="attr">#[default(<span class="number">80.0</span>)]
-    </span>warning_swap: f64,
+    </span><span class="kw">pub </span>warning_swap: f64,
     <span class="attr">#[default(<span class="number">95.0</span>)]
-    </span>critical_mem: f64,
+    </span><span class="kw">pub </span>critical_mem: f64,
     <span class="attr">#[default(<span class="number">95.0</span>)]
-    </span>critical_swap: f64,
+    </span><span class="kw">pub </span>critical_swap: f64,
 }
 
-<span class="kw">pub async fn </span>run(config: Config, <span class="kw-2">mut </span>api: CommonApi) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+<span class="kw">pub async fn </span>run(config: <span class="kw-2">&amp;</span>Config, api: <span class="kw-2">&amp;</span>CommonApi) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="kw">let </span><span class="kw-2">mut </span>actions = api.get_actions().<span class="kw">await</span><span class="question-mark">?</span>;
     api.set_default_actions(<span class="kw-2">&amp;</span>[(MouseButton::Left, <span class="prelude-val">None</span>, <span class="string">&quot;toggle_format&quot;</span>)])
         .<span class="kw">await</span><span class="question-mark">?</span>;
-
-    <span class="kw">let </span><span class="kw-2">mut </span>widget = Widget::new();
 
     <span class="kw">let </span><span class="kw-2">mut </span>format = config.format.with_default(
         <span class="string">&quot; $icon $mem_avail.eng(prefix:M)/$mem_total.eng(prefix:M)($mem_total_used_percents.eng(w:2)) &quot;</span>,
     )<span class="question-mark">?</span>;
-    <span class="kw">let </span><span class="kw-2">mut </span>format_alt = <span class="kw">match </span>config.format_alt {
+    <span class="kw">let </span><span class="kw-2">mut </span>format_alt = <span class="kw">match </span><span class="kw-2">&amp;</span>config.format_alt {
         <span class="prelude-val">Some</span>(f) =&gt; <span class="prelude-val">Some</span>(f.with_default(<span class="string">&quot;&quot;</span>)<span class="question-mark">?</span>),
         <span class="prelude-val">None </span>=&gt; <span class="prelude-val">None</span>,
     };
@@ -448,7 +445,7 @@
         <span class="kw">let </span>swap_cached = mem_state.swap_cached <span class="kw">as </span>f64 * <span class="number">1024.</span>;
         <span class="kw">let </span>swap_used = swap_total - swap_free - swap_cached;
 
-        widget.set_format(format.clone());
+        <span class="kw">let </span><span class="kw-2">mut </span>widget = Widget::new().with_format(format.clone());
         widget.set_values(<span class="macro">map! </span>{
             <span class="string">&quot;icon&quot; </span>=&gt; Value::icon(api.get_icon(<span class="string">&quot;memory_mem&quot;</span>)<span class="question-mark">?</span>),
             <span class="string">&quot;icon_swap&quot; </span>=&gt; Value::icon(api.get_icon(<span class="string">&quot;memory_swap&quot;</span>)<span class="question-mark">?</span>),
@@ -492,17 +489,16 @@
             State::Idle
         };
 
-        api.set_widget(<span class="kw-2">&amp;</span>widget).<span class="kw">await</span><span class="question-mark">?</span>;
+        api.set_widget(widget).<span class="kw">await</span><span class="question-mark">?</span>;
 
         <span class="kw">loop </span>{
             <span class="macro">select! </span>{
                 <span class="kw">_ </span>= timer.tick() =&gt; <span class="kw">break</span>,
-                event = api.event() =&gt; <span class="kw">match </span>event {
-                    UpdateRequest =&gt; <span class="kw">break</span>,
-                    Action(a) <span class="kw">if </span>a == <span class="string">&quot;toggle_format&quot; </span>=&gt; {
+                <span class="kw">_ </span>= api.wait_for_update_request() =&gt; <span class="kw">break</span>,
+                <span class="prelude-val">Some</span>(action) = actions.recv() =&gt; <span class="kw">match </span>action.as_ref() {
+                    <span class="string">&quot;toggle_format&quot; </span>=&gt; {
                         <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">ref mut </span>format_alt) = format_alt {
                             std::mem::swap(format_alt, <span class="kw-2">&amp;mut </span>format);
-                            widget.set_format(format.clone());
                             <span class="kw">break</span>;
                         }
                     }
