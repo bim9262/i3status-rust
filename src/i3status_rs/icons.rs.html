@@ -178,9 +178,9 @@
     }
 }
 
-<span class="kw">impl </span>From&lt;Vec&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str&gt;&gt; <span class="kw">for </span>Icon {
-    <span class="kw">fn </span>from(value: Vec&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str&gt;) -&gt; <span class="self">Self </span>{
-        <span class="self">Self</span>::Progression(value.into_iter().map(|s| s.to_string()).collect())
+<span class="kw">impl</span>&lt;<span class="kw">const </span>N: usize&gt; From&lt;[<span class="kw-2">&amp;</span>str; N]&gt; <span class="kw">for </span>Icon {
+    <span class="kw">fn </span>from(value: [<span class="kw-2">&amp;</span>str; N]) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::Progression(value.iter().map(|s| s.to_string()).collect())
     }
 }
 
@@ -217,7 +217,7 @@
             <span class="string">&quot;music_play&quot; </span>=&gt; <span class="string">&quot;&gt;&quot;</span>,
             <span class="string">&quot;music_prev&quot; </span>=&gt; <span class="string">&quot;&lt;&quot;</span>,
             <span class="string">&quot;net_bridge&quot; </span>=&gt; <span class="string">&quot;BRIDGE&quot;</span>,
-            <span class="string">&quot;net_cellular&quot; </span>=&gt; <span class="macro">vec!</span>[
+            <span class="string">&quot;net_cellular&quot; </span>=&gt; [
                                 <span class="string">&quot;NO SIGNAL&quot;</span>,
                                 <span class="string">&quot;0 BARS&quot;</span>,
                                 <span class="string">&quot;1 BAR&quot;</span>,
