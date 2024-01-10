@@ -164,6 +164,7 @@ define_blocks!(
     nvidia_gpu,
     pacman,
     pomodoro,
+    privacy,
     rofication,
     service_status,
     sound,
