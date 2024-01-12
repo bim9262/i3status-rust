@@ -17,6 +17,7 @@ members = [".", "xtask"]
 [features]
 default = ["pulseaudio"]
 pulseaudio = ["libpulse-binding"]
+pipewire = ["dep:pipewire"]
 maildir = ["dep:maildir", "glob"]
 icu_calendar = ["dep:icu_datetime", "dep:icu_calendar", "dep:icu_locid"]
 debug_borders = []                # Make widgets' borders visible
@@ -53,6 +54,7 @@ nix = { version = "0.27", features = ["fs", "process"] }
 nom = "7.1.2"
 notmuch = { version = "0.8", optional = true }
 once_cell = "1"
+pipewire = { version = "0.7.2", default-features = false, optional = true }
 regex = "1.5"
 reqwest = { version = "0.11", features = ["json"] }
 sensors = "0.2.2"
