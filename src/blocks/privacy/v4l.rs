@@ -100,7 +100,6 @@ impl<'a> Monitor<'a> {
 #[async_trait]
 impl<'a> PrivacyMonitor for Monitor<'a> {
     async fn get_info(&mut self) -> Result<PrivacyInfo> {
-        // device -> [reader]
         let mut mapping: PrivacyInfo = PrivacyInfo::new();
 
         let mut proc_paths = read_dir("/proc").await.error("Unable to read /proc")?;
@@ -124,9 +123,11 @@ impl<'a> PrivacyMonitor for Monitor<'a> {
                                     }
                                     debug!("{} {:?}", reader, link_path);
                                     mapping
+                                        .entry(Type::Webcam)
+                                        .or_default()
                                         .entry(link_path.to_string_lossy().to_string())
                                         .or_default()
-                                        .push(reader);
+                                        .insert(reader);
                                     debug!("{:?}", mapping);
                                 }
                             }
@@ -150,9 +151,5 @@ impl<'a> PrivacyMonitor for Monitor<'a> {
             }
         }
         Ok(())
-    }
-
-    fn get_icon(&self) -> &'static str {
-        "webcam"
     }
 }
