@@ -78,6 +78,7 @@ words:
   - kibi
   - kmon
   - libc
+  - libdbus
   - liquidctl
   - locid
   - macchiato

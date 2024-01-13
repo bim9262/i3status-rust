@@ -22,7 +22,27 @@ jobs:
               ]
     steps:
     - name: Get required packages
-      run: sudo apt-get update && sudo apt-get install libsensors-dev libssl-dev libpulse-dev libnotmuch-dev libpipewire-0.3
+      run: sudo apt-get update && sudo apt-get install libsensors-dev libssl-dev libpulse-dev libnotmuch-dev meson libdbus-1-dev
+    - name: Restore cached Pipewire build
+      id: cache-pipewire-restore
+      uses: actions/cache/restore@v4
+      with:
+        path: |
+          pipewire-1.0.1
+        key: ${{ runner.os }}-pipewire-1.0.1
+    - if: ${{ steps.cache-pipewire-restore.outputs.cache-hit != 'true' }}
+      name: Build pipewire
+      run: wget https://gitlab.freedesktop.org/pipewire/pipewire/-/archive/1.0.1/pipewire-1.0.1.zip && unzip pipewire-1.0.1.zip && cd pipewire-1.0.1 && meson setup builddir && meson compile -C builddir
+    - if: ${{ steps.cache-pipewire-restore.outputs.cache-hit != 'true' }}
+      name: Save cached Pipewire build
+      id: cache-pipewire-save
+      uses: actions/cache/save@v4
+      with:
+        path: |
+          pipewire-1.0.1
+        key: ${{ steps.cache-pipewire-restore.outputs.cache-primary-key }}
+    - name: Install pipewire
+      run: cd pipewire-1.0.1 && sudo meson install -C builddir
     - uses: actions/checkout@v4
     - uses: actions/setup-python@v4
       with:
