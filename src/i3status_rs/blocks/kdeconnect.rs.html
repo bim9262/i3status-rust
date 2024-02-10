@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/blocks/kdeconnect.rs`."><title>kdeconnect.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-9bb858ba049f1f21.css" id="mainThemeStyle"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="i3status_rs" data-themes="" data-resource-suffix="" data-rustdoc-version="1.72.1 (d5c2e9c34 2023-09-13)" data-channel="1.72.1" data-search-js="search-f6292fe389d70017.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ><script src="../../../static.files/storage-59fd9b8ccb335783.js"></script><script defer src="../../../static.files/source-script-106908c7a7964ba4.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../static.files/main-0795b7d26be81095.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../i3status_rs/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/blocks/kdeconnect.rs`."><title>kdeconnect.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-ac92e1bbe349e143.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="i3status_rs" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0 (07dca489a 2024-02-04)" data-channel="1.76.0" data-search-js="search-2b6ce74ff89ae146.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../static.files/storage-f2adc0d6ca4d09fb.js"></script><script defer src="../../../static.files/src-script-39ed315d46fb705f.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-305769736d49e732.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-feafe1bb7466e4bd.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><div class="sidebar-resizer"></div>
+    <main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -369,6 +370,125 @@
 <a href="#369" id="369">369</a>
 <a href="#370" id="370">370</a>
 <a href="#371" id="371">371</a>
+<a href="#372" id="372">372</a>
+<a href="#373" id="373">373</a>
+<a href="#374" id="374">374</a>
+<a href="#375" id="375">375</a>
+<a href="#376" id="376">376</a>
+<a href="#377" id="377">377</a>
+<a href="#378" id="378">378</a>
+<a href="#379" id="379">379</a>
+<a href="#380" id="380">380</a>
+<a href="#381" id="381">381</a>
+<a href="#382" id="382">382</a>
+<a href="#383" id="383">383</a>
+<a href="#384" id="384">384</a>
+<a href="#385" id="385">385</a>
+<a href="#386" id="386">386</a>
+<a href="#387" id="387">387</a>
+<a href="#388" id="388">388</a>
+<a href="#389" id="389">389</a>
+<a href="#390" id="390">390</a>
+<a href="#391" id="391">391</a>
+<a href="#392" id="392">392</a>
+<a href="#393" id="393">393</a>
+<a href="#394" id="394">394</a>
+<a href="#395" id="395">395</a>
+<a href="#396" id="396">396</a>
+<a href="#397" id="397">397</a>
+<a href="#398" id="398">398</a>
+<a href="#399" id="399">399</a>
+<a href="#400" id="400">400</a>
+<a href="#401" id="401">401</a>
+<a href="#402" id="402">402</a>
+<a href="#403" id="403">403</a>
+<a href="#404" id="404">404</a>
+<a href="#405" id="405">405</a>
+<a href="#406" id="406">406</a>
+<a href="#407" id="407">407</a>
+<a href="#408" id="408">408</a>
+<a href="#409" id="409">409</a>
+<a href="#410" id="410">410</a>
+<a href="#411" id="411">411</a>
+<a href="#412" id="412">412</a>
+<a href="#413" id="413">413</a>
+<a href="#414" id="414">414</a>
+<a href="#415" id="415">415</a>
+<a href="#416" id="416">416</a>
+<a href="#417" id="417">417</a>
+<a href="#418" id="418">418</a>
+<a href="#419" id="419">419</a>
+<a href="#420" id="420">420</a>
+<a href="#421" id="421">421</a>
+<a href="#422" id="422">422</a>
+<a href="#423" id="423">423</a>
+<a href="#424" id="424">424</a>
+<a href="#425" id="425">425</a>
+<a href="#426" id="426">426</a>
+<a href="#427" id="427">427</a>
+<a href="#428" id="428">428</a>
+<a href="#429" id="429">429</a>
+<a href="#430" id="430">430</a>
+<a href="#431" id="431">431</a>
+<a href="#432" id="432">432</a>
+<a href="#433" id="433">433</a>
+<a href="#434" id="434">434</a>
+<a href="#435" id="435">435</a>
+<a href="#436" id="436">436</a>
+<a href="#437" id="437">437</a>
+<a href="#438" id="438">438</a>
+<a href="#439" id="439">439</a>
+<a href="#440" id="440">440</a>
+<a href="#441" id="441">441</a>
+<a href="#442" id="442">442</a>
+<a href="#443" id="443">443</a>
+<a href="#444" id="444">444</a>
+<a href="#445" id="445">445</a>
+<a href="#446" id="446">446</a>
+<a href="#447" id="447">447</a>
+<a href="#448" id="448">448</a>
+<a href="#449" id="449">449</a>
+<a href="#450" id="450">450</a>
+<a href="#451" id="451">451</a>
+<a href="#452" id="452">452</a>
+<a href="#453" id="453">453</a>
+<a href="#454" id="454">454</a>
+<a href="#455" id="455">455</a>
+<a href="#456" id="456">456</a>
+<a href="#457" id="457">457</a>
+<a href="#458" id="458">458</a>
+<a href="#459" id="459">459</a>
+<a href="#460" id="460">460</a>
+<a href="#461" id="461">461</a>
+<a href="#462" id="462">462</a>
+<a href="#463" id="463">463</a>
+<a href="#464" id="464">464</a>
+<a href="#465" id="465">465</a>
+<a href="#466" id="466">466</a>
+<a href="#467" id="467">467</a>
+<a href="#468" id="468">468</a>
+<a href="#469" id="469">469</a>
+<a href="#470" id="470">470</a>
+<a href="#471" id="471">471</a>
+<a href="#472" id="472">472</a>
+<a href="#473" id="473">473</a>
+<a href="#474" id="474">474</a>
+<a href="#475" id="475">475</a>
+<a href="#476" id="476">476</a>
+<a href="#477" id="477">477</a>
+<a href="#478" id="478">478</a>
+<a href="#479" id="479">479</a>
+<a href="#480" id="480">480</a>
+<a href="#481" id="481">481</a>
+<a href="#482" id="482">482</a>
+<a href="#483" id="483">483</a>
+<a href="#484" id="484">484</a>
+<a href="#485" id="485">485</a>
+<a href="#486" id="486">486</a>
+<a href="#487" id="487">487</a>
+<a href="#488" id="488">488</a>
+<a href="#489" id="489">489</a>
+<a href="#490" id="490">490</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! [KDEConnect](https://community.kde.org/KDEConnect) indicator
 //!
 //! Display info from the currently connected device in KDEConnect, updated asynchronously.
@@ -381,16 +501,17 @@
 //! Key | Values | Default
 //! ----|--------|--------
 //! `device_id` | Device ID as per the output of `kdeconnect --list-devices`. | Chooses the first found device, if any.
-//! `format` | A string to customise the output of this block. See below for available placeholders. | &lt;code&gt;&quot; $icon $name{ $bat_icon $bat_charge&amp;vert;}{ $notif_icon&amp;vert;} &quot;&lt;/code&gt;
+//! `format` | A string to customise the output of this block. See below for available placeholders. | &lt;code&gt;" $icon $name{ $bat_icon $bat_charge&amp;vert;}{ $notif_icon&amp;vert;} "&lt;/code&gt;
+//! `format_disconnected` | Same as `format` but when device is disconnected | `" $icon "`
+//! `format_missing` | Same as `format` but when device does not exist | `" $icon x "`
 //! `bat_info` | Min battery level below which state is set to info. | `60`
 //! `bat_good` | Min battery level below which state is set to good. | `60`
 //! `bat_warning` | Min battery level below which state is set to warning. | `30`
 //! `bat_critical` | Min battery level below which state is set to critical. | `15`
-//! `hide_disconnected` | Whether to hide this block when disconnected | `true`
 //!
 //! Placeholder        | Value                                                                    | Type   | Unit
 //! -------------------|--------------------------------------------------------------------------|--------|-----
-//! `icon`             | Icon based on connection&#39;s status                                        | Icon   | -
+//! `icon`             | Icon based on connection's status                                        | Icon   | -
 //! `bat_icon`         | Battery level indicator (only when connected and if supported)           | Icon   | -
 //! `bat_charge`       | Battery charge level (only when connected and if supported)              | Number | %
 //! `network_icon`     | Cell Network indicator (only when connected and if supported)            | Icon   | -
@@ -399,16 +520,15 @@
 //! `notif_icon`       | Only when connected and there are notifications                          | Icon   | -
 //! `notif_count`      | Number of notifications on your phone (only when connected and non-zero) | Number | -
 //! `name`             | Name of your device as reported by KDEConnect (if available)             | Text   | -
-//! `connected`        | Present if your device is connected                                      | Flag   | -
 //!
 //! # Example
 //!
-//! Do not show the name, do not set the &quot;good&quot; state.
+//! Do not show the name, do not set the "good" state.
 //!
 //! ```toml
 //! [[block]]
-//! block = &quot;kdeconnect&quot;
-//! format = &quot; $icon {$bat_icon $bat_charge |}{$notif_icon |}{$network_icon$network_strength $network_type |}&quot;
+//! block = "kdeconnect"
+//! format = " $icon {$bat_icon $bat_charge |}{$notif_icon |}{$network_icon$network_strength $network_type |}"
 //! bat_good = 101
 //! ```
 //!
@@ -420,9 +540,7 @@
 //! - `phone`
 //! - `phone_disconnected`
 
-</span><span class="kw">use </span>futures::TryFutureExt;
-<span class="kw">use </span>tokio::sync::mpsc;
-<span class="kw">use </span>zbus::dbus_proxy;
+</span><span class="kw">use </span>zbus::dbus_proxy;
 
 <span class="kw">use </span><span class="kw">super</span>::prelude::<span class="kw-2">*</span>;
 
@@ -431,11 +549,15 @@
 <span class="kw">use </span>battery::BatteryDbusProxy;
 <span class="kw">use </span>connectivity_report::ConnectivityDbusProxy;
 
+<span class="macro">make_log_macro!</span>(debug, <span class="string">"kdeconnect"</span>);
+
 <span class="attr">#[derive(Deserialize, Debug, SmartDefault)]
 #[serde(deny_unknown_fields, default)]
 </span><span class="kw">pub struct </span>Config {
     <span class="kw">pub </span>device_id: <span class="prelude-ty">Option</span>&lt;String&gt;,
     <span class="kw">pub </span>format: FormatConfig,
+    <span class="kw">pub </span>disconnected_format: FormatConfig,
+    <span class="kw">pub </span>missing_format: FormatConfig,
     <span class="attr">#[default(<span class="number">60</span>)]
     </span><span class="kw">pub </span>bat_good: u8,
     <span class="attr">#[default(<span class="number">60</span>)]
@@ -444,14 +566,14 @@
     </span><span class="kw">pub </span>bat_warning: u8,
     <span class="attr">#[default(<span class="number">15</span>)]
     </span><span class="kw">pub </span>bat_critical: u8,
-    <span class="attr">#[default(<span class="bool-val">true</span>)]
-    </span><span class="kw">pub </span>hide_disconnected: bool,
 }
 
 <span class="kw">pub async fn </span>run(config: <span class="kw-2">&amp;</span>Config, api: <span class="kw-2">&amp;</span>CommonApi) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
     <span class="kw">let </span>format = config
         .format
-        .with_default(<span class="string">&quot; $icon $name {$bat_icon $bat_charge |}{$notif_icon |}&quot;</span>)<span class="question-mark">?</span>;
+        .with_default(<span class="string">" $icon $name {$bat_icon $bat_charge |}{$notif_icon |}"</span>)<span class="question-mark">?</span>;
+    <span class="kw">let </span>disconnected_format = config.disconnected_format.with_default(<span class="string">" $icon "</span>)<span class="question-mark">?</span>;
+    <span class="kw">let </span>missing_format = config.missing_format.with_default(<span class="string">" $icon x "</span>)<span class="question-mark">?</span>;
 
     <span class="kw">let </span>battery_state = (
         config.bat_good,
@@ -460,53 +582,43 @@
         config.bat_critical,
     ) != (<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);
 
-    <span class="kw">let </span>dbus_conn = new_dbus_connection().<span class="kw">await</span><span class="question-mark">?</span>;
-    <span class="kw">let </span>id = <span class="kw">match </span>config.device_id.clone() {
-        <span class="prelude-val">Some</span>(id) =&gt; id,
-        <span class="prelude-val">None </span>=&gt; any_device_id(<span class="kw-2">&amp;</span>dbus_conn).<span class="kw">await</span><span class="question-mark">?</span>,
-    };
-
-    <span class="kw">let </span>(tx, <span class="kw-2">mut </span>rx) = mpsc::channel(<span class="number">8</span>);
-    <span class="kw">let </span>device = Device::new(<span class="kw-2">&amp;</span>dbus_conn, tx, <span class="kw-2">&amp;</span>id).<span class="kw">await</span><span class="question-mark">?</span>;
+    <span class="kw">let </span><span class="kw-2">mut </span>monitor = DeviceMonitor::new(config.device_id.clone()).<span class="kw">await</span><span class="question-mark">?</span>;
 
     <span class="kw">loop </span>{
-        <span class="kw">let </span>connected = device.connected().<span class="kw">await</span>;
+        <span class="kw">match </span>monitor.get_device_info().<span class="kw">await </span>{
+            <span class="prelude-val">Some</span>(info) =&gt; {
+                <span class="kw">let </span><span class="kw-2">mut </span>widget = Widget::new();
+                <span class="kw">if </span>info.connected {
+                    widget.set_format(format.clone());
+                } <span class="kw">else </span>{
+                    widget.set_format(disconnected_format.clone());
+                }
 
-        <span class="kw">if </span>connected || !config.hide_disconnected {
-            <span class="kw">let </span><span class="kw-2">mut </span>widget = Widget::new().with_format(format.clone());
+                <span class="kw">let </span><span class="kw-2">mut </span>values = <span class="macro">map! </span>{
+                    [<span class="kw">if </span>info.connected] <span class="string">"icon" </span>=&gt; Value::icon(<span class="string">"phone"</span>),
+                    [<span class="kw">if </span>!info.connected] <span class="string">"icon" </span>=&gt; Value::icon(<span class="string">"phone_disconnected"</span>),
+                    [<span class="kw">if let </span><span class="prelude-val">Some</span>(name) = info.name] <span class="string">"name" </span>=&gt; Value::text(name),
+                    [<span class="kw">if </span>info.notifications &gt; <span class="number">0</span>] <span class="string">"notif_count" </span>=&gt; Value::number(info.notifications),
+                    [<span class="kw">if </span>info.notifications &gt; <span class="number">0</span>] <span class="string">"notif_icon" </span>=&gt; Value::icon(<span class="string">"notification"</span>),
+                    [<span class="kw">if let </span><span class="prelude-val">Some</span>(bat) = info.bat_level] <span class="string">"bat_charge" </span>=&gt; Value::percents(bat),
+                };
 
-            <span class="kw">let </span><span class="kw-2">mut </span>values = <span class="macro">map!</span>();
-
-            <span class="kw">if let </span><span class="prelude-val">Some</span>(name) = device.name().<span class="kw">await </span>{
-                values.insert(<span class="string">&quot;name&quot;</span>.into(), Value::text(name));
-            }
-
-            <span class="kw">if </span>connected {
-                values.insert(<span class="string">&quot;icon&quot;</span>.into(), Value::icon(<span class="string">&quot;phone&quot;</span>));
-                values.insert(<span class="string">&quot;connected&quot;</span>.into(), Value::flag());
-                <span class="kw">let </span>(
-                    (level, charging),
-                    (cellular_network_type, cellular_network_strength),
-                    notif_count,
-                ) = <span class="macro">tokio::join!</span>(device.battery(), device.network(), device.notifications());
-
-                <span class="kw">if let </span><span class="prelude-val">Ok</span>(level) = level {
-                    values.insert(<span class="string">&quot;bat_charge&quot;</span>.into(), Value::percents(level));
+                <span class="kw">if let </span><span class="prelude-val">Some</span>(bat_level) = info.bat_level {
                     values.insert(
-                        <span class="string">&quot;bat_icon&quot;</span>.into(),
+                        <span class="string">"bat_icon"</span>.into(),
                         Value::icon_progression(
-                            <span class="kw">if </span>charging { <span class="string">&quot;bat_charging&quot; </span>} <span class="kw">else </span>{ <span class="string">&quot;bat&quot; </span>},
-                            level <span class="kw">as </span>f64 / <span class="number">100.0</span>,
+                            <span class="kw">if </span>info.charging { <span class="string">"bat_charging" </span>} <span class="kw">else </span>{ <span class="string">"bat" </span>},
+                            bat_level <span class="kw">as </span>f64 / <span class="number">100.0</span>,
                         ),
                     );
                     <span class="kw">if </span>battery_state {
-                        widget.state = <span class="kw">if </span>charging {
+                        widget.state = <span class="kw">if </span>info.charging {
                             State::Good
-                        } <span class="kw">else if </span>level &lt;= config.bat_critical {
+                        } <span class="kw">else if </span>bat_level &lt;= config.bat_critical {
                             State::Critical
-                        } <span class="kw">else if </span>level &lt;= config.bat_info {
+                        } <span class="kw">else if </span>bat_level &lt;= config.bat_info {
                             State::Info
-                        } <span class="kw">else if </span>level &gt; config.bat_good {
+                        } <span class="kw">else if </span>bat_level &gt; config.bat_good {
                             State::Good
                         } <span class="kw">else </span>{
                             State::Idle
@@ -514,133 +626,270 @@
                     }
                 }
 
-                <span class="kw">if let </span><span class="prelude-val">Ok</span>(cellular_network_type) = cellular_network_type {
-                    <span class="comment">// network strength is 0..=4 from docs of
-                    // kdeconnect/plugins/connectivity-report, and I
-                    // got -1 for disabled SIM (undocumented)
-                    </span><span class="kw">let </span>cell_network_percent = (cellular_network_strength.clamp(<span class="number">0</span>, <span class="number">4</span>) * <span class="number">25</span>) <span class="kw">as </span>f64;
-                    values.insert(
-                        <span class="string">&quot;network_icon&quot;</span>.into(),
-                        Value::icon_progression(
-                            <span class="string">&quot;net_cellular&quot;</span>,
-                            (cellular_network_strength + <span class="number">1</span>).clamp(<span class="number">0</span>, <span class="number">5</span>) <span class="kw">as </span>f64 / <span class="number">5.0</span>,
-                        ),
-                    );
-                    values.insert(
-                        <span class="string">&quot;network_strength&quot;</span>.into(),
-                        Value::percents(cell_network_percent),
-                    );
-
-                    <span class="kw">if </span>cellular_network_strength &lt;= <span class="number">0 </span>{
-                        widget.state = State::Critical;
-                        values.insert(<span class="string">&quot;network_type&quot;</span>.into(), Value::text(<span class="string">&quot;×&quot;</span>.into()));
-                    } <span class="kw">else </span>{
-                        values.insert(<span class="string">&quot;network_type&quot;</span>.into(), Value::text(cellular_network_type));
-                    }
-                }
-
-                <span class="kw">if </span>notif_count &gt; <span class="number">0 </span>{
-                    values.insert(<span class="string">&quot;notif_count&quot;</span>.into(), Value::number(notif_count));
-                    values.insert(<span class="string">&quot;notif_icon&quot;</span>.into(), Value::icon(<span class="string">&quot;notification&quot;</span>));
-                }
                 <span class="kw">if </span>!battery_state {
-                    widget.state = <span class="kw">if </span>notif_count == <span class="number">0 </span>{
+                    widget.state = <span class="kw">if </span>info.notifications == <span class="number">0 </span>{
                         State::Idle
                     } <span class="kw">else </span>{
                         State::Info
                     };
                 }
-            } <span class="kw">else </span>{
-                values.insert(<span class="string">&quot;icon&quot;</span>.into(), Value::icon(<span class="string">&quot;phone_disconnected&quot;</span>));
-            }
 
-            widget.set_values(values);
-            api.set_widget(widget)<span class="question-mark">?</span>;
-        } <span class="kw">else </span>{
-            api.hide()<span class="question-mark">?</span>;
+                <span class="kw">if let </span><span class="prelude-val">Some</span>(cellular_network_type) = info.cellular_network_type {
+                    <span class="comment">// network strength is 0..=4 from docs of
+                    // kdeconnect/plugins/connectivity-report, and I
+                    // got -1 for disabled SIM (undocumented)
+                    </span><span class="kw">let </span>cell_network_percent =
+                        (info.cellular_network_strength.clamp(<span class="number">0</span>, <span class="number">4</span>) * <span class="number">25</span>) <span class="kw">as </span>f64;
+                    values.insert(
+                        <span class="string">"network_icon"</span>.into(),
+                        Value::icon_progression(
+                            <span class="string">"net_cellular"</span>,
+                            (info.cellular_network_strength + <span class="number">1</span>).clamp(<span class="number">0</span>, <span class="number">5</span>) <span class="kw">as </span>f64 / <span class="number">5.0</span>,
+                        ),
+                    );
+                    values.insert(
+                        <span class="string">"network_strength"</span>.into(),
+                        Value::percents(cell_network_percent),
+                    );
+
+                    <span class="kw">if </span>info.cellular_network_strength &lt;= <span class="number">0 </span>{
+                        widget.state = State::Critical;
+                        values.insert(<span class="string">"network_type"</span>.into(), Value::text(<span class="string">"×"</span>.into()));
+                    } <span class="kw">else </span>{
+                        values.insert(<span class="string">"network_type"</span>.into(), Value::text(cellular_network_type));
+                    }
+                }
+
+                widget.set_values(values);
+                api.set_widget(widget)<span class="question-mark">?</span>;
+            }
+            <span class="prelude-val">None </span>=&gt; {
+                <span class="kw">let </span><span class="kw-2">mut </span>widget = Widget::new().with_format(missing_format.clone());
+                widget.set_values(<span class="macro">map! </span>{ <span class="string">"icon" </span>=&gt; Value::icon(<span class="string">"phone_disconnected"</span>) });
+                api.set_widget(widget)<span class="question-mark">?</span>;
+            }
         }
 
-        rx.recv().<span class="kw">await</span>.error(<span class="string">&quot;channel closed&quot;</span>)<span class="question-mark">?</span>;
+        monitor.wait_for_change().<span class="kw">await</span><span class="question-mark">?</span>;
     }
 }
 
+<span class="kw">struct </span>DeviceMonitor {
+    device_id: <span class="prelude-ty">Option</span>&lt;String&gt;,
+    daemon_proxy: DaemonDbusProxy&lt;<span class="lifetime">'static</span>&gt;,
+    device: <span class="prelude-ty">Option</span>&lt;Device&gt;,
+}
+
 <span class="kw">struct </span>Device {
-    device_proxy: DeviceDbusProxy&lt;<span class="lifetime">&#39;static</span>&gt;,
-    battery_proxy: BatteryDbusProxy&lt;<span class="lifetime">&#39;static</span>&gt;,
-    notifications_proxy: NotificationsDbusProxy&lt;<span class="lifetime">&#39;static</span>&gt;,
-    connectivity_proxy: ConnectivityDbusProxy&lt;<span class="lifetime">&#39;static</span>&gt;,
+    id: String,
+    device_proxy: DeviceDbusProxy&lt;<span class="lifetime">'static</span>&gt;,
+    battery_proxy: BatteryDbusProxy&lt;<span class="lifetime">'static</span>&gt;,
+    notifications_proxy: NotificationsDbusProxy&lt;<span class="lifetime">'static</span>&gt;,
+    connectivity_proxy: ConnectivityDbusProxy&lt;<span class="lifetime">'static</span>&gt;,
+    device_signals: zbus::SignalStream&lt;<span class="lifetime">'static</span>&gt;,
+    notifications_signals: zbus::SignalStream&lt;<span class="lifetime">'static</span>&gt;,
+    battery_refreshed: battery::refreshedStream&lt;<span class="lifetime">'static</span>&gt;,
+    connectivity_refreshed: connectivity_report::refreshedStream&lt;<span class="lifetime">'static</span>&gt;,
+}
+
+<span class="kw">struct </span>DeviceInfo {
+    connected: bool,
+    name: <span class="prelude-ty">Option</span>&lt;String&gt;,
+    notifications: usize,
+    charging: bool,
+    bat_level: <span class="prelude-ty">Option</span>&lt;u8&gt;,
+    cellular_network_type: <span class="prelude-ty">Option</span>&lt;String&gt;,
+    cellular_network_strength: i32,
+}
+
+<span class="kw">impl </span>DeviceMonitor {
+    <span class="kw">async fn </span>new(device_id: <span class="prelude-ty">Option</span>&lt;String&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
+        <span class="kw">let </span>dbus_conn = new_dbus_connection().<span class="kw">await</span><span class="question-mark">?</span>;
+        <span class="kw">let </span>daemon_proxy = DaemonDbusProxy::new(<span class="kw-2">&amp;</span>dbus_conn)
+            .<span class="kw">await
+            </span>.error(<span class="string">"Failed to create DaemonDbusProxy"</span>)<span class="question-mark">?</span>;
+        <span class="kw">let </span>device = Device::try_find(<span class="kw-2">&amp;</span>daemon_proxy, device_id.as_deref()).<span class="kw">await</span><span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(<span class="self">Self </span>{
+            device_id,
+            daemon_proxy,
+            device,
+        })
+    }
+
+    <span class="kw">async fn </span>wait_for_change(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+        <span class="kw">match </span><span class="kw-2">&amp;mut </span><span class="self">self</span>.device {
+            <span class="prelude-val">None </span>=&gt; {
+                <span class="kw">let </span><span class="kw-2">mut </span>device_added = <span class="self">self
+                    </span>.daemon_proxy
+                    .receive_device_added()
+                    .<span class="kw">await
+                    </span>.error(<span class="string">"Couldn't create stream"</span>)<span class="question-mark">?</span>;
+                <span class="kw">loop </span>{
+                    device_added
+                        .next()
+                        .<span class="kw">await
+                        </span>.error(<span class="string">"Stream ended unexpectedly"</span>)<span class="question-mark">?</span>;
+                    <span class="kw">if let </span><span class="prelude-val">Some</span>(device) =
+                        Device::try_find(<span class="kw-2">&amp;</span><span class="self">self</span>.daemon_proxy, <span class="self">self</span>.device_id.as_deref()).<span class="kw">await</span><span class="question-mark">?
+                    </span>{
+                        <span class="self">self</span>.device = <span class="prelude-val">Some</span>(device);
+                        <span class="kw">return </span><span class="prelude-val">Ok</span>(());
+                    }
+                }
+            }
+            <span class="prelude-val">Some</span>(dev) =&gt; {
+                <span class="kw">let </span><span class="kw-2">mut </span>device_removed = <span class="self">self
+                    </span>.daemon_proxy
+                    .receive_device_removed()
+                    .<span class="kw">await
+                    </span>.error(<span class="string">"Couldn't create stream"</span>)<span class="question-mark">?</span>;
+                <span class="kw">loop </span>{
+                    <span class="macro">select! </span>{
+                        rem = device_removed.next() =&gt; {
+                            <span class="kw">let </span>rem = rem.error(<span class="string">"stream ended unexpectedly"</span>)<span class="question-mark">?</span>;
+                            <span class="kw">let </span>args = rem.args().error(<span class="string">"dbus error"</span>)<span class="question-mark">?</span>;
+                            <span class="kw">if </span>args.id() == <span class="kw-2">&amp;</span>dev.id {
+                                <span class="self">self</span>.device = Device::try_find(<span class="kw-2">&amp;</span><span class="self">self</span>.daemon_proxy, <span class="self">self</span>.device_id.as_deref()).<span class="kw">await</span><span class="question-mark">?</span>;
+                                <span class="kw">return </span><span class="prelude-val">Ok</span>(());
+                            }
+                        }
+                        <span class="kw">_ </span>= dev.wait_for_change() =&gt; {
+                            <span class="kw">if </span>!dev.connected().<span class="kw">await </span>{
+                                <span class="macro">debug!</span>(<span class="string">"device became unreachable, re-searching"</span>);
+                                <span class="kw">if let </span><span class="prelude-val">Some</span>(dev) = Device::try_find(<span class="kw-2">&amp;</span><span class="self">self</span>.daemon_proxy, <span class="self">self</span>.device_id.as_deref()).<span class="kw">await</span><span class="question-mark">? </span>{
+                                    <span class="kw">if </span>dev.connected().<span class="kw">await </span>{
+                                        <span class="macro">debug!</span>(<span class="string">"selected {:?}"</span>, dev.id);
+                                        <span class="self">self</span>.device = <span class="prelude-val">Some</span>(dev);
+                                    }
+                                }
+                            }
+                            <span class="kw">return </span><span class="prelude-val">Ok</span>(())
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    <span class="kw">async fn </span>get_device_info(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;DeviceInfo&gt; {
+        <span class="kw">let </span>device = <span class="self">self</span>.device.as_ref()<span class="question-mark">?</span>;
+        <span class="kw">let </span>(bat_level, charging) = device.battery().<span class="kw">await</span>;
+        <span class="kw">let </span>(cellular_network_type, cellular_network_strength) = device.network().<span class="kw">await</span>;
+        <span class="prelude-val">Some</span>(DeviceInfo {
+            connected: device.connected().<span class="kw">await</span>,
+            name: device.name().<span class="kw">await</span>,
+            notifications: device.notifications().<span class="kw">await</span>,
+            charging,
+            bat_level,
+            cellular_network_type,
+            cellular_network_strength,
+        })
+    }
 }
 
 <span class="kw">impl </span>Device {
-    <span class="kw">async fn </span>new(conn: <span class="kw-2">&amp;</span>zbus::Connection, tx: mpsc::Sender&lt;()&gt;, id: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
-        <span class="kw">let </span>device_path = <span class="macro">format!</span>(<span class="string">&quot;/modules/kdeconnect/devices/{id}&quot;</span>);
-        <span class="kw">let </span>battery_path = <span class="macro">format!</span>(<span class="string">&quot;{device_path}/battery&quot;</span>);
-        <span class="kw">let </span>notifications_path = <span class="macro">format!</span>(<span class="string">&quot;{device_path}/notifications&quot;</span>);
-        <span class="kw">let </span>connectivity_path = <span class="macro">format!</span>(<span class="string">&quot;{device_path}/connectivity_report&quot;</span>);
+    <span class="doccomment">/// Find a device which `device_id`. Reachable devices have precedence.
+    </span><span class="kw">async fn </span>try_find(
+        daemon_proxy: <span class="kw-2">&amp;</span>DaemonDbusProxy&lt;<span class="lifetime">'_</span>&gt;,
+        device_id: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt;,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>&gt;&gt; {
+        <span class="kw">let </span><span class="prelude-val">Ok</span>(<span class="kw-2">mut </span>devices) = daemon_proxy.devices().<span class="kw">await else </span>{
+            <span class="macro">debug!</span>(<span class="string">"could not get the list of managed objects"</span>);
+            <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>);
+        };
 
-        <span class="kw">let </span>device_proxy = DeviceDbusProxy::builder(conn)
-            .cache_properties(zbus::CacheProperties::No)
-            .path(device_path)
-            .error(<span class="string">&quot;Failed to set device path&quot;</span>)<span class="question-mark">?
-            </span>.build()
-            .<span class="kw">await
-            </span>.error(<span class="string">&quot;Failed to create DeviceDbusProxy&quot;</span>)<span class="question-mark">?</span>;
-        <span class="kw">let </span>battery_proxy = BatteryDbusProxy::builder(conn)
+        <span class="macro">debug!</span>(<span class="string">"all devices: {:?}"</span>, devices);
+
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(device_id) = device_id {
+            devices.retain(|id| id != device_id);
+        }
+
+        <span class="kw">let </span><span class="kw-2">mut </span>selected_device = <span class="prelude-val">None</span>;
+
+        <span class="kw">for </span>id <span class="kw">in </span>devices {
+            <span class="kw">let </span>device_proxy = DeviceDbusProxy::builder(daemon_proxy.connection())
+                .cache_properties(zbus::CacheProperties::No)
+                .path(<span class="macro">format!</span>(<span class="string">"/modules/kdeconnect/devices/{id}"</span>))
+                .unwrap()
+                .build()
+                .<span class="kw">await
+                </span>.error(<span class="string">"Failed to create DeviceDbusProxy"</span>)<span class="question-mark">?</span>;
+            <span class="kw">let </span>reachable = device_proxy.is_reachable().<span class="kw">await</span>.unwrap_or(<span class="bool-val">false</span>);
+            selected_device = <span class="prelude-val">Some</span>((id, device_proxy));
+            <span class="kw">if </span>reachable {
+                <span class="kw">break</span>;
+            }
+        }
+
+        <span class="kw">let </span><span class="prelude-val">Some</span>((device_id, device_proxy)) = selected_device <span class="kw">else </span>{
+            <span class="macro">debug!</span>(<span class="string">"No device found"</span>);
+            <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>);
+        };
+
+        <span class="kw">let </span>device_path = <span class="macro">format!</span>(<span class="string">"/modules/kdeconnect/devices/{device_id}"</span>);
+        <span class="kw">let </span>battery_path = <span class="macro">format!</span>(<span class="string">"{device_path}/battery"</span>);
+        <span class="kw">let </span>notifications_path = <span class="macro">format!</span>(<span class="string">"{device_path}/notifications"</span>);
+        <span class="kw">let </span>connectivity_path = <span class="macro">format!</span>(<span class="string">"{device_path}/connectivity_report"</span>);
+
+        <span class="kw">let </span>battery_proxy = BatteryDbusProxy::builder(daemon_proxy.connection())
             .cache_properties(zbus::CacheProperties::No)
             .path(battery_path)
-            .error(<span class="string">&quot;Failed to set battery path&quot;</span>)<span class="question-mark">?
+            .error(<span class="string">"Failed to set battery path"</span>)<span class="question-mark">?
             </span>.build()
             .<span class="kw">await
-            </span>.error(<span class="string">&quot;Failed to create BatteryDbusProxy&quot;</span>)<span class="question-mark">?</span>;
-        <span class="kw">let </span>notifications_proxy = NotificationsDbusProxy::builder(conn)
+            </span>.error(<span class="string">"Failed to create BatteryDbusProxy"</span>)<span class="question-mark">?</span>;
+        <span class="kw">let </span>notifications_proxy = NotificationsDbusProxy::builder(daemon_proxy.connection())
             .cache_properties(zbus::CacheProperties::No)
             .path(notifications_path)
-            .error(<span class="string">&quot;Failed to set battery path&quot;</span>)<span class="question-mark">?
+            .error(<span class="string">"Failed to set notifications path"</span>)<span class="question-mark">?
             </span>.build()
             .<span class="kw">await
-            </span>.error(<span class="string">&quot;Failed to create BatteryDbusProxy&quot;</span>)<span class="question-mark">?</span>;
-        <span class="kw">let </span>connectivity_proxy = ConnectivityDbusProxy::builder(conn)
+            </span>.error(<span class="string">"Failed to create BatteryDbusProxy"</span>)<span class="question-mark">?</span>;
+        <span class="kw">let </span>connectivity_proxy = ConnectivityDbusProxy::builder(daemon_proxy.connection())
             .cache_properties(zbus::CacheProperties::No)
             .path(connectivity_path)
-            .error(<span class="string">&quot;Failed to set connectivity path&quot;</span>)<span class="question-mark">?
+            .error(<span class="string">"Failed to set connectivity path"</span>)<span class="question-mark">?
             </span>.build()
             .<span class="kw">await
-            </span>.error(<span class="string">&quot;Failed to create ConnectivityDbusProxy&quot;</span>)<span class="question-mark">?</span>;
+            </span>.error(<span class="string">"Failed to create ConnectivityDbusProxy"</span>)<span class="question-mark">?</span>;
 
-        <span class="kw">let </span><span class="kw-2">mut </span>s1 = device_proxy
+        <span class="kw">let </span>device_signals = device_proxy
             .receive_all_signals()
             .<span class="kw">await
-            </span>.error(<span class="string">&quot;Failed to receive signals&quot;</span>)<span class="question-mark">?</span>;
-        <span class="kw">let </span><span class="kw-2">mut </span>s2 = battery_proxy
-            .receive_refreshed()
-            .<span class="kw">await
-            </span>.error(<span class="string">&quot;Failed to receive signals&quot;</span>)<span class="question-mark">?</span>;
-        <span class="kw">let </span><span class="kw-2">mut </span>s3 = notifications_proxy
+            </span>.error(<span class="string">"Failed to receive signals"</span>)<span class="question-mark">?</span>;
+        <span class="kw">let </span>notifications_signals = notifications_proxy
             .receive_all_signals()
             .<span class="kw">await
-            </span>.error(<span class="string">&quot;Failed to receive signals&quot;</span>)<span class="question-mark">?</span>;
-        <span class="kw">let </span><span class="kw-2">mut </span>s4 = connectivity_proxy
+            </span>.error(<span class="string">"Failed to receive signals"</span>)<span class="question-mark">?</span>;
+        <span class="kw">let </span>battery_refreshed = battery_proxy
             .receive_refreshed()
             .<span class="kw">await
-            </span>.error(<span class="string">&quot;Failed to receive signals&quot;</span>)<span class="question-mark">?</span>;
+            </span>.error(<span class="string">"Failed to receive signals"</span>)<span class="question-mark">?</span>;
+        <span class="kw">let </span>connectivity_refreshed = connectivity_proxy
+            .receive_refreshed()
+            .<span class="kw">await
+            </span>.error(<span class="string">"Failed to receive signals"</span>)<span class="question-mark">?</span>;
 
-        tokio::spawn(<span class="kw">async move </span>{
-            <span class="kw">loop </span>{
-                <span class="macro">tokio::select! </span>{
-                    <span class="kw">_ </span>= s1.next() =&gt; tx.send(()).<span class="kw">await</span>.unwrap(),
-                    <span class="kw">_ </span>= s2.next() =&gt; tx.send(()).<span class="kw">await</span>.unwrap(),
-                    <span class="kw">_ </span>= s3.next() =&gt; tx.send(()).<span class="kw">await</span>.unwrap(),
-                    <span class="kw">_ </span>= s4.next() =&gt; tx.send(()).<span class="kw">await</span>.unwrap(),
-                }
-            }
-        });
-
-        <span class="prelude-val">Ok</span>(<span class="self">Self </span>{
+        <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="self">Self </span>{
+            id: device_id,
             device_proxy,
             battery_proxy,
             notifications_proxy,
             connectivity_proxy,
-        })
+            device_signals,
+            notifications_signals,
+            battery_refreshed,
+            connectivity_refreshed,
+        }))
+    }
+
+    <span class="kw">async fn </span>wait_for_change(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="macro">select! </span>{
+            <span class="kw">_ </span>= <span class="self">self</span>.device_signals.next() =&gt; (),
+            <span class="kw">_ </span>= <span class="self">self</span>.notifications_signals.next() =&gt; (),
+            <span class="kw">_ </span>= <span class="self">self</span>.battery_refreshed.next() =&gt; (),
+            <span class="kw">_ </span>= <span class="self">self</span>.connectivity_refreshed.next() =&gt; (),
+        }
     }
 
     <span class="kw">async fn </span>connected(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
@@ -651,15 +900,14 @@
         <span class="self">self</span>.device_proxy.name().<span class="kw">await</span>.ok()
     }
 
-    <span class="kw">async fn </span>battery(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (<span class="prelude-ty">Result</span>&lt;u8&gt;, bool) {
-        <span class="macro">tokio::join!</span>(
-            <span class="self">self</span>.battery_proxy
-                .charge()
-                .map_ok(|p| p.clamp(<span class="number">0</span>, <span class="number">100</span>) <span class="kw">as </span>u8)
-                .map_err(|<span class="kw">_</span>| Error::new(<span class="string">&quot;Could not get charge&quot;</span>)),
-            <span class="self">self</span>.battery_proxy
-                .is_charging()
-                .map_ok_or_else(|<span class="kw">_</span>| <span class="bool-val">false</span>, |x| x),
+    <span class="kw">async fn </span>battery(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (<span class="prelude-ty">Option</span>&lt;u8&gt;, bool) {
+        <span class="kw">let </span>(charge, is_charging) = <span class="macro">tokio::join!</span>(
+            <span class="self">self</span>.battery_proxy.charge(),
+            <span class="self">self</span>.battery_proxy.is_charging(),
+        );
+        (
+            charge.ok().map(|x| x.clamp(<span class="number">0</span>, <span class="number">100</span>) <span class="kw">as </span>u8),
+            is_charging.unwrap_or(<span class="bool-val">false</span>),
         )
     }
 
@@ -671,73 +919,64 @@
             .unwrap_or(<span class="number">0</span>)
     }
 
-    <span class="kw">async fn </span>network(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (<span class="prelude-ty">Result</span>&lt;String&gt;, i32) {
-        <span class="macro">tokio::join!</span>(
-            <span class="self">self</span>.connectivity_proxy
-                .cellular_network_type()
-                .map_err(|<span class="kw">_</span>| Error::new(<span class="string">&quot;Could not get cellular_network_type&quot;</span>)),
-            <span class="self">self</span>.connectivity_proxy
-                .cellular_network_strength()
-                .map_ok_or_else(|<span class="kw">_</span>| -<span class="number">1</span>, |x| x),
-        )
+    <span class="kw">async fn </span>network(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (<span class="prelude-ty">Option</span>&lt;String&gt;, i32) {
+        <span class="kw">let </span>(ty, strength) = <span class="macro">tokio::join!</span>(
+            <span class="self">self</span>.connectivity_proxy.cellular_network_type(),
+            <span class="self">self</span>.connectivity_proxy.cellular_network_strength(),
+        );
+        (ty.ok(), strength.unwrap_or(-<span class="number">1</span>))
     }
 }
 
-<span class="kw">async fn </span>any_device_id(conn: <span class="kw-2">&amp;</span>zbus::Connection) -&gt; <span class="prelude-ty">Result</span>&lt;String&gt; {
-    DaemonDbusProxy::new(conn)
-        .<span class="kw">await
-        </span>.error(<span class="string">&quot;Failed to create DaemonDbusProxy&quot;</span>)<span class="question-mark">?
-        </span>.devices()
-        .<span class="kw">await
-        </span>.error(<span class="string">&quot;Failed to get devices&quot;</span>)<span class="question-mark">?
-        </span>.into_iter()
-        .next()
-        .error(<span class="string">&quot;No devices found&quot;</span>)
-}
-
 <span class="attr">#[dbus_proxy(
-    interface = <span class="string">&quot;org.kde.kdeconnect.daemon&quot;</span>,
-    default_service = <span class="string">&quot;org.kde.kdeconnect&quot;</span>,
-    default_path = <span class="string">&quot;/modules/kdeconnect&quot;
+    interface = <span class="string">"org.kde.kdeconnect.daemon"</span>,
+    default_service = <span class="string">"org.kde.kdeconnect"</span>,
+    default_path = <span class="string">"/modules/kdeconnect"
 </span>)]
 </span><span class="kw">trait </span>DaemonDbus {
-    <span class="attr">#[dbus_proxy(name = <span class="string">&quot;devices&quot;</span>)]
+    <span class="attr">#[dbus_proxy(name = <span class="string">"devices"</span>)]
     </span><span class="kw">fn </span>devices(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; zbus::Result&lt;Vec&lt;String&gt;&gt;;
+
+    <span class="attr">#[dbus_proxy(signal, name = <span class="string">"deviceAdded"</span>)]
+    </span><span class="kw">fn </span>device_added(<span class="kw-2">&amp;</span><span class="self">self</span>, id: String) -&gt; zbus::Result&lt;()&gt;;
+
+    <span class="attr">#[dbus_proxy(signal, name = <span class="string">"deviceRemoved"</span>)]
+    </span><span class="kw">fn </span>device_removed(<span class="kw-2">&amp;</span><span class="self">self</span>, id: String) -&gt; zbus::Result&lt;()&gt;;
 }
 
 <span class="attr">#[dbus_proxy(
-    interface = <span class="string">&quot;org.kde.kdeconnect.device&quot;</span>,
-    default_service = <span class="string">&quot;org.kde.kdeconnect&quot;
+    interface = <span class="string">"org.kde.kdeconnect.device"</span>,
+    default_service = <span class="string">"org.kde.kdeconnect"
 </span>)]
 </span><span class="kw">trait </span>DeviceDbus {
-    <span class="attr">#[dbus_proxy(property, name = <span class="string">&quot;isReachable&quot;</span>)]
+    <span class="attr">#[dbus_proxy(property, name = <span class="string">"isReachable"</span>)]
     </span><span class="kw">fn </span>is_reachable(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; zbus::Result&lt;bool&gt;;
 
-    <span class="attr">#[dbus_proxy(signal, name = <span class="string">&quot;reachableChanged&quot;</span>)]
+    <span class="attr">#[dbus_proxy(signal, name = <span class="string">"reachableChanged"</span>)]
     </span><span class="kw">fn </span>reachable_changed(<span class="kw-2">&amp;</span><span class="self">self</span>, reachable: bool) -&gt; zbus::Result&lt;()&gt;;
 
-    <span class="attr">#[dbus_proxy(property, name = <span class="string">&quot;name&quot;</span>)]
+    <span class="attr">#[dbus_proxy(property, name = <span class="string">"name"</span>)]
     </span><span class="kw">fn </span>name(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; zbus::Result&lt;String&gt;;
 
-    <span class="attr">#[dbus_proxy(signal, name = <span class="string">&quot;nameChanged&quot;</span>)]
+    <span class="attr">#[dbus_proxy(signal, name = <span class="string">"nameChanged"</span>)]
     </span><span class="kw">fn </span>name_changed_(<span class="kw-2">&amp;</span><span class="self">self</span>, name: <span class="kw-2">&amp;</span>str) -&gt; zbus::Result&lt;()&gt;;
 }
 
 <span class="attr">#[dbus_proxy(
-    interface = <span class="string">&quot;org.kde.kdeconnect.device.notifications&quot;</span>,
-    default_service = <span class="string">&quot;org.kde.kdeconnect&quot;
+    interface = <span class="string">"org.kde.kdeconnect.device.notifications"</span>,
+    default_service = <span class="string">"org.kde.kdeconnect"
 </span>)]
 </span><span class="kw">trait </span>NotificationsDbus {
-    <span class="attr">#[dbus_proxy(name = <span class="string">&quot;activeNotifications&quot;</span>)]
+    <span class="attr">#[dbus_proxy(name = <span class="string">"activeNotifications"</span>)]
     </span><span class="kw">fn </span>active_notifications(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; zbus::Result&lt;Vec&lt;String&gt;&gt;;
 
-    <span class="attr">#[dbus_proxy(signal, name = <span class="string">&quot;allNotificationsRemoved&quot;</span>)]
+    <span class="attr">#[dbus_proxy(signal, name = <span class="string">"allNotificationsRemoved"</span>)]
     </span><span class="kw">fn </span>all_notifications_removed(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; zbus::Result&lt;()&gt;;
 
-    <span class="attr">#[dbus_proxy(signal, name = <span class="string">&quot;notificationPosted&quot;</span>)]
+    <span class="attr">#[dbus_proxy(signal, name = <span class="string">"notificationPosted"</span>)]
     </span><span class="kw">fn </span>notification_posted(<span class="kw-2">&amp;</span><span class="self">self</span>, id: <span class="kw-2">&amp;</span>str) -&gt; zbus::Result&lt;()&gt;;
 
-    <span class="attr">#[dbus_proxy(signal, name = <span class="string">&quot;notificationRemoved&quot;</span>)]
+    <span class="attr">#[dbus_proxy(signal, name = <span class="string">"notificationRemoved"</span>)]
     </span><span class="kw">fn </span>notification_removed(<span class="kw-2">&amp;</span><span class="self">self</span>, id: <span class="kw-2">&amp;</span>str) -&gt; zbus::Result&lt;()&gt;;
 }
 </code></pre></div></section></main></body></html>
