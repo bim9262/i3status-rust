@@ -1,5 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/blocks/bluetooth.rs`."><title>bluetooth.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-ac92e1bbe349e143.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="i3status_rs" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0 (07dca489a 2024-02-04)" data-channel="1.76.0" data-search-js="search-2b6ce74ff89ae146.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../static.files/storage-f2adc0d6ca4d09fb.js"></script><script defer src="../../../static.files/src-script-39ed315d46fb705f.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-305769736d49e732.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-feafe1bb7466e4bd.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><div class="sidebar-resizer"></div>
-    <main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/blocks/bluetooth.rs`."><title>bluetooth.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-dd39b87e5fcfba68.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="i3status_rs" data-themes="" data-resource-suffix="" data-rustdoc-version="1.80.1 (3f5fd8dd4 2024-08-06)" data-channel="1.80.1" data-search-js="search-d52510db62a78183.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -438,6 +437,7 @@
 <a href="#437" id="437">437</a>
 <a href="#438" id="438">438</a>
 <a href="#439" id="439">439</a>
+<a href="#440" id="440">440</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Monitor Bluetooth device
 //!
 //! This block displays the connectivity of a given Bluetooth device and the battery level if this
@@ -458,8 +458,8 @@
 //! ----|--------|--------
 //! `mac` | MAC address of the Bluetooth device | **Required**
 //! `adapter_mac` | MAC Address of the Bluetooth adapter (in case your device was connected to multiple currently available adapters) | `None`
-//! `format` | A string to customise the output of this block. See below for available placeholders. | &lt;code&gt;" $icon $name{ $percentage&amp;vert;} "&lt;/code&gt;
-//! `disconnected_format` | A string to customise the output of this block. See below for available placeholders. | &lt;code&gt;" $icon{ $name&amp;vert;} "&lt;/code&gt;
+//! `format` | A string to customise the output of this block. See below for available placeholders. | &lt;code&gt;\" $icon $name{ $percentage\|} \"&lt;/code&gt;
+//! `disconnected_format` | A string to customise the output of this block. See below for available placeholders. | &lt;code&gt;\" $icon{ $name\|} \"&lt;/code&gt;
 //! `battery_state` | A mapping from battery percentage to block's [state](State) (color). See example below. | 0..15 -&gt; critical, 16..30 -&gt; warning, 31..60 -&gt; info, 61..100 -&gt; good
 //!
 //! Placeholder    | Value                                                                 | Type   | Unit
@@ -547,7 +547,7 @@
 
                 <span class="kw">let </span><span class="kw-2">mut </span>widget = Widget::new();
 
-                <span class="kw">let </span>values = <span class="macro">map! </span>{
+                <span class="kw">let </span>values = <span class="macro">map!</span> {
                     <span class="string">"icon" </span>=&gt; Value::icon(device.icon),
                     <span class="string">"name" </span>=&gt; Value::text(device.name),
                     <span class="string">"available" </span>=&gt; Value::flag(),
@@ -580,7 +580,7 @@
         }
 
         <span class="kw">loop </span>{
-            <span class="macro">select! </span>{
+            <span class="macro">select!</span> {
                 res = monitor.wait_for_change() =&gt; {
                     res<span class="question-mark">?</span>;
                     <span class="kw">break</span>;
@@ -690,15 +690,16 @@
                     .<span class="kw">await
                     </span>.error(<span class="string">"Failed to monitor interfaces"</span>)<span class="question-mark">?</span>;
 
-                <span class="kw">let </span><span class="kw-2">mut </span>bluez_owner_changed = DBusProxy::new(<span class="self">self</span>.manager_proxy.connection())
-                    .<span class="kw">await
-                    </span>.error(<span class="string">"Failed to create DBusProxy"</span>)<span class="question-mark">?
-                    </span>.receive_name_owner_changed_with_args(<span class="kw-2">&amp;</span>[(<span class="number">0</span>, <span class="string">"org.bluez"</span>)])
-                    .<span class="kw">await
-                    </span>.unwrap();
+                <span class="kw">let </span><span class="kw-2">mut </span>bluez_owner_changed =
+                    DBusProxy::new(<span class="self">self</span>.manager_proxy.inner().connection())
+                        .<span class="kw">await
+                        </span>.error(<span class="string">"Failed to create DBusProxy"</span>)<span class="question-mark">?
+                        </span>.receive_name_owner_changed_with_args(<span class="kw-2">&amp;</span>[(<span class="number">0</span>, <span class="string">"org.bluez"</span>)])
+                        .<span class="kw">await
+                        </span>.unwrap();
 
                 <span class="kw">loop </span>{
-                    <span class="macro">select! </span>{
+                    <span class="macro">select!</span> {
                         <span class="kw">_ </span>= updates.next() =&gt; {
                             <span class="comment">// avoid too frequent updates
                             </span><span class="kw">let _ </span>= tokio::time::timeout(Duration::from_millis(<span class="number">100</span>), <span class="kw">async </span>{
@@ -709,14 +710,14 @@
                         }
                         <span class="prelude-val">Some</span>(event) = interface_added.next() =&gt; {
                             <span class="kw">let </span>args = event.args().error(<span class="string">"Failed to get the args"</span>)<span class="question-mark">?</span>;
-                            <span class="kw">if </span>args.object_path() == device.device.path() {
+                            <span class="kw">if </span>args.object_path() == device.device.inner().path() {
                                 <span class="macro">debug!</span>(<span class="string">"Interfaces added: {:?}"</span>, args.interfaces_and_properties().keys());
                                 <span class="kw">return </span><span class="prelude-val">Ok</span>(());
                             }
                         }
                         <span class="prelude-val">Some</span>(event) = interface_removed.next() =&gt; {
                             <span class="kw">let </span>args = event.args().error(<span class="string">"Failed to get the args"</span>)<span class="question-mark">?</span>;
-                            <span class="kw">if </span>args.object_path() == device.device.path() {
+                            <span class="kw">if </span>args.object_path() == device.device.inner().path() {
                                 <span class="self">self</span>.device = <span class="prelude-val">None</span>;
                                 <span class="macro">debug!</span>(<span class="string">"Device is no longer available"</span>);
                                 <span class="kw">return </span><span class="prelude-val">Ok</span>(());
@@ -787,7 +788,7 @@
                     </span>};
                     <span class="kw">let </span>addr: <span class="kw-2">&amp;</span>str = adapter_interface
                         .get(<span class="string">"Address"</span>)
-                        .and_then(|a| a.downcast_ref())
+                        .and_then(|a| a.downcast_ref().ok())
                         .unwrap();
                     <span class="kw">if </span>addr == adapter_mac {
                         adapter_path = <span class="prelude-val">Some</span>(path);
@@ -818,7 +819,7 @@
 
             <span class="kw">let </span>addr: <span class="kw-2">&amp;</span>str = device_interface
                 .get(<span class="string">"Address"</span>)
-                .and_then(|a| a.downcast_ref())
+                .and_then(|a| a.downcast_ref().ok())
                 .unwrap();
             <span class="kw">if </span>addr != mac {
                 <span class="kw">continue</span>;
@@ -827,14 +828,14 @@
             <span class="macro">debug!</span>(<span class="string">"Found device with path {:?}"</span>, path);
 
             <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="self">Self </span>{
-                props: PropertiesProxy::builder(manager_proxy.connection())
+                props: PropertiesProxy::builder(manager_proxy.inner().connection())
                     .destination(<span class="string">"org.bluez"</span>)
                     .and_then(|x| x.path(path.clone()))
                     .unwrap()
                     .build()
                     .<span class="kw">await
                     </span>.error(<span class="string">"Failed to create PropertiesProxy"</span>)<span class="question-mark">?</span>,
-                device: Device1Proxy::builder(manager_proxy.connection())
+                device: Device1Proxy::builder(manager_proxy.inner().connection())
                     <span class="comment">// No caching because https://github.com/greshake/i3status-rust/issues/1565#issuecomment-1379308681
                     </span>.cache_properties(zbus::CacheProperties::No)
                     .path(path.clone())
@@ -842,7 +843,7 @@
                     .build()
                     .<span class="kw">await
                     </span>.error(<span class="string">"Failed to create Device1Proxy"</span>)<span class="question-mark">?</span>,
-                battery: Battery1Proxy::builder(manager_proxy.connection())
+                battery: Battery1Proxy::builder(manager_proxy.inner().connection())
                     .cache_properties(zbus::CacheProperties::No)
                     .path(path)
                     .unwrap()
@@ -857,24 +858,24 @@
     }
 }
 
-<span class="attr">#[zbus::dbus_proxy(interface = <span class="string">"org.bluez.Device1"</span>, default_service = <span class="string">"org.bluez"</span>)]
+<span class="attr">#[zbus::proxy(interface = <span class="string">"org.bluez.Device1"</span>, default_service = <span class="string">"org.bluez"</span>)]
 </span><span class="kw">trait </span>Device1 {
     <span class="kw">fn </span>connect(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; zbus::Result&lt;()&gt;;
     <span class="kw">fn </span>disconnect(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; zbus::Result&lt;()&gt;;
 
-    <span class="attr">#[dbus_proxy(property)]
+    <span class="attr">#[zbus(property)]
     </span><span class="kw">fn </span>connected(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; zbus::Result&lt;bool&gt;;
 
-    <span class="attr">#[dbus_proxy(property)]
+    <span class="attr">#[zbus(property)]
     </span><span class="kw">fn </span>name(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; zbus::Result&lt;String&gt;;
 
-    <span class="attr">#[dbus_proxy(property)]
+    <span class="attr">#[zbus(property)]
     </span><span class="kw">fn </span>icon(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; zbus::Result&lt;String&gt;;
 }
 
-<span class="attr">#[zbus::dbus_proxy(interface = <span class="string">"org.bluez.Battery1"</span>, default_service = <span class="string">"org.bluez"</span>)]
+<span class="attr">#[zbus::proxy(interface = <span class="string">"org.bluez.Battery1"</span>, default_service = <span class="string">"org.bluez"</span>)]
 </span><span class="kw">trait </span>Battery1 {
-    <span class="attr">#[dbus_proxy(property)]
+    <span class="attr">#[zbus(property)]
     </span><span class="kw">fn </span>percentage(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; zbus::Result&lt;u8&gt;;
 }
 </code></pre></div></section></main></body></html>

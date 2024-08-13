@@ -1,5 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/blocks/privacy.rs`."><title>privacy.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-ac92e1bbe349e143.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="i3status_rs" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0 (07dca489a 2024-02-04)" data-channel="1.76.0" data-search-js="search-2b6ce74ff89ae146.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../static.files/storage-f2adc0d6ca4d09fb.js"></script><script defer src="../../../static.files/src-script-39ed315d46fb705f.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-305769736d49e732.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-feafe1bb7466e4bd.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><div class="sidebar-resizer"></div>
-    <main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/blocks/privacy.rs`."><title>privacy.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-dd39b87e5fcfba68.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="i3status_rs" data-themes="" data-resource-suffix="" data-rustdoc-version="1.80.1 (3f5fd8dd4 2024-08-06)" data-channel="1.80.1" data-search-js="search-d52510db62a78183.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -245,6 +244,17 @@
 <a href="#244" id="244">244</a>
 <a href="#245" id="245">245</a>
 <a href="#246" id="246">246</a>
+<a href="#247" id="247">247</a>
+<a href="#248" id="248">248</a>
+<a href="#249" id="249">249</a>
+<a href="#250" id="250">250</a>
+<a href="#251" id="251">251</a>
+<a href="#252" id="252">252</a>
+<a href="#253" id="253">253</a>
+<a href="#254" id="254">254</a>
+<a href="#255" id="255">255</a>
+<a href="#256" id="256">256</a>
+<a href="#257" id="257">257</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Privacy Monitor
 //!
 //! # Configuration
@@ -252,8 +262,8 @@
 //! Key        | Values | Default|
 //! -----------|--------|--------|
 //! `driver` | The configuration of a driver (see below). | **Required**
-//! `format`   | Format string. | &lt;code&gt;"{ $icon_audio \|}{ $icon_audio_sink \|}{ $icon_video \|}{ $icon_webcam \|}{ $icon_unknown \|}"&lt;/code&gt; |
-//! `format_alt`   | Format string. | &lt;code&gt;"{ $icon_audio $info_audio \|}{ $icon_audio_sink $info_audio_sink \|}{ $icon_video $info_video \|}{ $icon_webcam $info_webcam \|}{ $icon_unknown $info_unknown \|}"&lt;/code&gt; |
+//! `format`   | Format string. | &lt;code&gt;\"{ $icon_audio \|}{ $icon_audio_sink \|}{ $icon_video \|}{ $icon_webcam \|}{ $icon_unknown \|}\"&lt;/code&gt; |
+//! `format_alt`   | Format string. | &lt;code&gt;\"{ $icon_audio $info_audio \|}{ $icon_audio_sink $info_audio_sink \|}{ $icon_video $info_video \|}{ $icon_webcam $info_webcam \|}{ $icon_unknown $info_unknown \|}\"&lt;/code&gt; |
 //!
 //! # pipewire Options (requires the pipewire feature to be enabled)
 //!
@@ -315,9 +325,7 @@
 //! - `webcam`
 //! - `unknown`
 
-</span><span class="kw">use </span>std::collections::HashSet;
-
-<span class="kw">use </span>futures::future::{select_all, try_join_all};
+</span><span class="kw">use </span>futures::future::{select_all, try_join_all};
 
 <span class="kw">use </span><span class="kw">super</span>::prelude::<span class="kw-2">*</span>;
 
@@ -361,10 +369,10 @@
     Unknown,
 }
 
-<span class="comment">// {type: {name: {reader}}
+<span class="comment">// {type: {source: {destination: count}}
 </span><span class="kw">type </span>PrivacyInfo = HashMap&lt;Type, PrivacyInfoInner&gt;;
 
-<span class="kw">type </span>PrivacyInfoInnerType = HashMap&lt;String, HashSet&lt;String&gt;&gt;;
+<span class="kw">type </span>PrivacyInfoInnerType = HashMap&lt;String, HashMap&lt;String, usize&gt;&gt;;
 <span class="attr">#[derive(Default, Debug)]
 </span><span class="kw">struct </span>PrivacyInfoInner(PrivacyInfoInnerType);
 
@@ -385,10 +393,23 @@
     <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; std::fmt::Result {
         <span class="macro">write!</span>(
             f,
-            <span class="string">"{{{}}}"</span>,
+            <span class="string">"{{ {} }}"</span>,
             itertools::join(
                 <span class="self">self</span>.iter().map(|(source, destinations)| {
-                    <span class="macro">format!</span>(<span class="string">"{} =&gt; [{}]"</span>, source, itertools::join(destinations, <span class="string">", "</span>))
+                    <span class="macro">format!</span>(
+                        <span class="string">"{} =&gt; [ {} ]"</span>,
+                        source,
+                        itertools::join(
+                            destinations
+                                .iter()
+                                .map(|(destination, count)| <span class="kw">if </span>count == <span class="kw-2">&amp;</span><span class="number">1 </span>{
+                                    destination.into()
+                                } <span class="kw">else </span>{
+                                    <span class="macro">format!</span>(<span class="string">"{} (x{})"</span>, destination, count)
+                                }),
+                            <span class="string">", "
+                        </span>)
+                    )
                 }),
                 <span class="string">", "</span>,
             )
@@ -445,41 +466,41 @@
         <span class="kw">let </span><span class="kw-2">mut </span>values = Values::new();
 
         <span class="kw">if let </span><span class="prelude-val">Some</span>(info_by_type) = info.get(<span class="kw-2">&amp;</span>Type::Audio) {
-            values.extend(<span class="macro">map! </span>{
+            <span class="macro">map!</span> { @extend values
                 <span class="string">"icon_audio" </span>=&gt; Value::icon(<span class="string">"microphone"</span>),
                 <span class="string">"info_audio" </span>=&gt; Value::text(<span class="macro">format!</span>(<span class="string">"{}"</span>, info_by_type))
-            });
+            }
         }
         <span class="kw">if let </span><span class="prelude-val">Some</span>(info_by_type) = info.get(<span class="kw-2">&amp;</span>Type::AudioSink) {
-            values.extend(<span class="macro">map! </span>{
+            <span class="macro">map!</span> { @extend values
                 <span class="string">"icon_audio_sink" </span>=&gt; Value::icon(<span class="string">"volume"</span>),
                 <span class="string">"info_audio_sink" </span>=&gt; Value::text(<span class="macro">format!</span>(<span class="string">"{}"</span>, info_by_type))
-            });
+            }
         }
         <span class="kw">if let </span><span class="prelude-val">Some</span>(info_by_type) = info.get(<span class="kw-2">&amp;</span>Type::Video) {
-            values.extend(<span class="macro">map! </span>{
+            <span class="macro">map!</span> { @extend values
                 <span class="string">"icon_video" </span>=&gt; Value::icon(<span class="string">"xrandr"</span>),
                 <span class="string">"info_video" </span>=&gt; Value::text(<span class="macro">format!</span>(<span class="string">"{}"</span>, info_by_type))
-            });
+            }
         }
         <span class="kw">if let </span><span class="prelude-val">Some</span>(info_by_type) = info.get(<span class="kw-2">&amp;</span>Type::Webcam) {
-            values.extend(<span class="macro">map! </span>{
+            <span class="macro">map!</span> { @extend values
                 <span class="string">"icon_webcam" </span>=&gt; Value::icon(<span class="string">"webcam"</span>),
                 <span class="string">"info_webcam" </span>=&gt; Value::text(<span class="macro">format!</span>(<span class="string">"{}"</span>, info_by_type))
-            });
+            }
         }
         <span class="kw">if let </span><span class="prelude-val">Some</span>(info_by_type) = info.get(<span class="kw-2">&amp;</span>Type::Unknown) {
-            values.extend(<span class="macro">map! </span>{
+            <span class="macro">map!</span> { @extend values
                 <span class="string">"icon_unknown" </span>=&gt; Value::icon(<span class="string">"unknown"</span>),
                 <span class="string">"info_unknown" </span>=&gt; Value::text(<span class="macro">format!</span>(<span class="string">"{}"</span>, info_by_type))
-            });
+            }
         }
 
         widget.set_values(values);
 
         api.set_widget(widget)<span class="question-mark">?</span>;
 
-        <span class="macro">select! </span>{
+        <span class="macro">select!</span> {
             <span class="kw">_ </span>= api.wait_for_update_request() =&gt; (),
             <span class="kw">_ </span>= select_all(drivers.iter_mut().map(|driver| driver.wait_for_change())) =&gt;(),
             <span class="prelude-val">Some</span>(action) = actions.recv() =&gt; <span class="kw">match </span>action.as_ref() {
