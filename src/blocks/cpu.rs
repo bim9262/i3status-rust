@@ -50,7 +50,8 @@ use tokio::fs::File;
 use tokio::io::{AsyncBufReadExt as _, BufReader};
 
 use super::prelude::*;
-use crate::util::read_file;
+use crate::formatting::value::BarGraphAccumulator;
+use crate::util::{format_bar_graph, read_file};
 
 const CPU_BOOST_PATH: &str = "/sys/devices/system/cpu/cpufreq/boost";
 const CPU_NO_TURBO_PATH: &str = "/sys/devices/system/cpu/intel_pstate/no_turbo";
@@ -96,21 +97,17 @@ pub async fn run(config: &Config, api: &CommonApi) -> Result<()> {
         // Compute utilizations
         let new_cputime = read_proc_stat().await?;
         let utilization_avg = new_cputime.0.utilization(cputime.0);
-        let mut utilizations = Vec::new();
+        let mut utilizations = Vec::with_capacity(cores);
         if new_cputime.1.len() != cores {
             return Err(Error::new("new cputime length is incorrect"));
         }
         for i in 0..cores {
-            utilizations.push(new_cputime.1[i].utilization(cputime.1[i]));
+            utilizations.push(new_cputime.1[i].utilization(cputime.1[i]) * 100.);
         }
         cputime = new_cputime;
 
         // Create barchart indicating per-core utilization
-        let mut barchart = String::new();
-        const BOXCHARS: &[char] = &['▁', '▂', '▃', '▄', '▅', '▆', '▇', '█'];
-        for utilization in &utilizations {
-            barchart.push(BOXCHARS[(7.5 * utilization) as usize]);
-        }
+        let barchart = format_bar_graph(&utilizations, Some(0.), Some(100.));
 
         // Read boost state on intel CPUs
         let boost = boost_status().await.map(|status| match status {
@@ -121,7 +118,7 @@ pub async fn run(config: &Config, api: &CommonApi) -> Result<()> {
         let mut values = map!(
             "icon" => Value::icon_progression("cpu", utilization_avg),
             "barchart" => Value::text(barchart),
-            "utilization" => Value::percents(utilization_avg * 100.),
+            "utilization" => Value::percents_bar_graph(&utilizations, BarGraphAccumulator::Average, Some(0.), Some(100.)),
             [if !freqs.is_empty()] "frequency" => Value::hertz(freqs.iter().sum::<f64>() / (freqs.len() as f64)),
             [if !freqs.is_empty()] "max_frequency" => Value::hertz(freqs.iter().copied().max_by(f64::total_cmp).unwrap()),
         );

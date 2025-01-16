@@ -60,8 +60,9 @@
 //! - `net_down`
 
 use super::prelude::*;
+use crate::formatting::value::BarGraphAccumulator;
 use crate::netlink::NetDevice;
-use crate::util;
+use crate::util::format_bar_graph;
 use itertools::Itertools as _;
 use regex::Regex;
 use std::time::Instant;
@@ -101,11 +102,28 @@ pub async fn run(config: &Config, api: &CommonApi) -> Result<()> {
         .transpose()
         .error("Failed to parse device regex")?;
 
+    let tx_hist_length = format
+        .formatter_max_data_points("speed_up")
+        .max(
+            format_alt
+                .as_ref()
+                .and_then(|f| f.formatter_max_data_points("speed_up")),
+        )
+        .unwrap_or(8);
+    let rx_hist_length = format
+        .formatter_max_data_points("speed_down")
+        .max(
+            format_alt
+                .as_ref()
+                .and_then(|f| f.formatter_max_data_points("speed_down")),
+        )
+        .unwrap_or(8);
+
     // Stats
     let mut stats = None;
     let mut stats_timer = Instant::now();
-    let mut tx_hist = [0f64; 8];
-    let mut rx_hist = [0f64; 8];
+    let mut tx_hist = vec![0f64; tx_hist_length];
+    let mut rx_hist = vec![0f64; rx_hist_length];
 
     loop {
         match NetDevice::new(device_re.as_ref()).await? {
@@ -151,10 +169,10 @@ pub async fn run(config: &Config, api: &CommonApi) -> Result<()> {
 
                 widget.set_values(map! {
                     "icon" => icon,
-                    "speed_down" => Value::bytes(speed_down),
-                    "speed_up" => Value::bytes(speed_up),
-                    "graph_down" => Value::text(util::format_bar_graph(&rx_hist)),
-                    "graph_up" => Value::text(util::format_bar_graph(&tx_hist)),
+                    "speed_down" => Value::bytes_bar_graph(&rx_hist, BarGraphAccumulator::Last, None, None),
+                    "speed_up" => Value::bytes_bar_graph(&tx_hist, BarGraphAccumulator::Last, None, None),
+                    "graph_down" => Value::text(format_bar_graph(&rx_hist, None, None)),
+                    "graph_up" => Value::text(format_bar_graph(&tx_hist, None, None)),
                     [if let Some(v) = device.ip] "ip" => Value::text(v.to_string()),
                     [if let Some(v) = device.ipv6] "ipv6" => Value::text(v.to_string()),
                     [if let Some(v) = device.ssid()] "ssid" => Value::text(v),

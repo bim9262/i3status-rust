@@ -1,5 +1,6 @@
 use crate::formatting::prefix::Prefix;
 use crate::formatting::unit::Unit;
+use crate::formatting::value::BarGraphAccumulator;
 
 use std::borrow::Cow;
 use std::ops::RangeInclusive;
@@ -197,6 +198,29 @@ impl Formatter for EngFormatter {
 
                 Ok(retval)
             }
+            Value::BarGraph {
+                val,
+                unit,
+                accumulator,
+                ..
+            } => Self::format(
+                self,
+                &Value::Number {
+                    val: match *accumulator {
+                        BarGraphAccumulator::First => *val.first().error("Empty bar graph")?,
+                        BarGraphAccumulator::Last => *val.last().error("Empty bar graph")?,
+                        BarGraphAccumulator::Average => {
+                            let len = val.len();
+                            if len == 0 {
+                                return Err(FormatError::Other(Error::new("Empty bar graph")));
+                            }
+                            val.iter().sum::<f64>() / (len as f64)
+                        }
+                    },
+                    unit: *unit,
+                },
+                _config,
+            ),
             other => Err(FormatError::IncompatibleFormatter {
                 ty: other.type_name(),
                 fmt: "eng",

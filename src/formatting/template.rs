@@ -42,6 +42,26 @@ impl FormatTemplate {
         })
     }
 
+    pub(crate) fn formatter_max_data_points(&self, key: &str) -> Option<usize> {
+        let mut max_width = None;
+
+        for token_list in self.0.iter() {
+            for token in &token_list.0 {
+                match token {
+                    Token::Placeholder { name, formatter } if name == key => {
+                        max_width = max_width.max(formatter.as_ref().and_then(|f| f.data_points()));
+                    }
+                    Token::Recursive(rec) => {
+                        max_width = max_width.max(rec.formatter_max_data_points(key));
+                    }
+                    _ => (),
+                }
+            }
+        }
+
+        max_width
+    }
+
     pub fn render(
         &self,
         values: &Values,

@@ -174,6 +174,12 @@ impl Format {
         self.full.contains_key(key) || self.short.contains_key(key)
     }
 
+    pub fn formatter_max_data_points(&self, key: &str) -> Option<usize> {
+        self.full
+            .formatter_max_data_points(key)
+            .max(self.short.formatter_max_data_points(key))
+    }
+
     pub fn intervals(&self) -> Vec<u64> {
         self.intervals.clone()
     }

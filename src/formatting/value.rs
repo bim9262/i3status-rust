@@ -14,10 +14,27 @@ pub struct Value {
 }
 
 #[derive(Debug, Clone)]
+pub enum BarGraphAccumulator {
+    First,
+    Last,
+    Average,
+}
+
+#[derive(Debug, Clone)]
 pub enum ValueInner {
     Text(String),
     Icon(Cow<'static, str>, Option<f64>),
-    Number { val: f64, unit: Unit },
+    Number {
+        val: f64,
+        unit: Unit,
+    },
+    BarGraph {
+        val: Vec<f64>,
+        unit: Unit,
+        accumulator: BarGraphAccumulator,
+        min: Option<f64>,
+        max: Option<f64>,
+    },
     Datetime(DateTime<Utc>, Option<Tz>),
     Duration(Duration),
     Flag,
@@ -29,6 +46,7 @@ impl ValueInner {
             ValueInner::Text(..) => "Text",
             ValueInner::Icon(..) => "Icon",
             ValueInner::Number { .. } => "Number",
+            ValueInner::BarGraph { .. } => "bar_graph",
             ValueInner::Datetime(..) => "Datetime",
             ValueInner::Duration(..) => "Duration",
             ValueInner::Flag => "Flag",
@@ -129,6 +147,87 @@ impl Value {
     pub fn number(val: impl IntoF64) -> Self {
         Self::number_unit(val, Unit::None)
     }
+
+    pub fn bar_graph_unit(
+        val: &[impl IntoF64 + Copy],
+        unit: Unit,
+        accumulator: BarGraphAccumulator,
+        min: Option<f64>,
+        max: Option<f64>,
+    ) -> Self {
+        Self::new(ValueInner::BarGraph {
+            val: val.iter().map(|v| v.into_f64()).collect(),
+            unit,
+            accumulator,
+            min,
+            max,
+        })
+    }
+
+    pub fn bytes_bar_graph(
+        val: &[impl IntoF64 + Copy],
+        accumulator: BarGraphAccumulator,
+        min: Option<f64>,
+        max: Option<f64>,
+    ) -> Self {
+        Self::bar_graph_unit(val, Unit::Bytes, accumulator, min, max)
+    }
+    pub fn bits_bar_graph(
+        val: &[impl IntoF64 + Copy],
+        accumulator: BarGraphAccumulator,
+        min: Option<f64>,
+        max: Option<f64>,
+    ) -> Self {
+        Self::bar_graph_unit(val, Unit::Bits, accumulator, min, max)
+    }
+    pub fn percents_bar_graph(
+        val: &[impl IntoF64 + Copy],
+        accumulator: BarGraphAccumulator,
+        min: Option<f64>,
+        max: Option<f64>,
+    ) -> Self {
+        Self::bar_graph_unit(val, Unit::Percents, accumulator, min, max)
+    }
+    pub fn degrees_bar_graph(
+        val: &[impl IntoF64 + Copy],
+        accumulator: BarGraphAccumulator,
+        min: Option<f64>,
+        max: Option<f64>,
+    ) -> Self {
+        Self::bar_graph_unit(val, Unit::Degrees, accumulator, min, max)
+    }
+    pub fn seconds_bar_graph(
+        val: &[impl IntoF64 + Copy],
+        accumulator: BarGraphAccumulator,
+        min: Option<f64>,
+        max: Option<f64>,
+    ) -> Self {
+        Self::bar_graph_unit(val, Unit::Seconds, accumulator, min, max)
+    }
+    pub fn watts_bar_graph(
+        val: &[impl IntoF64 + Copy],
+        accumulator: BarGraphAccumulator,
+        min: Option<f64>,
+        max: Option<f64>,
+    ) -> Self {
+        Self::bar_graph_unit(val, Unit::Watts, accumulator, min, max)
+    }
+    pub fn hertz_bar_graph(
+        val: &[impl IntoF64 + Copy],
+        accumulator: BarGraphAccumulator,
+        min: Option<f64>,
+        max: Option<f64>,
+    ) -> Self {
+        Self::bar_graph_unit(val, Unit::Hertz, accumulator, min, max)
+    }
+    pub fn number_bar_graph(
+        val: &[impl IntoF64 + Copy],
+        accumulator: BarGraphAccumulator,
+        min: Option<f64>,
+        max: Option<f64>,
+    ) -> Self {
+        Self::bar_graph_unit(val, Unit::None, accumulator, min, max)
+    }
 }
 
 /// Set options
@@ -151,7 +250,9 @@ impl Value {
     pub fn default_formatter(&self) -> &'static dyn formatter::Formatter {
         match &self.inner {
             ValueInner::Text(_) | ValueInner::Icon(..) => &formatter::DEFAULT_STRING_FORMATTER,
-            ValueInner::Number { .. } => &formatter::DEFAULT_NUMBER_FORMATTER,
+            ValueInner::Number { .. } | ValueInner::BarGraph { .. } => {
+                &formatter::DEFAULT_NUMBER_FORMATTER
+            }
             ValueInner::Datetime { .. } => &*formatter::DEFAULT_DATETIME_FORMATTER,
             ValueInner::Duration { .. } => &formatter::DEFAULT_DURATION_FORMATTER,
             ValueInner::Flag => &formatter::DEFAULT_FLAG_FORMATTER,
