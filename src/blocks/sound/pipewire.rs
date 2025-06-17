@@ -1,5 +1,3 @@
-use std::cmp::{max, min};
-
 use tokio::sync::mpsc::{UnboundedReceiver, unbounded_channel};
 
 use super::*;
@@ -13,7 +11,8 @@ pub(super) struct Device {
     description: Option<String>,
     active_port: Option<String>,
     form_factor: Option<String>,
-    volume: u32,
+    volume: Vec<f32>,
+    volume_avg: u32,
     muted: bool,
     updates: UnboundedReceiver<EventKind>,
     command_sender: PwSender<CommandKind>,
@@ -34,7 +33,8 @@ impl Device {
             description: None,
             active_port: None,
             form_factor: None,
-            volume: 0,
+            volume: Vec::new(),
+            volume_avg: 0,
             muted: false,
             updates: rx,
             command_sender,
@@ -47,7 +47,7 @@ impl Device {
 #[async_trait]
 impl SoundDevice for Device {
     fn volume(&self) -> u32 {
-        self.volume
+        self.volume_avg
     }
 
     fn muted(&self) -> bool {
@@ -92,8 +92,9 @@ impl SoundDevice for Device {
 
         if let Some((id, node)) = data.nodes.iter().find(|(_, node)| node.name == *name) {
             self.id = Some(*id);
-            if let Some(volume) = node.volume {
-                self.volume = volume;
+            if let Some(volume) = &node.volume {
+                self.volume = volume.clone();
+                self.volume_avg = (volume.iter().sum::<f32>() / volume.len() as f32).round() as u32;
             }
             if let Some(muted) = node.muted {
                 self.muted = muted;
@@ -118,15 +119,21 @@ impl SoundDevice for Device {
 
     async fn set_volume(&mut self, step: i32, max_vol: Option<u32>) -> Result<()> {
         if let Some(id) = self.id {
-            let new_vol = max(0, self.volume as i32 + step) as u32;
-            let capped_volume = if let Some(vol_cap) = max_vol {
-                min(new_vol, vol_cap)
-            } else {
-                new_vol
-            };
+            let volume = self
+                .volume
+                .iter()
+                .map(|&vol| {
+                    let uncapped_vol = 0_f32.max(vol + step as f32);
+                    if let Some(vol_cap) = max_vol {
+                        uncapped_vol.min(vol_cap as f32)
+                    } else {
+                        uncapped_vol
+                    }
+                })
+                .collect();
 
             self.command_sender
-                .send(CommandKind::SetVolume(id, capped_volume))
+                .send(CommandKind::SetVolume(id, volume))
                 .map_err(|_| Error::new("Could not set volume"))?;
         }
         Ok(())

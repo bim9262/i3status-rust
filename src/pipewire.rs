@@ -89,8 +89,7 @@ pub(crate) struct Node {
     //These come from the proxy
     pub running: bool,
     pub muted: Option<bool>,
-    pub volume: Option<u32>,
-    pub channels: Option<usize>,
+    pub volume: Option<Vec<f32>>,
     pub description: Option<String>,
     pub form_factor: Option<String>,
 }
@@ -118,7 +117,6 @@ impl Node {
                 .map(|s| s.to_string()),
             muted: None,
             volume: None,
-            channels: None,
             running: false,
         }
     }
@@ -281,10 +279,10 @@ bitflags! {
     }
 }
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Debug)]
 pub(crate) enum CommandKind {
     Mute(u32, bool),
-    SetVolume(u32, u32),
+    SetVolume(u32, Vec<f32>),
 }
 
 impl CommandKind {
@@ -295,9 +293,7 @@ impl CommandKind {
         };
         let client_data = client.data.lock().unwrap();
         if let Some(node) = client_data.nodes.get(&id) {
-            if let (Some(device_id), Some(channels), Some(direction)) =
-                (node.device_id, node.channels, node.direction)
-            {
+            if let (Some(device_id), Some(direction)) = (node.device_id, node.direction) {
                 if let Some(directed_routes) = client_data.directed_routes.get(&device_id) {
                     if let Some(route) = directed_routes.get_route(direction) {
                         if let Some(device_proxy) = proxies
@@ -354,9 +350,6 @@ impl CommandKind {
 
                             match self {
                                 SetVolume(_, volume) => {
-                                    let volume = volume as f32 / NORMAL;
-                                    let volume = volume * volume * volume;
-
                                     pod_builder
                                         .add_prop(SPA_PROP_channelVolumes, 0)
                                         .expect("Could not add prop");
@@ -368,8 +361,11 @@ impl CommandKind {
                                     unsafe { pod_builder.push_array(&mut array_frame) }
                                         .expect("Could not push object");
 
-                                    for _ in 0..channels {
-                                        pod_builder.add_float(volume).expect("Could not add bool");
+                                    for vol in volume {
+                                        let vol = vol / NORMAL;
+                                        pod_builder
+                                            .add_float(vol * vol * vol)
+                                            .expect("Could not add bool");
                                     }
 
                                     // Safety: array_frame is popped here, which is frame 3
@@ -549,23 +545,13 @@ impl Client {
                                                 };
 
                                                 let volume = Some(
-                                                    (volumes
+                                                    volumes
                                                         .iter()
                                                         .map(|vol| vol.cbrt() * NORMAL)
-                                                        .sum::<f32>()
-                                                        / volumes.len() as f32)
-                                                        .round()
-                                                        as u32,
+                                                        .collect(),
                                                 );
                                                 if node.volume != volume {
                                                     node.volume = volume;
-                                                    update_copy3.replace_with(|v| {
-                                                        *v | EventKind::NODE_PARAM_UPDATE
-                                                    });
-                                                }
-                                                let channels = Some(volumes.len());
-                                                if node.channels != channels {
-                                                    node.channels = channels;
                                                     update_copy3.replace_with(|v| {
                                                         *v | EventKind::NODE_PARAM_UPDATE
                                                     });
