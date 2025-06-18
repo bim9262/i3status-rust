@@ -79,6 +79,7 @@ impl TryFrom<u32> for Direction {
 
 #[derive(Debug)]
 pub(crate) struct Node {
+    proxy_id: u32,
     pub device_id: Option<u32>,
     pub name: String,
     pub nick: Option<String>,
@@ -95,8 +96,9 @@ pub(crate) struct Node {
 }
 
 impl Node {
-    fn new(global_id: u32, global_props: &DictRef) -> Self {
+    fn new(global_id: u32, global_props: &DictRef, proxy_id: u32) -> Self {
         Self {
+            proxy_id,
             device_id: global_props
                 .get(&keys::DEVICE_ID)
                 .and_then(|s| s.parse().ok()),
@@ -219,7 +221,7 @@ impl<T: ProxyT + 'static> Proxies<T> {
         &mut self,
         proxy: T,
         listener: impl Listener + 'static,
-        proxies: &std::rc::Rc<RefCell<Self>>,
+        proxies: &Rc<RefCell<Self>>,
     ) -> u32 {
         let listener_spe = Box::new(listener);
 
@@ -286,17 +288,87 @@ pub(crate) enum CommandKind {
 }
 
 impl CommandKind {
-    fn execute(self, client: &Client, proxies: Rc<RefCell<Proxies<DeviceProxy>>>) {
+    fn execute(
+        self,
+        client: &Client,
+        node_proxies: Rc<RefCell<Proxies<NodeProxy>>>,
+        device_proxies: Rc<RefCell<Proxies<DeviceProxy>>>,
+    ) {
+        debug!("Executing command: {:?}", self);
         use CommandKind::*;
         let id = match self {
             SetVolume(id, _) | Mute(id, _) => id,
         };
         let client_data = client.data.lock().unwrap();
         if let Some(node) = client_data.nodes.get(&id) {
+            if let Some(node_proxy) = node_proxies.borrow_mut().proxies_t.get(&node.proxy_id) {
+                let mut pod_data = Vec::new();
+                let mut pod_builder = PodBuilder::new(&mut pod_data);
+
+                let mut object_param_props_frame = MaybeUninit::uninit();
+
+                // Safety: Frames must be popped in the reverse order they were pushed.
+                // push_object initializes the frame.
+                // object_param_props_frame is frame 1
+                unsafe {
+                    pod_builder.push_object(
+                        &mut object_param_props_frame,
+                        SpaTypes::ObjectParamProps.as_raw(),
+                        ParamType::Props.as_raw(),
+                    )
+                }
+                .expect("Could not push object");
+
+                match &self {
+                    SetVolume(_, volume) => {
+                        pod_builder
+                            .add_prop(SPA_PROP_channelVolumes, 0)
+                            .expect("Could not add prop");
+
+                        let mut array_frame = MaybeUninit::uninit();
+
+                        // Safety: push_array initializes the frame.
+                        // array_frame is frame 2
+                        unsafe { pod_builder.push_array(&mut array_frame) }
+                            .expect("Could not push object");
+
+                        for vol in volume {
+                            let vol = vol / NORMAL;
+                            pod_builder
+                                .add_float(vol * vol * vol)
+                                .expect("Could not add bool");
+                        }
+
+                        // Safety: array_frame is popped here, which is frame 2
+                        unsafe {
+                            PodBuilder::pop(&mut pod_builder, array_frame.assume_init_mut());
+                        }
+                    }
+                    Mute(_, mute) => {
+                        pod_builder
+                            .add_prop(SPA_PROP_mute, 0)
+                            .expect("Could not add prop");
+                        pod_builder.add_bool(*mute).expect("Could not add bool");
+                    }
+                }
+
+                // Safety: object_param_props_frame is popped here, which is frame 1
+                unsafe {
+                    PodBuilder::pop(&mut pod_builder, object_param_props_frame.assume_init_mut());
+                }
+
+                debug!(
+                    "Setting Node Props param: {:?}",
+                    PodDeserializer::deserialize_from::<Value>(&pod_data)
+                );
+                let pod = Pod::from_bytes(&pod_data).expect("Unable to construct pod");
+                node_proxy.set_param(ParamType::Props, 0, pod);
+            }
+
             if let (Some(device_id), Some(direction)) = (node.device_id, node.direction) {
                 if let Some(directed_routes) = client_data.directed_routes.get(&device_id) {
                     if let Some(route) = directed_routes.get_route(direction) {
-                        if let Some(device_proxy) = proxies
+                        if let Some(device_proxy) = device_proxies
                             .borrow_mut()
                             .proxies_t
                             .get(&directed_routes.proxy_id)
@@ -348,7 +420,7 @@ impl CommandKind {
                             }
                             .expect("Could not push object");
 
-                            match self {
+                            match &self {
                                 SetVolume(_, volume) => {
                                     pod_builder
                                         .add_prop(SPA_PROP_channelVolumes, 0)
@@ -380,7 +452,7 @@ impl CommandKind {
                                     pod_builder
                                         .add_prop(SPA_PROP_mute, 0)
                                         .expect("Could not add prop");
-                                    pod_builder.add_bool(mute).expect("Could not add bool");
+                                    pod_builder.add_bool(*mute).expect("Could not add bool");
                                 }
                             }
 
@@ -406,7 +478,7 @@ impl CommandKind {
                             }
 
                             debug!(
-                                "Setting param: {:?}",
+                                "Setting Device Route param: {:?}",
                                 PodDeserializer::deserialize_from::<Value>(&pod_data)
                             );
                             let pod = Pod::from_bytes(&pod_data).expect("Unable to construct pod");
@@ -460,13 +532,16 @@ impl Client {
 
         // Proxies and their listeners need to stay alive so store them here
         let node_proxies = Rc::new(RefCell::new(Proxies::<NodeProxy>::new()));
+        let node_proxies_weak = Rc::downgrade(&node_proxies);
         let device_proxies = Rc::new(RefCell::new(Proxies::<DeviceProxy>::new()));
         let device_proxies_weak = Rc::downgrade(&device_proxies);
         let metadata_proxies = Rc::new(RefCell::new(Proxies::<MetadataProxy>::new()));
 
         let _receiver = command_receiver.attach(main_loop.loop_(), move |command: CommandKind| {
-            if let Some(device_proxies) = device_proxies_weak.upgrade() {
-                command.execute(client, device_proxies.clone());
+            if let (Some(node_proxies), Some(device_proxies)) =
+                (node_proxies_weak.upgrade(), device_proxies_weak.upgrade())
+            {
+                command.execute(client, node_proxies.clone(), device_proxies.clone());
             }
         });
 
@@ -562,7 +637,7 @@ impl Client {
                             })
                             .register();
 
-                        node_proxies.borrow_mut().add_proxy(
+                        let proxy_id = node_proxies.borrow_mut().add_proxy(
                             node_proxy,
                             node_listener,
                             &node_proxies,
@@ -573,7 +648,7 @@ impl Client {
                             .lock()
                             .unwrap()
                             .nodes
-                            .insert(global_id, Node::new(global_id, global_props));
+                            .insert(global_id, Node::new(global_id, global_props, proxy_id));
                         update_copy.replace_with(|v| *v | EventKind::NODE_ADDED);
                     }
                     ObjectType::Link => {
