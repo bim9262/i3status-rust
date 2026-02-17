@@ -1,7 +1,8 @@
 use std::{str::FromStr as _, time::Duration, vec};
 
-use chrono::{DateTime, Datelike as _, Local, TimeZone as _, Timelike as _, Utc};
+use chrono::{Local, TimeZone as _};
 use icalendar::{Component as _, EventLike as _, Tz};
+use jiff::{Timestamp, tz::TimeZone};
 use reqwest::{
     self, ClientBuilder, Method, Url,
     header::{CONTENT_TYPE, HeaderMap, HeaderValue},
@@ -20,8 +21,8 @@ pub struct Event {
     pub description: Option<String>,
     pub location: Option<String>,
     pub url: Option<String>,
-    pub start_at: Option<DateTime<Utc>>,
-    pub end_at: Option<DateTime<Utc>>,
+    pub start_at: Option<Timestamp>,
+    pub end_at: Option<Timestamp>,
 }
 
 #[derive(Deserialize, Debug)]
@@ -132,8 +133,8 @@ impl Client {
     pub async fn events(
         &mut self,
         calendar: &Calendar,
-        start: DateTime<Utc>,
-        end: DateTime<Utc>,
+        start: Timestamp,
+        end: Timestamp,
     ) -> Result<Vec<Event>, CalendarError> {
         let multi_status = self
             .report_request(calendar.url.clone(), 1, calendar_events_request(start, end))
@@ -294,8 +295,8 @@ fn parse_calendars(
 
 fn parse_events(
     multi_status: Multistatus,
-    event_search_start: DateTime<Utc>,
-    event_search_end: DateTime<Utc>,
+    event_search_start: Timestamp,
+    event_search_end: Timestamp,
 ) -> Result<Vec<Event>, CalendarError> {
     let mut result = vec![];
     for response in multi_status.responses {
@@ -305,24 +306,32 @@ fn parse_events(
                     icalendar::Calendar::from_str(&data).map_err(CalendarError::Parsing)?;
                 for component in calendar.components {
                     if let icalendar::CalendarComponent::Event(event) = component {
-                        let event_start_at = event.get_start().and_then(|d| match d {
-                            icalendar::DatePerhapsTime::DateTime(dt) => dt.try_into_utc(),
-                            icalendar::DatePerhapsTime::Date(d) => d
-                                .and_hms_opt(0, 0, 0)
-                                .and_then(|d| d.and_local_timezone(Local).earliest())
-                                .map(|d| d.to_utc()),
-                        });
-                        let event_end_at = event.get_end().and_then(|d| match d {
-                            icalendar::DatePerhapsTime::DateTime(dt) => dt.try_into_utc(),
-                            icalendar::DatePerhapsTime::Date(d) => d
-                                .and_hms_opt(23, 59, 59)
-                                .and_then(|d| d.and_local_timezone(Local).earliest())
-                                .map(|d| d.to_utc()),
-                        });
+                        let event_start_at = event
+                            .get_start()
+                            .and_then(|d| match d {
+                                icalendar::DatePerhapsTime::DateTime(dt) => dt.try_into_utc(),
+                                icalendar::DatePerhapsTime::Date(d) => d
+                                    .and_hms_opt(0, 0, 0)
+                                    .and_then(|d| d.and_local_timezone(Local).earliest())
+                                    .map(|d| d.to_utc()),
+                            })
+                            .and_then(|d| Timestamp::from_second(d.timestamp()).ok());
+                        let event_end_at = event
+                            .get_end()
+                            .and_then(|d| match d {
+                                icalendar::DatePerhapsTime::DateTime(dt) => dt.try_into_utc(),
+                                icalendar::DatePerhapsTime::Date(d) => d
+                                    .and_hms_opt(23, 59, 59)
+                                    .and_then(|d| d.and_local_timezone(Local).earliest())
+                                    .map(|d| d.to_utc()),
+                            })
+                            .and_then(|d| Timestamp::from_second(d.timestamp()).ok());
 
                         if let Some(s) = event_start_at
                             && let Some(e) = event_end_at
                         {
+                            let event_search_start = event_search_start.to_zoned(TimeZone::UTC);
+                            let event_search_end = event_search_end.to_zoned(TimeZone::UTC);
                             let duration = e - s;
                             result.extend(
                                 event
@@ -330,12 +339,12 @@ fn parse_events(
                                     .after(
                                         Tz::UTC
                                             .with_ymd_and_hms(
-                                                event_search_start.year(),
-                                                event_search_start.month(),
-                                                event_search_start.day(),
-                                                event_search_start.hour(),
-                                                event_search_start.minute(),
-                                                event_search_start.second(),
+                                                event_search_start.year().into(),
+                                                event_search_start.month() as u32,
+                                                event_search_start.day() as u32,
+                                                event_search_start.hour() as u32,
+                                                event_search_start.minute() as u32,
+                                                event_search_start.second() as u32,
                                             )
                                             .earliest()
                                             .ok_or(CalendarError::TzConversion)?,
@@ -343,12 +352,12 @@ fn parse_events(
                                     .before(
                                         Tz::UTC
                                             .with_ymd_and_hms(
-                                                event_search_end.year(),
-                                                event_search_end.month(),
-                                                event_search_end.day(),
-                                                event_search_end.hour(),
-                                                event_search_end.minute(),
-                                                event_search_end.second(),
+                                                event_search_end.year().into(),
+                                                event_search_end.month() as u32,
+                                                event_search_end.day() as u32,
+                                                event_search_end.hour() as u32,
+                                                event_search_end.minute() as u32,
+                                                event_search_end.second() as u32,
                                             )
                                             .earliest()
                                             .ok_or(CalendarError::TzConversion)?,
@@ -357,7 +366,9 @@ fn parse_events(
                                     .dates
                                     .into_iter()
                                     .map(|new_start| {
-                                        let new_start = new_start.to_utc();
+                                        let new_start =
+                                            Timestamp::from_second(new_start.to_utc().timestamp())
+                                                .unwrap();
                                         let new_end = new_start + duration;
                                         Event {
                                             uid: event.get_uid().map(Into::into),
@@ -409,10 +420,10 @@ static CALENDAR_REQUEST: &str = r#"<d:propfind xmlns:d="DAV:" xmlns:c="urn:ietf:
             </d:prop>
         </d:propfind>"#;
 
-pub fn calendar_events_request(start: DateTime<Utc>, end: DateTime<Utc>) -> String {
+pub fn calendar_events_request(start: Timestamp, end: Timestamp) -> String {
     const DATE_FORMAT: &str = "%Y%m%dT%H%M%SZ";
-    let start = start.format(DATE_FORMAT);
-    let end = end.format(DATE_FORMAT);
+    let start = start.strftime(DATE_FORMAT);
+    let end = end.strftime(DATE_FORMAT);
     format!(
         r#"<?xml version="1.0" encoding="UTF-8"?>
         <c:calendar-query xmlns:d="DAV:" xmlns:c="urn:ietf:params:xml:ns:caldav">

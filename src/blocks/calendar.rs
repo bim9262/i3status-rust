@@ -167,7 +167,9 @@
 //! # Icons Used
 //! - `calendar`
 
-use chrono::{Duration, Local, Utc};
+use std::time::Duration;
+
+use jiff::{Timestamp, Zoned, tz::TimeZone};
 use oauth2::{AuthUrl, ClientId, ClientSecret, Scope, TokenUrl};
 use reqwest::Url;
 
@@ -292,8 +294,7 @@ pub async fn run(config: &Config, api: &CommonApi) -> Result<()> {
         }
     };
 
-    let warning_threshold = Duration::try_seconds(config.warning_threshold.into())
-        .error("Invalid warning threshold configuration")?;
+    let warning_threshold = Duration::from_secs(config.warning_threshold.into());
 
     let mut source = Source::new(source_config.to_owned()).await?;
 
@@ -303,8 +304,7 @@ pub async fn run(config: &Config, api: &CommonApi) -> Result<()> {
 
     let mut actions = api.get_actions()?;
 
-    let events_within = Duration::try_hours(config.events_within_hours.into())
-        .error("Invalid events within hours configuration")?;
+    let events_within = Duration::from_hours(config.events_within_hours.into());
 
     let mut widget_status = WidgetStatus::FetchSources;
 
@@ -364,10 +364,10 @@ pub async fn run(config: &Config, api: &CommonApi) -> Result<()> {
             && let Some(end_date) = event.end_at
         {
             let warn_datetime = start_date - warning_threshold;
-            if warn_datetime < Utc::now() && Utc::now() < start_date {
+            if warn_datetime < Timestamp::now() && Timestamp::now() < start_date {
                 widget.state = State::Warning;
             }
-            if start_date < Utc::now() && Utc::now() < end_date {
+            if start_date < Timestamp::now() && Timestamp::now() < end_date {
                 widget.set_format(ongoing_event_format.clone());
             } else {
                 widget.set_format(next_event_format.clone());
@@ -378,8 +378,8 @@ pub async fn run(config: &Config, api: &CommonApi) -> Result<()> {
                    [if let Some(description) = event.description] "description" => Value::text(description),
                    [if let Some(location) = event.location] "location" => Value::text(location),
                    [if let Some(url) = event.url] "url" => Value::text(url),
-                   "start" => Value::datetime(start_date, None),
-                   "end" => Value::datetime(end_date, None),
+                   "start" => Value::jiff_timestamp(start_date, None),
+                   "end" => Value::jiff_timestamp(end_date, None),
                 });
         }
 
@@ -497,22 +497,20 @@ impl Source {
                 .client
                 .events(
                     &calendar,
-                    Local::now()
-                        .date_naive()
-                        .and_hms_opt(0, 0, 0)
-                        .expect("A valid time")
-                        .and_local_timezone(Local)
-                        .earliest()
-                        .expect("A valid datetime")
-                        .to_utc(),
-                    Utc::now() + within,
+                    Zoned::now()
+                        .date()
+                        .at(0, 0, 0, 0)
+                        .to_zoned(TimeZone::UTC)
+                        .expect("A valid zoned")
+                        .timestamp(),
+                    Timestamp::now() + within,
                 )
                 .await?
                 .into_iter()
                 .filter(|e| {
-                    let not_started = e.start_at.is_some_and(|d| d > Utc::now());
-                    let is_ongoing = e.start_at.is_some_and(|d| d < Utc::now())
-                        && e.end_at.is_some_and(|d| d > Utc::now());
+                    let not_started = e.start_at.is_some_and(|d| d > Timestamp::now());
+                    let is_ongoing = e.start_at.is_some_and(|d| d < Timestamp::now())
+                        && e.end_at.is_some_and(|d| d > Timestamp::now());
                     not_started || is_ongoing
                 })
                 .collect();
@@ -566,11 +564,11 @@ impl OverlappingEvents {
                     .skip_while(|e| e.uid != current.uid);
                 iter.next();
                 iter.find(|e| {
-                    let is_ongoing = e.start_at.is_some_and(|d| d < Utc::now())
-                        && e.end_at.is_some_and(|d| d > Utc::now());
-                    let is_warning = e
-                        .start_at
-                        .is_some_and(|d| d - warning_threshold < Utc::now() && Utc::now() < d);
+                    let is_ongoing = e.start_at.is_some_and(|d| d < Timestamp::now())
+                        && e.end_at.is_some_and(|d| d > Timestamp::now());
+                    let is_warning = e.start_at.is_some_and(|d| {
+                        d - warning_threshold < Timestamp::now() && Timestamp::now() < d
+                    });
                     e.uid == current.uid || is_warning || is_ongoing
                 })
                 .cloned()

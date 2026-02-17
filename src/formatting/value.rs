@@ -4,8 +4,6 @@ use std::time::Duration;
 use super::Metadata;
 use super::formatter;
 use super::unit::Unit;
-use chrono::{DateTime, Utc};
-use chrono_tz::Tz;
 
 #[derive(Debug, Clone)]
 pub struct Value {
@@ -18,7 +16,7 @@ pub enum ValueInner {
     Text(String),
     Icon(Cow<'static, str>, Option<f64>),
     Number { val: f64, unit: Unit },
-    Datetime(DateTime<Utc>, Option<Tz>),
+    Timestamp(jiff::Timestamp, Option<jiff::tz::TimeZone>),
     Duration(Duration),
     Flag,
 }
@@ -29,7 +27,7 @@ impl ValueInner {
             ValueInner::Text(..) => "Text",
             ValueInner::Icon(..) => "Icon",
             ValueInner::Number { .. } => "Number",
-            ValueInner::Datetime(..) => "Datetime",
+            ValueInner::Timestamp(..) => "Timestamp",
             ValueInner::Duration(..) => "Duration",
             ValueInner::Flag => "Flag",
         }
@@ -66,8 +64,8 @@ impl Value {
         Self::new(ValueInner::Flag)
     }
 
-    pub fn datetime(datetime: DateTime<Utc>, tz: Option<Tz>) -> Self {
-        Self::new(ValueInner::Datetime(datetime, tz))
+    pub fn jiff_timestamp(datetime: jiff::Timestamp, tz: Option<jiff::tz::TimeZone>) -> Self {
+        Self::new(ValueInner::Timestamp(datetime, tz))
     }
 
     pub fn duration(duration: Duration) -> Self {
@@ -155,7 +153,7 @@ impl Value {
         match &self.inner {
             ValueInner::Text(_) | ValueInner::Icon(..) => &formatter::DEFAULT_STRING_FORMATTER,
             ValueInner::Number { .. } => &formatter::DEFAULT_NUMBER_FORMATTER,
-            ValueInner::Datetime { .. } => &*formatter::DEFAULT_DATETIME_FORMATTER,
+            ValueInner::Timestamp(..) => &*formatter::DEFAULT_DATETIME_FORMATTER,
             ValueInner::Duration { .. } => &formatter::DEFAULT_DURATION_FORMATTER,
             ValueInner::Flag => &formatter::DEFAULT_FLAG_FORMATTER,
         }
